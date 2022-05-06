@@ -14,6 +14,7 @@ import com.money.util.AuthTokenVO;
 import com.money.util.OwnInfoVO;
 import com.money.common.vo.PageVO;
 import com.money.util.SysUserVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -82,6 +83,15 @@ public interface SysUserService extends IService<SysUser> {
     AuthTokenVO refreshToken(String refreshToken);
 
     // ============================================================
+
+    /**
+     * 上传头像
+     *
+     * @param username 用户名
+     * @param file     文件
+     * @return {@link String}
+     */
+    String uploadAvatar(String username, MultipartFile file);
 
     /**
      * 更新资料
