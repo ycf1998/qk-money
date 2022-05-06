@@ -1,9 +1,8 @@
 package com.money.controller;
 
-
-import com.money.common.dto.SysRoleDTO;
 import com.money.common.dto.ValidGroup;
-import com.money.common.dto.query.SysRoleQueryDTO;
+import com.money.dto.SysRoleDTO;
+import com.money.dto.query.SysRoleQueryDTO;
 import com.money.entity.SysRole;
 import com.money.security.SecurityGuard;
 import com.money.service.SysRoleService;

@@ -1,7 +1,7 @@
 package com.money.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.SysDictDetailDTO;
+import com.money.dto.SysDictDetailDTO;
 import com.money.entity.SysDictDetail;
 
 import java.util.List;

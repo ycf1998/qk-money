@@ -2,8 +2,8 @@ package com.money.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.SysRoleDTO;
-import com.money.common.dto.query.SysRoleQueryDTO;
+import com.money.dto.SysRoleDTO;
+import com.money.dto.query.SysRoleQueryDTO;
 import com.money.entity.SysRole;
 import com.money.entity.SysUserRoleRelation;
 import com.money.common.vo.PageVO;

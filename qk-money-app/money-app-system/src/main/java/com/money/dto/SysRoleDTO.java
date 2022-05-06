@@ -1,5 +1,6 @@
-package com.money.common.dto;
+package com.money.dto;
 
+import com.money.common.dto.ValidGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

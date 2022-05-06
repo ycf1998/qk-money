@@ -2,10 +2,10 @@ package com.money.controller;
 
 
 import com.money.common.dto.ValidGroup;
-import com.money.common.dto.ChangePasswordDTO;
-import com.money.common.dto.SysUserDTO;
-import com.money.common.dto.UpdateProfileDTO;
-import com.money.common.dto.query.SysUserQueryDTO;
+import com.money.dto.ChangePasswordDTO;
+import com.money.dto.SysUserDTO;
+import com.money.dto.UpdateProfileDTO;
+import com.money.dto.query.SysUserQueryDTO;
 import com.money.security.SecurityGuard;
 import com.money.security.annotation.CurrentUser;
 import com.money.service.SysRoleService;

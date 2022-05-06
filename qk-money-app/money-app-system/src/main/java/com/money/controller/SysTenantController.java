@@ -1,9 +1,8 @@
 package com.money.controller;
 
-
-import com.money.common.dto.SysTenantDTO;
 import com.money.common.dto.ValidGroup;
-import com.money.common.dto.query.SysTenantQueryDTO;
+import com.money.dto.SysTenantDTO;
+import com.money.dto.query.SysTenantQueryDTO;
 import com.money.entity.SysTenant;
 import com.money.service.SysTenantService;
 import com.money.common.vo.PageVO;

@@ -2,8 +2,8 @@ package com.money.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.SysPermissionDTO;
-import com.money.common.dto.query.SysPermissionQueryDTO;
+import com.money.dto.SysPermissionDTO;
+import com.money.dto.query.SysPermissionQueryDTO;
 import com.money.entity.SysPermission;
 import com.money.util.SysPermissionVO;
 import com.money.util.VueRouterVO;

@@ -1,8 +1,8 @@
 package com.money.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.SysDictDTO;
-import com.money.common.dto.query.SysDictQueryDTO;
+import com.money.dto.SysDictDTO;
+import com.money.dto.query.SysDictQueryDTO;
 import com.money.entity.SysDict;
 import com.money.common.vo.PageVO;
 

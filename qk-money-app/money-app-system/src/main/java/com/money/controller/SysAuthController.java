@@ -1,6 +1,6 @@
 package com.money.controller;
 
-import com.money.common.dto.LoginDTO;
+import com.money.dto.LoginDTO;
 import com.money.security.annotation.CurrentUser;
 import com.money.service.SysUserService;
 import com.money.util.AuthTokenVO;

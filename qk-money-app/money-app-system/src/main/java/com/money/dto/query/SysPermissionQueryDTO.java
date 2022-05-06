@@ -1,4 +1,4 @@
-package com.money.common.dto.query;
+package com.money.dto.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

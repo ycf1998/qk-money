@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.exception.BaseException;
 import com.money.constant.ErrorStatus;
-import com.money.common.dto.SysDictDetailDTO;
+import com.money.dto.SysDictDetailDTO;
 import com.money.entity.SysDictDetail;
 import com.money.mapper.SysDictDetailMapper;
 import com.money.service.SysDictDetailService;

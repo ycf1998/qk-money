@@ -1,8 +1,8 @@
 package com.money.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.SysTenantDTO;
-import com.money.common.dto.query.SysTenantQueryDTO;
+import com.money.dto.SysTenantDTO;
+import com.money.dto.query.SysTenantQueryDTO;
 import com.money.entity.SysTenant;
 import com.money.common.vo.PageVO;
 import org.springframework.web.multipart.MultipartFile;

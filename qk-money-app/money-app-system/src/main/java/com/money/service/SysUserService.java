@@ -2,11 +2,11 @@ package com.money.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.money.common.dto.ChangePasswordDTO;
-import com.money.common.dto.LoginDTO;
-import com.money.common.dto.SysUserDTO;
-import com.money.common.dto.UpdateProfileDTO;
-import com.money.common.dto.query.SysUserQueryDTO;
+import com.money.dto.ChangePasswordDTO;
+import com.money.dto.LoginDTO;
+import com.money.dto.SysUserDTO;
+import com.money.dto.UpdateProfileDTO;
+import com.money.dto.query.SysUserQueryDTO;
 import com.money.entity.SysPermission;
 import com.money.entity.SysRole;
 import com.money.entity.SysUser;

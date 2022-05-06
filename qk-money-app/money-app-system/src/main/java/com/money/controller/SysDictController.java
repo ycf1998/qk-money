@@ -1,10 +1,10 @@
 package com.money.controller;
 
 
-import com.money.common.dto.SysDictDTO;
-import com.money.common.dto.SysDictDetailDTO;
 import com.money.common.dto.ValidGroup;
-import com.money.common.dto.query.SysDictQueryDTO;
+import com.money.dto.SysDictDTO;
+import com.money.dto.SysDictDetailDTO;
+import com.money.dto.query.SysDictQueryDTO;
 import com.money.entity.SysDict;
 import com.money.entity.SysDictDetail;
 import com.money.service.SysDictDetailService;
