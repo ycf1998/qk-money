@@ -7,7 +7,7 @@ import com.money.dto.query.SysRoleQueryDTO;
 import com.money.entity.SysRole;
 import com.money.entity.SysUserRoleRelation;
 import com.money.common.vo.PageVO;
-import com.money.util.SysRoleVO;
+import com.money.vo.SysRoleVO;
 
 import java.util.List;
 import java.util.Set;

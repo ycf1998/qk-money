@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.money.dto.SysPermissionDTO;
 import com.money.dto.query.SysPermissionQueryDTO;
 import com.money.entity.SysPermission;
-import com.money.util.SysPermissionVO;
-import com.money.util.VueRouterVO;
+import com.money.vo.SysPermissionVO;
+import com.money.vo.VueRouterVO;
 
 import java.util.List;
 import java.util.Set;

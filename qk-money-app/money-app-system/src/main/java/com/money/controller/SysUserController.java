@@ -11,7 +11,7 @@ import com.money.security.annotation.CurrentUser;
 import com.money.service.SysRoleService;
 import com.money.service.SysUserService;
 import com.money.common.vo.PageVO;
-import com.money.util.SysUserVO;
+import com.money.vo.SysUserVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

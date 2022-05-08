@@ -1,4 +1,4 @@
-package com.money.util;
+package com.money.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

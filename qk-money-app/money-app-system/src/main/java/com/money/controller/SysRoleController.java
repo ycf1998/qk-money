@@ -7,7 +7,7 @@ import com.money.entity.SysRole;
 import com.money.security.SecurityGuard;
 import com.money.service.SysRoleService;
 import com.money.common.vo.PageVO;
-import com.money.util.SysRoleVO;
+import com.money.vo.SysRoleVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

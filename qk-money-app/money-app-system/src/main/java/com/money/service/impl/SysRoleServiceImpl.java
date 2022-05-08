@@ -25,7 +25,7 @@ import com.money.service.SysRolePermissionRelationService;
 import com.money.service.SysRoleService;
 import com.money.service.SysUserRoleRelationService;
 import com.money.util.PageUtil;
-import com.money.util.SysRoleVO;
+import com.money.vo.SysRoleVO;
 import com.money.util.VOUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;

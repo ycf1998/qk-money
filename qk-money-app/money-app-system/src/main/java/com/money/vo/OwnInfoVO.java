@@ -1,4 +1,4 @@
-package com.money.util;
+package com.money.vo;
 
 import com.money.entity.SysPermission;
 import com.money.entity.SysRole;

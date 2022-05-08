@@ -10,10 +10,10 @@ import com.money.dto.query.SysUserQueryDTO;
 import com.money.entity.SysPermission;
 import com.money.entity.SysRole;
 import com.money.entity.SysUser;
-import com.money.util.AuthTokenVO;
-import com.money.util.OwnInfoVO;
+import com.money.vo.AuthTokenVO;
+import com.money.vo.OwnInfoVO;
 import com.money.common.vo.PageVO;
-import com.money.util.SysUserVO;
+import com.money.vo.SysUserVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
