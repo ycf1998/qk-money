@@ -9,10 +9,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.exception.BaseException;
-import com.money.dto.SysRoleDTO;
-import com.money.dto.query.SysRoleQueryDTO;
 import com.money.common.vo.PageVO;
 import com.money.constant.ErrorStatus;
+import com.money.dto.SysRoleDTO;
+import com.money.dto.query.SysRoleQueryDTO;
 import com.money.entity.SysPermission;
 import com.money.entity.SysRole;
 import com.money.entity.SysRolePermissionRelation;
@@ -25,8 +25,8 @@ import com.money.service.SysRolePermissionRelationService;
 import com.money.service.SysRoleService;
 import com.money.service.SysUserRoleRelationService;
 import com.money.util.PageUtil;
-import com.money.vo.SysRoleVO;
 import com.money.util.VOUtil;
+import com.money.vo.SysRoleVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -166,7 +166,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public void checkLevel(Long userId, Integer checkLevel) {
         Integer level = this.getLevel(userId);
         if (level > checkLevel) {
-            throw new BaseException("权限不足，你的角色级别：" + level + "，低于操作的角色级别：" + checkLevel);
+            throw new BaseException("权限不足，你的角色级别低于操作的角色级别");
         }
     }
 
@@ -175,7 +175,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Integer level = this.getLevel(userId);
         Integer min = this.listByIds(roleIds).stream().map(SysRole::getLevel).min(Integer::compare).orElse(Integer.MAX_VALUE);
         if (level > min) {
-            throw new BaseException("权限不足，你的角色级别：" + level + "，低于操作角色的级别：" + min);
+            throw new BaseException("权限不足，你的角色级别低于操作的角色级别");
         }
     }
 

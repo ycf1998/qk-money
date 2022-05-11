@@ -1,8 +1,10 @@
 package com.money.common;
 
 import com.money.common.i18n.I18nProperties;
+import com.money.common.i18n.I18nSupport;
 import com.money.common.timezone.TimezoneProperties;
 import lombok.Data;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -13,7 +15,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties("money.web")
-public class CommonWebProperties {
+public class CommonWebProperties implements InitializingBean {
 
     /**
      * 全局响应处理器
@@ -33,10 +35,18 @@ public class CommonWebProperties {
     /**
      * 国际化
      */
-    private I18nProperties i18n;
+    private I18nProperties i18n = new I18nProperties();
 
     /**
      * 时区
      */
-    private TimezoneProperties timezone;
+    private TimezoneProperties timezone = new TimezoneProperties();
+
+    @Override
+    public void afterPropertiesSet() {
+        // 多语言
+        if (i18n.isEnabled()) {
+            I18nSupport.enableI18n(i18n);
+        }
+    }
 }

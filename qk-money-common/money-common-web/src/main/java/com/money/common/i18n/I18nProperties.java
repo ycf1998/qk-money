@@ -15,8 +15,22 @@ import java.util.List;
 public class I18nProperties {
 
     /**
+     * 启用
+     */
+    private boolean enabled = false;
+
+    /**
      * 支持
      */
     private List<String> support = new ArrayList<>();
 
+    /**
+     * 是支持
+     *
+     * @param lang 朗
+     * @return boolean
+     */
+    public boolean isSupport(String lang) {
+        return support.contains(lang);
+    }
 }

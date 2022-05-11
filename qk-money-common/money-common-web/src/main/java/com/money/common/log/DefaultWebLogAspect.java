@@ -8,6 +8,7 @@ import com.money.common.constant.WebRequestConstant;
 import com.money.common.context.WebRequestContext;
 import com.money.common.context.WebRequestContextHolder;
 import com.money.common.util.IpUtil;
+import com.money.common.util.WebUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,8 +22,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -61,9 +60,7 @@ public class DefaultWebLogAspect {
         long startTime = Instant.now().toEpochMilli();
         log.info("=============================================");
         // 获取当前请求对象
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = WebUtil.getRequest();
         // 填充上下文
         this.fillRequestContext(request);
         MDC.put("requestId", WebRequestContextHolder.getCONTEXT().getRequestId());
@@ -123,7 +120,7 @@ public class DefaultWebLogAspect {
                 argList.add(Collections.singletonMap(parameters[i].getName(), args[i]));
             }
         }
-        return argList.size() > 0 ? argList.get(0) : argList;
+        return argList.size() == 1 ? argList.get(0) : argList;
     }
 
     /**

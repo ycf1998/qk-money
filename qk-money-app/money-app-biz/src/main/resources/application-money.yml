@@ -6,6 +6,11 @@ money:
     exception-handler: true
     # 全局请求日志切面
     web-log-aspect: true
+    # 多语言
+    i18n:
+      enabled: true
+      support:
+        - en
   # 多租户
   tenant:
     # 开关
@@ -73,7 +78,7 @@ money:
   mail:
     host: smtp.qq.com # 邮箱服务器
     username: 374648769@qq.com
-    password: aqzhvhajqebqbgjh # 授权码（得去邮箱获取）
+    password:  # 授权码（得去邮箱获取）
     properties:
       mail:
         smtp:
