@@ -11,6 +11,9 @@ money:
       enabled: true
       support:
         - en
+    # 多时区
+    timezone:
+      default-time-zone: GMT+08:00
   # 多租户
   tenant:
     # 开关

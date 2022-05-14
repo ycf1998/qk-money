@@ -3,7 +3,6 @@ package com.money.common.log;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.money.common.CommonWebProperties;
 import com.money.common.constant.WebRequestConstant;
 import com.money.common.context.WebRequestContext;
 import com.money.common.context.WebRequestContextHolder;
@@ -47,8 +46,6 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "money.web", name = "web-log-aspect", matchIfMissing = true)
 @RequiredArgsConstructor
 public class DefaultWebLogAspect {
-
-    private final CommonWebProperties commonWebProperties;
 
     @Pointcut("execution(public * com.money..controller..*.*(..))")
     public void webLog() {

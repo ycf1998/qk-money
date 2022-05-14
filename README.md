@@ -4,7 +4,7 @@
 
 - JDK8语法、使用较新的技术栈，注重代码规范
 - 自由拆卸组装功能，不强依赖Redis
-- 尽可能‘低水平、低耦合高内聚
+- 尽可能低水平、低耦合高内聚
 - 客制化配置
 
 # 版本依赖
@@ -15,7 +15,7 @@
 | Maven        | 3.8.1  |
 | Spring Boot  | 2.5.4  |
 | Mybatis-plus | 3.5.0  |
-| JWT          | 0.11.2 |
+| JJWT         | 0.11.2 |
 | Hutool       | 5.7.9  |
 | Jackson      | 2.12.4 |
 | Spring Doc   | 1.5.11 |
@@ -37,7 +37,7 @@
 - [x] 对象存储OSS
     - [x] 本地
     - [x] 七牛云
-- [ ] 国际化（多语言、多时区）
+- [x] 国际化（多语言、多时区）
 - [x] 接口文档（OpenApi3）
 - [x] 发送邮件
 - [x] 代码生成器
@@ -48,25 +48,25 @@
 
 # 工程结构
 
-| 模块                                      | 描述                                                         |
-| ----------------------------------------- | ------------------------------------------------------------ |
-| `qk-money-parent`                         | 👉父模块：BOM，依赖版本清单，其他模块都不能写具体版本号，需要新增的依赖要先在这声明版本信息 |
-| `qk-money-app`                            | 👉应用模块：**主要开发的模块**                                |
-| `qk-money-app`/`money-app-api`            | 应用api模块：放常量枚举、异常、Entity、DTO、VO等实体类       |
-| `qk-money-app`/`money-app-biz`            | 应用业务模块：放Controller、Service、Mapper等，**启动类所在** |
-| `qk-money-app`/`money-app-system`         | 应用系统模块：提供和前端配套的基于RBAC模型和JWT的权限认证、数据字典等系统管理功能，biz模块默认会引入 |
-| `qk-money-common`                         | 👉通用模块：                                                  |
-| ~~`qk-money-common`/`money-common-core`~~ | ~~（整合进common-web）通用核心模块：核心的常量枚举、通用异常和工具类（工具类能用[Hutool](https://www.hutool.cn/docs/#/)就不要重复造轮子）等。~~ |
-| `qk-money-common`/`money-common-web`      | 通用web模块：包含core模块，作为web项目必要的依赖。提供默认的响应返回①、异常处理和请求日志切面（可通过开关配置，默认都开）等web相关配置。 |
-| `qk-money-common`/`money-common-mybatis`  | Mybatis模块：使用的是`Mybatis-Plus`，默认已配置分页插件、审计字段默认值填充（需继承`BaseEntity`）和**生成器**。 |
-| `qk-money-common/money-common-cache`      | 缓存模块：支持本地缓存和分布式缓存`Redis`                    |
-| `qk-money-common/money-common-mail`       | 邮件模块：发送邮件                                           |
-| `qk-money-common`/`money-common-oss`      | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
-| `qk-money-common/money-common-swagger`    | 接口文档模块：提供Open API 3（Swagger）                      |
-| `qk-money-security`                       | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
-| `qk-money-tenant`                         | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能。    |
+| 模块                                                         | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `qk-money-parent`[📃!](./qk-money-parent/README.md)           | 👉父模块：BOM，依赖版本清单，其他模块都不能写具体版本号，需要新增的依赖要先在这声明版本信息 |
+| `qk-money-app`                                               | 👉应用模块：**主要开发的模块**                                |
+| `qk-money-app`/`money-app-api`                               | 应用api模块：放常量枚举、异常、Entity、DTO、VO等实体类       |
+| `qk-money-app`/`money-app-biz`                               | 应用业务模块：放Controller、Service、Mapper等，**启动类所在** |
+| `qk-money-app`/`money-app-system`                            | 应用系统模块：提供和前端配套的基于RBAC模型和JWT的权限认证、数据字典等系统管理功能，biz模块默认会引入 |
+| `qk-money-common`                                            | 👉通用模块：                                                  |
+| ~~`qk-money-common`/`money-common-core`~~                    | ~~（整合进common-web）通用核心模块：核心的常量枚举、通用异常和工具类（工具类能用[Hutool](https://www.hutool.cn/docs/#/)就不要重复造轮子）等。~~ |
+| `qk-money-common`/`money-common-web`[📃!](./qk-money-common/money-common-web/README.md) | 通用web模块：**建议至少引入的模块**。<br />提供默认全局的响应返回、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少项目的基础构建和规范。 |
+| `qk-money-common`/`money-common-mybatis`                     | Mybatis模块：使用的是`Mybatis-Plus`，默认已配置分页插件、审计字段默认值填充（需继承`BaseEntity`）和**代码生成器**。 |
+| `qk-money-common/money-common-cache`                         | 缓存模块：支持本地缓存和分布式缓存`Redis`                    |
+| `qk-money-common/money-common-mail`                          | 邮件模块：发送邮件                                           |
+| `qk-money-common`/`money-common-oss`                         | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
+| `qk-money-common/money-common-swagger`                       | 接口文档模块：提供Open API 3（Swagger）                      |
+| `qk-money-security`                                          | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
+| `qk-money-tenant`                                            | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能。    |
 
-①响应返回：对于Controller的返回值默认会用`R<T>(code=200, data, message)`包装返回，返回值无需自己包装。如果不想被包装，可在Controller类上或者方法上注解`@IgnoreGlobalResponse`。而对于非200，建议用抛异常的方式让统一异常处理返回，而不要自己包装非200的`R`
+> 点击📃查看对应模块文档，带 ! 的开发前建议先看.
 
 # 快速使用手册
 

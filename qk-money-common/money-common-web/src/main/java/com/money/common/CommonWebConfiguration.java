@@ -1,8 +1,8 @@
 package com.money.common;
 
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.money.common.i18n.I18nProperties;
+import com.money.common.timezone.TimeZoneProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @createTime : 2021-09-11 10:01:34
  */
 @Configuration
-@EnableConfigurationProperties(CommonWebProperties.class)
+@EnableConfigurationProperties({CommonWebProperties.class, I18nProperties.class, TimeZoneProperties.class})
 public class CommonWebConfiguration {
 
 }
