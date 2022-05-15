@@ -2,6 +2,16 @@
 
 ​		该模块提供web开发的一些通用能力和配置，减少项目的基础构建和规范，是建议至少引入的模块。包括默认全局响应返回、默认全局异常处理、请求日志切面、日志链路追踪、多语言、多时区等。
 
+## 依赖
+
+~~~xml
+<!-- web模块-->
+<dependency>
+    <groupId>com.money</groupId>
+    <artifactId>money-common-web</artifactId>
+</dependency>
+~~~
+
 ## 功能结构
 
 每个功能的核心类都在对应的包里。
@@ -90,7 +100,7 @@ WebRequestContextHolder.getContext().getLang(); // 获取上下文的语言环�
 - List（递归对泛型类型是目前支持的类型转换）
 - PageVO（对record，其实就是List进行转换）
 
-**🌰TimeZoneDemoController**
+**🌰`TimeZoneDemoController`**
 
 ### DTO、VO
 

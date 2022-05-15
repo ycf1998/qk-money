@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TimeZoneDemoController {
 
     @TZRep
-    @PostMapping("/one")
+    @PostMapping
     public TimeZoneVO test1(@TZParam TimeZoneDTO dto) {
-        // 例子请求 curl "http://localhost:9000/qk-money/test/timeZone/one" -H "Content-Type: application/x-www-form-urlencoded" -H "X-qk-timezone: GMT+09:00" --data-raw "dateTime=2022-05-13 13:15:00&localDateTime=2022-05-13 13:15:00"
+        // 例子请求 curl "http://localhost:9000/qk-money/test/timeZone" -H "Content-Type: application/x-www-form-urlencoded" -H "X-qk-timezone: GMT+09:00" --data-raw "dateTime=2022-05-13 13:15:00&localDateTime=2022-05-13 13:15:00"
 
         // 入参东九区被转为了东八区，少了一小时
         System.out.println(dto);

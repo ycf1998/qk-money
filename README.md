@@ -60,7 +60,7 @@
 | `qk-money-common`/`money-common-web`[📃!](./qk-money-common/money-common-web/README.md) | 通用web模块：**建议至少引入的模块**。<br />提供默认全局的响应返回、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少项目的基础构建和规范。 |
 | `qk-money-common`/`money-common-mybatis`                     | Mybatis模块：使用的是`Mybatis-Plus`，默认已配置分页插件、审计字段默认值填充（需继承`BaseEntity`）和**代码生成器**。 |
 | `qk-money-common/money-common-cache`                         | 缓存模块：支持本地缓存和分布式缓存`Redis`                    |
-| `qk-money-common/money-common-mail`                          | 邮件模块：发送邮件                                           |
+| `qk-money-common/money-common-mail`[📃](./qk-money-common/money-common-mail/README.md) | 邮件模块：提供邮件发送功能                                   |
 | `qk-money-common`/`money-common-oss`                         | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
 | `qk-money-common/money-common-swagger`                       | 接口文档模块：提供Open API 3（Swagger）                      |
 | `qk-money-security`                                          | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
