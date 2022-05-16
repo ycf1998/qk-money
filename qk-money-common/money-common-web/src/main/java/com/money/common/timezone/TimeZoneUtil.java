@@ -1,9 +1,6 @@
 package com.money.common.timezone;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
 import com.money.common.timezone.annotation.TZParam;
 import com.money.common.timezone.converter.DefaultTimeZoneConverter;
 import com.money.common.timezone.converter.TimeZoneConverter;
@@ -34,34 +31,6 @@ public class TimeZoneUtil {
      * map key含有关键字则转换
      */
     private final List<String> MAP_KEY = ListUtil.toList("time", "date");
-
-    /**
-     * JSON转换
-     *
-     * @param target
-     * @param format
-     * @param formZoneId
-     * @param toZoneId
-     * @return {@link JSON}
-     */
-    public JSON convertJSON(JSON target, String format, ZoneId formZoneId, ZoneId toZoneId) {
-        if (target != null) {
-            Class<?> targetClass = target.getClass();
-            if (targetClass == JSONArray.class) {
-                ((JSONArray) target).forEach(e -> convertJSON((JSON) e, format, formZoneId, toZoneId));
-            } else if (targetClass == JSONObject.class) {
-                JSONObject object = (JSONObject) target;
-                for (Map.Entry<String, Object> entry : object.entrySet()) {
-                    if (entry.getValue().getClass() == String.class && MAP_KEY.stream().anyMatch(k -> entry.getKey().toLowerCase().contains(k))) {
-                        object.put(entry.getKey(), convertString(String.valueOf(entry.getValue()), format, formZoneId, toZoneId));
-                    } else if (entry.getValue().getClass() == JSONObject.class || entry.getValue().getClass() == JSONArray.class) {
-                        object.put(entry.getKey(), convertJSON((JSON) entry.getValue(), format, formZoneId, toZoneId));
-                    }
-                }
-            }
-        }
-        return target;
-    }
 
     /**
      * 转换

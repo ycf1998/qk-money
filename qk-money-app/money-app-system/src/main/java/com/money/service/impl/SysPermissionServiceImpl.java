@@ -238,10 +238,9 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                     throw new BaseException("组件路径不允许为空");
                 }
             }
-        } else if (PermissionType.BUTTON.name().equals(permissionType)) {
-            if (StrUtil.isBlank(permissionDTO.getPermission())) {
+        } else if (PermissionType.BUTTON.name().equals(permissionType)
+                && StrUtil.isBlank(permissionDTO.getPermission())) {
                 throw new BaseException("权限标识不允许为空");
-            }
         }
     }
 }
