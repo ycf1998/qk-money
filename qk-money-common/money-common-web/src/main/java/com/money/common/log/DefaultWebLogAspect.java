@@ -8,7 +8,6 @@ import com.money.common.context.WebRequestContext;
 import com.money.common.context.WebRequestContextHolder;
 import com.money.common.util.IpUtil;
 import com.money.common.util.WebUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -44,7 +43,6 @@ import java.util.List;
 @Order(-1)
 @Component
 @ConditionalOnProperty(prefix = "money.web", name = "web-log-aspect", matchIfMissing = true)
-@RequiredArgsConstructor
 public class DefaultWebLogAspect {
 
     @Pointcut("execution(public * com.money..controller..*.*(..))")
@@ -58,10 +56,9 @@ public class DefaultWebLogAspect {
         log.info("=============================================");
         // 获取当前请求对象
         HttpServletRequest request = WebUtil.getRequest();
-        // 填充上下文
-        this.fillRequestContext(request);
-        MDC.put("requestId", WebRequestContextHolder.getCONTEXT().getRequestId());
-        log.info("{}", WebRequestContextHolder.getCONTEXT());
+        // 链路追踪
+        String requestId = request.getHeader(WebRequestConstant.HEADER_REQUEST_ID);
+        MDC.put("requestId", requestId);
         // 记录请求信息
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
@@ -69,31 +66,30 @@ public class DefaultWebLogAspect {
         String requestMethod = request.getMethod();
         String url = request.getRequestURL().toString();
         log.info("{} {}", requestMethod, url);
-        // swagger注解描述
-        String description = "";
-//        if (method.isAnnotationPresent(Operation.class)) {
-//            Operation operation = method.getAnnotation(Operation.class);
-//            description = operation.summary();
-//            log.info("描述：{}", description);
-//        }
+        // 填充上下文
+        this.fillRequestContext(request);
+        log.info("{}", WebRequestContextHolder.getContext());
         // 执行
-        Object result = joinPoint.proceed();
-        long endTime = Instant.now().toEpochMilli();
-        long spendTime = endTime - startTime;
-        WebLog webLog = WebLog.builder()
-                .basePath(url.replace(new URL(url).getPath(), ""))
-                .description(description)
-                .ip(IpUtil.getIp(request))
-                .method(requestMethod)
-                .parameter(this.getParameter(method, joinPoint.getArgs()))
-                .url(url)
-                .uri(request.getRequestURI())
-                .result(result)
-                .operationTime(now.toString())
-                .spendTime(spendTime)
-                .build();
-        log.info("detail {}", JSONUtil.toJsonStr(webLog));
-        log.info("spend time: {}ms", spendTime);
+        Object result = null;
+        try {
+           result = joinPoint.proceed();
+        } finally {
+            long endTime = Instant.now().toEpochMilli();
+            long spendTime = endTime - startTime;
+            WebLog webLog = WebLog.builder()
+                    .basePath(url.replace(new URL(url).getPath(), ""))
+                    .ip(IpUtil.getIp(request))
+                    .method(requestMethod)
+                    .parameter(this.getParameter(method, joinPoint.getArgs()))
+                    .url(url)
+                    .uri(request.getRequestURI())
+                    .result(result)
+                    .operationTime(now.toString())
+                    .spendTime(spendTime)
+                    .build();
+            log.info("detail {}", JSONUtil.toJsonStr(webLog));
+            log.info("spend time: {}ms", spendTime);
+        }
         return result;
     }
 

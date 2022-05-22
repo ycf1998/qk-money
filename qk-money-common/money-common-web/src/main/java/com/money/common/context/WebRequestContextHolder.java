@@ -17,7 +17,7 @@ public class WebRequestContextHolder {
         CONTEXT.set(webRequestContext);
     }
 
-    public WebRequestContext getCONTEXT() {
+    public WebRequestContext getContext() {
         return CONTEXT.get();
     }
 

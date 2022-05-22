@@ -43,7 +43,7 @@ public class TimeZoneAspect {
     @Around(value = "timezone()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
-        ZoneId customTimeZone = WebRequestContextHolder.getCONTEXT().getTimezone();
+        ZoneId customTimeZone = WebRequestContextHolder.getContext().getTimezone();
         log.info("客户时区：{}", customTimeZone);
         // 时区为默认时区或者没带时区不处理
         ZoneId defaultZone = ZoneId.of(timezoneProperties.getDefaultTimeZone());
