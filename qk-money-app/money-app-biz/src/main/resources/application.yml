@@ -14,12 +14,13 @@ spring:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-# swagger配置
+# swagger配置，更多配置可参考官网https://springdoc.org/#properties
 swagger:
   scan-package: com.money
   title: ${spring.application.name}
   description: ${spring.application.name}接口文档
   version: 1.0.0
+  auth-header: ${money.security.token.header}
   contact:
     name: money
     url: www.money.com
