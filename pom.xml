@@ -80,7 +80,7 @@
             </dependency>
             <dependency>
                 <groupId>com.money</groupId>
-                <artifactId>money-common-dict</artifactId>
+                <artifactId>money-common-dtp</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

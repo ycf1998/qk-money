@@ -38,7 +38,7 @@
     - [x] 本地
     - [x] 七牛云
 - [x] 国际化（多语言、多时区）
-- [x] 接口文档（OpenApi3）
+- [x] 接口文档（OpenAPI3）
 - [x] 发送邮件
 - [x] 代码生成器
 - [x] 日志（logback），链路追踪
@@ -61,7 +61,7 @@
 | `qk-money-common`/`money-common-mybatis`                     | Mybatis模块：使用的是`Mybatis-Plus`，默认已配置分页插件、审计字段默认值填充（需继承`BaseEntity`）和**代码生成器**。 |
 | `qk-money-common/money-common-cache`                         | 缓存模块：支持本地缓存和分布式缓存`Redis`                    |
 | `qk-money-common/money-common-mail`[📃](./qk-money-common/money-common-mail/README.md) | 邮件模块：提供邮件发送功能                                   |
-| `qk-money-common`/`money-common-oss`                         | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
+| `qk-money-common`/`money-common-oss`[📃](./qk-money-common/money-common-oss/README.md)` | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
 | `qk-money-common/money-common-swagger`[📃](./qk-money-common/money-common-swagger/README.md) | 接口文档模块：提供Open API 3（Swagger）                      |
 | `qk-money-security`                                          | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
 | `qk-money-tenant`                                            | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能。    |
