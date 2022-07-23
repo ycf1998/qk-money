@@ -1,6 +1,6 @@
 # 简介
 
-​	`QK-MONEY`一个基于Spring Boot2.5.4、Spring Security、MybatisPlus3.5 并提供如实现RBAC模型、基于JWT的权限认证解决方案、多租户等可拆卸模块化功能组件，采用前端后端分离（Vue-Element-Admin）的后台管理系统。
+​	`QK-MONEY`一个基于Spring Boot2.5、Spring Security、MybatisPlus3.5 并提供如实现RBAC模型、基于JWT的权限认证解决方案、多租户等可拆卸模块化功能组件，采用前端后端分离（Vue-Element-Admin）的后台管理系统。
 
 - JDK8语法、使用较新的技术栈，注重代码规范
 - 自由拆卸组装功能，不强依赖Redis
@@ -13,10 +13,10 @@
 | ------------ | ------ |
 | JDK          | 1.8    |
 | Maven        | 3.8.1  |
-| Spring Boot  | 2.5.4  |
-| Mybatis-plus | 3.5.0  |
+| Spring Boot  | 2.5.14 |
+| Mybatis-plus | 3.5.2  |
 | JJWT         | 0.11.2 |
-| Hutool       | 5.7.9  |
+| Hutool       | 5.8.4  |
 | Jackson      | 2.12.4 |
 | Spring Doc   | 1.5.11 |
 | Qiniu        | 7.7.0  |
