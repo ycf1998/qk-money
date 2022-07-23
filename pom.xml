@@ -80,11 +80,6 @@
             </dependency>
             <dependency>
                 <groupId>com.money</groupId>
-                <artifactId>money-common-dtp</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.money</groupId>
                 <artifactId>qk-money-security</artifactId>
                 <version>${revision}</version>
             </dependency>

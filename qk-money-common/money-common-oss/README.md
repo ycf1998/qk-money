@@ -21,7 +21,7 @@
 
 **🌰`OssDemoController`**
 
-## 配置
+## 相关配置
 
 配置故意使用了如下的引入方式，所以相关配置写在对应的`oss.properties`文件，不喜欢就提出来和`application-money.yml`写一起就好了
 

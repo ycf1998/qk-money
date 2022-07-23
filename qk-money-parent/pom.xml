@@ -24,6 +24,7 @@
         <spring-boot-admin.version>2.4.3</spring-boot-admin.version>
         <mybatis-plus.version>3.5.0</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.1</mybatis-plus-generator.version>
+        <xxl-job.version>2.3.1</xxl-job.version>
         <qiniu.version>7.7.0</qiniu.version>
         <caffeine.version>2.9.2</caffeine.version>
         <jjwt.version>0.11.2</jjwt.version>
@@ -74,6 +75,12 @@
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
             </dependency>
+            <!-- xxl-job -->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
             <!-- 七牛云对象存储 -->
             <dependency>
                 <groupId>com.qiniu</groupId>
@@ -90,7 +97,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.12.4</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
