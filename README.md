@@ -1,6 +1,6 @@
 # 简介
 
-​	`QK-MONEY`一个基于Spring Boot2.5、Spring Security、MybatisPlus3.5 并提供如实现RBAC模型、基于JWT的权限认证解决方案、多租户等可拆卸模块化功能组件，采用前端后端分离（Vue-Element-Admin）的后台管理系统。
+​	`QK-MONEY`一个基于Spring Boot 2.6、Spring Security、MybatisPlus 并提供如实现RBAC模型、基于JWT的权限认证解决方案、多租户等可拆卸模块化功能组件，采用前端后端分离（Vue-Element-Admin）的后台管理系统。
 
 - JDK8语法、使用较新的技术栈，注重代码规范
 - 自由拆卸组装功能，不强依赖Redis
@@ -13,7 +13,7 @@
 | ------------ | ------ |
 | JDK          | 1.8    |
 | Maven        | 3.8.1  |
-| Spring Boot  | 2.5.14 |
+| Spring Boot  | 2.6.10 |
 | Mybatis-plus | 3.5.2  |
 | JJWT         | 0.11.2 |
 | Hutool       | 5.8.4  |
@@ -67,193 +67,70 @@
 | `qk-money-common`/`money-common-oss`[📃](./qk-money-common/money-common-oss/README.md) | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
 | `qk-money-common/money-common-swagger`[📃](./qk-money-common/money-common-swagger/README.md) | 接口文档模块：提供Open API 3（Swagger）                      |
 | `qk-money-security`                                          | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
-| `qk-money-tenant`                                            | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能。    |
-| `xxl-job-admin`                                              | 👉XXL-JOB调度中心：[官方文档](https://www.xuxueli.com/xxl-job) |
+| `qk-money-tenant`                                            | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能      |
+| `xxl-job-admin`                                              | 👉XXL-JOB调度中心：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可 |
 
 > 点击📃查看对应模块文档，带 ! 的开发前建议先看。
 
 # 快速使用手册
 
-## 主要开发模块`qk-money-app`
+## 开发模块`qk-money-app`
 
-主要是在`qk-money-app`下进行开发，如工程结构介绍，启动类就在`money-app-biz`，所以二开的相关代码都将写在这里。
+​		这个模块是用于业务开发的模块，包含如下三个模块，已经分好了职责。
 
-> qk-money-app -- 父项目
->
->   ├─money-app-api -- api模块
->
->   ├─money-app-biz -- 业务模块（引入api和system）
->
->   ├─money-app-system -- 权限管理系统模块
+```
+qk-money
+├── qk-money-app -- 开发模块
+    ├── money-app-api -- api模块，常量枚举、异常、Entity、DTO、VO等实体类管理
+    ├── money-app-biz -- 业务模块（引入api和system），编写Controller、Service、Mapper，配置也都在这个工程下的resource
+    └── money-app-system -- 权限管理系统，开箱即用
+```
 
-## 安全模块`qk-money-security`
+## 启动步骤
 
-赋予基于token认证、RBAC权限模型的认证授权管理能力。
+1. 初始化数据库 `qk_money.sql`
+2. 修改数据库连接池配置 `application-dev.yml`
+3. 启动
 
-1. 引入依赖
+> 此为最小依赖启动，仅仅依靠该工程和一个数据库，但是功能是齐全的。如果要使用一些其他依赖第三方组件的功能（如Redis、七牛云、定时任务XXL-JOB)，可在工程结构介绍里找到对应的功能模块，查看对应的文档使用。
 
-   ~~~xml
-   <!-- 安全模块 -->
-   <dependency>
-       <groupId>com.money</groupId>
-       <artifactId>qk-money-security</artifactId>
-   </dependency>
-   ~~~
+## 开发步骤
 
-2. 注入`RbacSecurityConfig`配置类
+1. **创建相关表**
 
-   这个配置类仅需实现一个返回`RbacUser`的方法，入参是安全模块解析token获取的username。所以你要做的就是通过用户名把`RbacUser`需要的信息如角色标识和权限标识填充好，这样安全模块就可以帮你完成认证和鉴权。
+    ![image-20220731105751029](README.assets/image-20220731105751029.png)
 
-   ~~~java
-   @Configuration(proxyBeanMethods = false)
-   @RequiredArgsConstructor
-   public class SecurityConfig {
-   
-       private final SysUserService sysUserService;
-   
-       @Bean
-       public RbacSecurityConfig rbacSecurityConfig() {
-           return username -> {
-               SysUser sysUser = Optional
-                       .ofNullable(sysUserService.getByUsername(username))
-                       .orElseThrow(() -> new UsernameNotFoundException("用户名或密码错误"));
-               List<SysRole> roles = sysUserService.getRoles(sysUser.getId());
-               List<String> roleCodeList = roles
-                       .stream().map(SysRole::getRoleCode).collect(Collectors.toList());
-               List<String> permissions = sysUserService.getPermissions(sysUser.getId())
-                       .stream().map(SysPermission::getPermission).collect(Collectors.toList());
-               // 返回装填的rbac user
-               RbacUser rbacUser = new RbacUser();
-               rbacUser.setUserId(sysUser.getId());
-               rbacUser.setUsername(sysUser.getUsername());
-               rbacUser.setPassword(sysUser.getPassword());
-               rbacUser.setEnabled(sysUser.getEnabled());
-               rbacUser.setRoles(roleCodeList);
-               rbacUser.setPermissions(permissions);
-               return rbacUser;
-           };
-       }
-   }
-   ~~~
+    > 高亮的是必须要创建的字段，因为生成器默认会继承`BaseEntity`，如果有一些类似关联表不需要这些字段，生成后自己取消继承，然后把`id`字段扣过去就行。`tenant_id`是多租户的字段，设置默认值为0，它并不是`BaseEntity`的字段，只是因为工程克隆下来默认是开启的所以必需创建，除非是多租户配置项里忽略的表。不过即使不想使用多租户功能，我觉得也没必要关闭，默认值都是0，也就是默认租户，那依然是单租户模式。
 
-3. 颁发token，用于认证
+2. **运行生成器生成CRUD代码** `qk-money-common/money-common-mybatis/src/main/java/com/money/mb/MybatisPlusGenerator.java`，生成代码结构如下
 
-   ```java
-   // 注入
-   private final SecurityTokenSupport securityTokenSupport;
-   // 生成token
-   securityTokenSupport.generateToken(username)
-   ```
+![image-20220731102938725](README.assets/image-20220731102938725.png)
 
-4. 权限判断 `@PreAuthorize("@rbac.hasPermission('user:add')")`
+> 生成的CRUD虽然能直接启动使用，但是它不包含业务逻辑，比如查询只有分页条件没有具体业务条件，名字不能重复等，这些生成后需要去补齐。生成的CRUD除了少写一些代码，更多的是给出一套开发的风格与规范，希望开发人员以统一的风格书写这些常用的操作。
 
-   安全模块会比较`RbacUser`里的**角色标识和权限标识**是否包含controller注解上的标识（包含其中一个就行），都不包含则为无权限。
+3. **补充业务代码**
 
-   ~~~java
-   @Operation(summary = "添加用户", tags = {"sysUser"})
-   @PostMapping
-   @PreAuthorize("@rbac.hasPermission('ADMIN','user:add')")
-   public void addSysUser(@Validated(ValidGroup.Save.class) @RequestBody SysUserDTO sysUserDTO) {
-       sysRoleService.checkLevelByRoleId(SecurityGuard.getRbacUser().getUserId(), sysUserDTO.getRoles());
-       sysUserService.add(sysUserDTO);
-   }
-   ~~~
+# 系统截图
 
-相关配置：
+![image-20220731111232903](README.assets/image-20220731111232903.png)
 
-~~~yml
-money:
- # 安全
-  security:
-    # token配置
-    token:
-      # token请求头名称
-      header: Authorization
-      # 令牌类型：完整token："{tokenType} {accessToken}"
-      token-type: Bearer
-      # 密钥
-      secret: money
-      # access token过期时间 ms，默认8小时
-      ttl: 28800000
-      # refresh token过期时间 ms，默认30天
-      refresh-ttl: 2592000000
-      # 策略：jwt（自动过期，默认）、redis
-      strategy: jwt
-      # 缓存键名
-      cache-key: "security:token:"
-    # 忽略的url
-    ignore:
-      get:
-        - /tenants/byCode
-        - /auth/refreshToken
-      post:
-        - /auth/login
-        - /auth/logout
-      pattern:
-        - /error/**
-        - /actuator/**
-        - /swagger**/**
-        - /webjars/**
-        - /v3/**
-        - /assets/**
-        - /test/**
-~~~
+![image-20220731111301378](README.assets/image-20220731111301378.png)
 
-## 系统管理模块`money-app-system`
+![image-20220731111320209](README.assets/image-20220731111320209.png)
 
-​		系统管理模块包含用户管理、角色管理、权限管理、数据字典管理、租户管理，一套完整的权限管理后台系统。它就是安全模块的一个实现。Biz默认会引入，你也可以拆掉，选择自己实现。
+![image-20220731111334536](README.assets/image-20220731111334536.png)
 
-引入依赖即可
-
-~~~xml
-<!-- 系统模块 -->
-<dependency>
-    <groupId>com.money</groupId>
-    <artifactId>money-app-system</artifactId>
-</dependency>
-~~~
-
-## 多租户模块`qk-money-tenant`
-
-赋予基于表字段的多租户隔离数据能力。（使用的是Mybatis plus的多租户插件）
-
-- 为要区分租户的表添加字段`tenant_id`
-- 所有sql和mybatis plus操作不需要显示的写租户条件过滤，无感介入！
-
-引入依赖
-
-~~~xml
-<!-- 多租户模块 -->
-<dependency>
-    <groupId>com.money</groupId>
-    <artifactId>qk-money-tenant</artifactId>
-</dependency>
-~~~
-
-相关配置：
-
-~~~yml
-money:
-  # 多租户
-  tenant:
-    # 开关
-    enabled: false
-    # 请求头
-    header: Y-tenant
-    # 忽略的表
-    ignore-table:
-      - sys_tenant
-~~~
+![image-20220731111504176](README.assets/image-20220731111504176.png)
 
 # 配置总览
 
-`qk-money-app/money-app-biz/resources/application-money.yml`
+**客制化配置：**`qk-money-app/money-app-biz/resources/application-money.yml`
 
 ~~~yml
 spring:
   config:
     # 引入对象存储的配置
-    import: oss.properties
+    import: oss.properties  
 money:
   web:
     # 全局响应处理器
@@ -262,10 +139,18 @@ money:
     exception-handler: true
     # 全局请求日志切面
     web-log-aspect: true
+    # 多语言
+    i18n:
+      enabled: true
+      support:
+        - en
+    # 多时区
+    timezone:
+      default-time-zone: GMT+08:00
   # 多租户
   tenant:
     # 开关
-    enabled: false
+    enabled: true
     # 请求头
     header: Y-tenant
     # 忽略的表
@@ -327,14 +212,14 @@ money:
         - /test/**
   # 邮件服务
   mail:
-    host: smtp.qq.com # 邮箱服务器
-    username: 374648769@qq.com
-    password:  # 授权码（得去邮箱获取）
+    host: smtp.shahow.top # 邮箱服务器
+    username: qk-money@money.shahow.top # 账号
+    password: Vv123456#
     properties:
       mail:
         smtp:
-          auth: true # 使用
-          starttls: # 使用 SSL 安全协议，必须配置如下
+          auth: true
+          starttls: # 使用SSL安全协议，必须配置如下
             enable: true
             required: true
     port: 465  # 端口
@@ -343,3 +228,115 @@ money:
     fromAlias: 麦尼 # 发件人别名
 ~~~
 
+**OSS配置：**`qk-money-app/money-app-biz/resources/oss.properties`
+
+~~~properties
+# ================================= 本地
+# 目标空间
+local.bucket = F:/qk-money/
+# 资源处理器
+local.resource-handler = /assets/**
+# ================================= 七牛云
+# 访问密钥
+qiniu.access-key =
+# 秘密密钥
+qiniu.secret-key =
+# 是否使用https
+qiniu.use-https = false
+# 访问域名
+qiniu.domain = r3xou9o36.hn-bkt.clouddn.com
+# 目标空间
+qiniu.bucket = qk-money
+# 区域
+qiniu.region = huanan
+# 令牌过期时间
+qiniu.token-expire = 3600
+# 上传策略 https://developer.qiniu.com/kodo/1206/put-policy
+qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$(x:fname)\",\"age\":\"$(x:age)\"}
+~~~
+
+**日志配置：**`qk-money-app/money-app-biz/resources/logback-spring.xml`
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 引入Spring上下文配置属性 -->
+    <springProperty scope="context" name="app_name" source="spring.application.name" defaultValue="app"/>
+    <!-- 设置变量 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="FILE_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
+    <property name="ACCESS_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level- [%thread] %logger{0} : %msg%n"/>
+    <property name="LOG_PATH" value="log"/>
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- 访问日志 -->
+    <appender name="ACCESS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志名格式 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/access.log</fileNamePattern>
+            <!-- 日志保留一周 -->
+            <maxHistory>7</maxHistory>
+            <!-- 且所有日志大小总和不能超过5GB -->
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${ACCESS_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- INFO级别及以上日志 -->
+    <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/service.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志名格式 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/info.log</fileNamePattern>
+            <!-- 日志保留一个月 -->
+            <maxHistory>30</maxHistory>
+            <!-- 且所有日志大小总和不能超过9GB -->
+            <totalSizeCap>9GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- ERROR级别日志 -->
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志名格式 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/error.log</fileNamePattern>
+            <!-- 日志保留一个月 -->
+            <maxHistory>30</maxHistory>
+            <!-- 且所有日志大小总和不能超过9GB -->
+            <totalSizeCap>9GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.money.common.log.DefaultWebLogAspect" level="info" additivity="false">
+        <appender-ref ref="ACCESS_LOG" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="FILE_ERROR" />
+    </root>
+</configuration>
+~~~
+
+# 项目使用
+
+[麦尼收银系统](https://github.com/ycf1998/money-pos)
