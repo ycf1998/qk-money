@@ -11,15 +11,14 @@ import lombok.Setter;
  * </p>
  *
  * @author money
- * @since 2022-05-28
+ * @since 2022-09-03
  */
 @Getter
 @Setter
 @Schema(description = "")
 public class Demo extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-
+    @Schema(description="名称")
     private String name;
 
     private Integer sort;

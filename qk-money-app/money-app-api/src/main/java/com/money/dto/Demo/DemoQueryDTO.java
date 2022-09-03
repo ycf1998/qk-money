@@ -1,6 +1,5 @@
-package com.money.web.Demo;
+package com.money.dto.Demo;
 
-import java.io.Serializable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,14 +11,13 @@ import com.money.common.dto.QueryRequest;
 * </p>
 *
 * @author money
-* @since 2022-05-28
+* @since 2022-09-03
 */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "")
-public class DemoQueryDTO extends QueryRequest implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class DemoQueryDTO extends QueryRequest {
+    @Schema(description="名称")
     private String name;
 
 

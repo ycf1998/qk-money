@@ -12,9 +12,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.money.common.vo.PageVO;
-import com.money.web.Demo.DemoDTO;
-import com.money.web.Demo.DemoQueryDTO;
-import com.money.web.Demo.DemoVO;
+import com.money.dto.Demo.DemoDTO;
+import com.money.dto.Demo.DemoQueryDTO;
+import com.money.dto.Demo.DemoVO;
 
 import java.util.Set;
 
@@ -24,7 +24,7 @@ import java.util.Set;
  * </p>
  *
  * @author money
- * @since 2022-05-28
+ * @since 2022-09-03
  */
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,5 @@
-package com.money.web.Demo;
+package com.money.dto.Demo;
 
-import java.io.Serializable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -10,16 +9,15 @@ import lombok.Data;
 * </p>
 *
 * @author money
-* @since 2022-05-28
+* @since 2022-09-03
 */
 @Data
 @Schema(description = "")
-public class DemoVO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class DemoDTO {
 
     private Long id;
 
+    @Schema(description="名称")
     private String name;
 
 

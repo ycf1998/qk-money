@@ -3,9 +3,9 @@ package com.money.service;
 import com.money.entity.Demo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.money.common.vo.PageVO;
-import com.money.web.Demo.DemoDTO;
-import com.money.web.Demo.DemoQueryDTO;
-import com.money.web.Demo.DemoVO;
+import com.money.dto.Demo.DemoDTO;
+import com.money.dto.Demo.DemoQueryDTO;
+import com.money.dto.Demo.DemoVO;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import java.util.Set;
  * </p>
  *
  * @author money
- * @since 2022-05-28
+ * @since 2022-09-03
  */
 public interface DemoService extends IService<Demo> {
 

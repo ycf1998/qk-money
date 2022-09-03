@@ -2,10 +2,10 @@ package com.money.controller;
 
 import com.money.common.dto.ValidGroup;
 import com.money.common.vo.PageVO;
+import com.money.dto.Demo.DemoDTO;
+import com.money.dto.Demo.DemoQueryDTO;
+import com.money.dto.Demo.DemoVO;
 import com.money.service.DemoService;
-import com.money.web.Demo.DemoDTO;
-import com.money.web.Demo.DemoQueryDTO;
-import com.money.web.Demo.DemoVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Set;
  * </p>
  *
  * @author money
- * @since 2022-05-28
+ * @since 2022-09-03
  */
 @Tag(name = "demo", description = "")
 @RestController

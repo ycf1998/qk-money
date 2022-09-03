@@ -1,4 +1,4 @@
-package com.money.web.timezone;
+package com.money.dto.timezone;
 
 import com.money.common.timezone.annotation.TZParam;
 import lombok.Data;
