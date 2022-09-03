@@ -104,7 +104,7 @@ qk-money
 
 2. **运行生成器生成CRUD代码** `qk-money-common/money-common-mybatis/src/main/java/com/money/mb/MybatisPlusGenerator.java`，生成代码结构如下
 
-![image-20220731102938725](README.assets/image-20220731102938725.png)
+![image-20220903122011922](README.assets/image-20220903122011922.png)
 
 > 生成的CRUD虽然能直接启动使用，但是它不包含业务逻辑，比如查询只有分页条件没有具体业务条件，名字不能重复等，这些生成后需要去补齐。生成的CRUD除了少写一些代码，更多的是给出一套开发的风格与规范，希望开发人员以统一的风格书写这些常用的操作。
 
