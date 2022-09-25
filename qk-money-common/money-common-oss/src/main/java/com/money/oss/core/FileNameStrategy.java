@@ -1,5 +1,6 @@
 package com.money.oss.core;
 
+import cn.hutool.core.util.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -20,9 +21,13 @@ public enum FileNameStrategy {
      */
     ORIGINAL((rawName, fileType) -> rawName + "." + fileType),
     /**
-     * 时间戳
+     * 时间戳：高并发且业务简单的情况下时间戳会相同，应选择其他策略
      */
     TIMESTAMP((rawName, fileType) -> getTimestamp() + "." + fileType),
+    /**
+     * 时间戳 + 3位随机字符
+     */
+    TIMESTAMP_H((rawName, fileType) -> getTimestamp() + RandomUtil.randomString(3) + "." + fileType),
     /**
      * 原始与时间戳
      */
