@@ -18,7 +18,7 @@
 
 #### 1.1. 初始化sql脚本
 
-执行工程下 `/doc/db/tables_xxl_job.sql`脚本，会创建一个`xxl_job`的数据库
+执行工程下 `xxl-job-admin/doc/db/tables_xxl_job.sql`脚本，会创建一个`xxl_job`的数据库
 
 #### 1.2. 修改配置
 
