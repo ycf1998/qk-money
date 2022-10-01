@@ -106,13 +106,15 @@ WebRequestContextHolder.getContext().getLang(); // 获取上下文的语言环�
 
 一些通用的DTO、VO。
 
-`PageRequest`：分页请求，里面规定了分页请求的键为 page、size，如果前端就是不要用这两，那就改这个类。
+`PageRequest`：分页请求，里面规定了分页请求的键为 *page*、*size*，如果前端就是不要用这两，那就改这个类。
 
-`QueryRequest`：查询请求，继承`PageRequest`、查询DTO继承这个，它除了继承后的分页，还提供的`sort`排序字段，配备方便获取order by语句的方法。
+`SortRequest`：排序请求，实现`ISortRequest`，排序字段为 *sort*，值应如 *createTime,desc;id,asc;* 形式，配备方便获取order by语句的方法。
+
+`QueryRequest`：查询请求，即`PageRequest` + `SortRequest`，供查询DTO继承使用。
 
 `ValidGroup`：验证组，用于数据校验@Validated分组
 
-`PageVO`：统一分页返回的VO，分页的返回需使用这个包装。
+`PageVO`：统一分页返回VO，返回分页数据应统一为该VO，`money-app-api`有提供VOUtil工具方便转换。
 
 ### util（工具类）
 
