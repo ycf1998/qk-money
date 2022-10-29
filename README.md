@@ -158,6 +158,8 @@ money:
     # 忽略的表
     ignore-table:
       - sys_tenant
+      - sys_dict
+      - sys_dict_detail
   # 缓存
   cache:
     # 本地缓存

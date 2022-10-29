@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 08/05/2022 11:09:58
+ Date: 29/10/2022 11:59:06
 */
 
 SET NAMES utf8mb4;
@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `demo`;
 CREATE TABLE `demo`  (
   `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
   `sort` int NOT NULL DEFAULT 999,
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,6 +36,7 @@ CREATE TABLE `demo`  (
 -- ----------------------------
 -- Records of demo
 -- ----------------------------
+INSERT INTO `demo` VALUES (1583719337830871041, 'aa', 999, '', '2022-10-22 15:18:09', '', '2022-10-22 15:18:09', 0);
 
 -- ----------------------------
 -- Table structure for sys_dict
@@ -50,16 +51,15 @@ CREATE TABLE `sys_dict`  (
   `create_time` datetime NOT NULL,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `update_time` datetime NOT NULL,
-  `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES (1, 'switch', '开关', 1, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34', 0);
-INSERT INTO `sys_dict` VALUES (2, 'permissionType', '权限类型', 1, '', '2022-03-06 12:02:55', '', '2022-03-06 12:02:58', 0);
-INSERT INTO `sys_dict` VALUES (3, 'yesOrNo', '是否', 2, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34', 0);
+INSERT INTO `sys_dict` VALUES (1, 'switch', '开关', 1, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
+INSERT INTO `sys_dict` VALUES (2, 'permissionType', '权限类型', 1, '', '2022-03-06 12:02:55', '', '2022-03-06 12:02:58');
+INSERT INTO `sys_dict` VALUES (3, 'yesOrNo', '是否', 2, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
 
 -- ----------------------------
 -- Table structure for sys_dict_detail
@@ -75,20 +75,19 @@ CREATE TABLE `sys_dict_detail`  (
   `create_time` datetime NOT NULL,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `update_time` datetime NOT NULL,
-  `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_detail
 -- ----------------------------
-INSERT INTO `sys_dict_detail` VALUES (1, 'switch', '开', 'true', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (2, 'switch', '关', 'false', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (3, 'permissionType', '目录', 'DIR', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (4, 'permissionType', '菜单', 'MENU', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (5, 'permissionType', '按钮', 'BUTTON', 3, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (6, 'yesOrNo', '是', 'true', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
-INSERT INTO `sys_dict_detail` VALUES (7, 'yesOrNo', '否', 'false', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17', 0);
+INSERT INTO `sys_dict_detail` VALUES (1, 'switch', '开', 'true', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (2, 'switch', '关', 'false', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (3, 'permissionType', '目录', 'DIR', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (4, 'permissionType', '菜单', 'MENU', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (5, 'permissionType', '按钮', 'BUTTON', 3, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (6, 'yesOrNo', '是', 'true', 1, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
+INSERT INTO `sys_dict_detail` VALUES (7, 'yesOrNo', '否', 'false', 2, '', '2022-03-30 22:13:11', '', '2022-03-30 22:13:17');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -232,7 +231,7 @@ CREATE TABLE `sys_tenant`  (
 -- ----------------------------
 -- Records of sys_tenant
 -- ----------------------------
-INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2022-05-08 11:09:49', '', '2022-03-26 14:06:28', 99, 0);
+INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2022-05-29 10:15:22', '', '2022-03-26 14:06:28', 99, 0);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -263,9 +262,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2022-05-08 11:07:32', 99, '', '2022-03-03 23:12:57', 'money', '2022-03-25 23:41:26', 0);
-INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120803972', 'admin@qq.com', '', 1, 1, '2022-03-19 16:06:30', 99, 'admin', '2022-03-11 20:04:32', 'money', '2022-03-25 23:41:06', 0);
-INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800002', 'guest@qq.com', '', 1, 1, '2022-03-25 23:16:43', 99, '001', '2022-03-18 08:15:49', 'money', '2022-03-25 23:41:00', 0);
+INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2022-10-29 11:44:29', 99, '', '2022-03-03 23:12:57', 'money', '2022-03-25 23:41:26', 0);
+INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120803972', 'admin@qq.com', '', 1, 1, '2022-09-03 12:07:07', 99, 'admin', '2022-03-11 20:04:32', 'money', '2022-03-25 23:41:06', 0);
+INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800002', 'guest@qq.com', '', 1, 1, '2022-09-03 12:07:24', 99, '001', '2022-03-18 08:15:49', 'money', '2022-03-25 23:41:00', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role_relation
