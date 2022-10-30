@@ -67,7 +67,7 @@
 | `qk-money-common`/`money-common-oss`[📃](./qk-money-common/money-common-oss/README.md) | OSS对象存储模块：提供本地文件OSS和七牛云OSS                  |
 | `qk-money-common/money-common-swagger`[📃](./qk-money-common/money-common-swagger/README.md) | 接口文档模块：提供Open API 3（Swagger）                      |
 | `qk-money-security`                                          | 👉安全模块：使用Spring Security框架，基于RBAC模型和JWT赋予认证授权能力 |
-| `qk-money-tenant`                                            | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能      |
+| `qk-money-tenant`[📃](./qk-money-tenant/README.md)`           | 👉多租户模块：基于`Mybatis Plus`多租户插件实现多租户功能      |
 | `xxl-job-admin`                                              | 👉XXL-JOB调度中心：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可 |
 
 > 点击📃查看对应模块文档，带 ! 的开发前建议先看。

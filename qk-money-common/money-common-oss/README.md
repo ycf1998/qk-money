@@ -1,4 +1,4 @@
-# money-common-oss(对象存储OSS模块)
+# 对象存储OSS模块
 
 ​		该模块提供OSS（对象存储）的能力，通俗的讲就是文件上传下载的能力。目前已提供本地和七牛云这两个服务，可自由选择或一起使用。使用方式简单，注入`OSSDelegate<T>`Bean，根据泛型调用不同服务。
 
@@ -59,4 +59,4 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
 
 ## 参考
 
-[Spring mvc传参](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-multipart-forms)
+[Spring MVC 上传传参参考](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-multipart-forms)

@@ -1,4 +1,4 @@
-# money-common-swagger(接口文档模块)
+# 接口文档模块
 
 ## 依赖
 
@@ -46,4 +46,4 @@ swagger:
 
 ## 相关链接
 
-[Springdoc 官网](https://springdoc.org/)
+[springdoc 官网](https://springdoc.org/)

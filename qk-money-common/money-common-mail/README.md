@@ -1,4 +1,4 @@
-# money-common-mail(邮件模块)
+# 邮件模块
 
 ​		该模块提供邮件发送功能。相对于短信来说，邮件不用钱。项目中使用过两种邮件服务，分别是`QQ邮箱`和[shinak](https://github.com/shinak)搭的`shahow邮箱`服务。
 
