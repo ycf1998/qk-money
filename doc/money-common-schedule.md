@@ -79,11 +79,11 @@ xxl:
 
 配置执行器，appName要和执行器工程配置的appName相同，才能被自动发现到
 
-![image-20220722222543189](README.assets/image-20220722222543189.png)
+![image-20220722222543189](money-common-schedule.assets/image-20220722222543189.png)
 
 ### 4. 配置任务
 
-具体参考官网：https://www.xuxueli.com/xxl-job ，**三、任务详解** 部分，不做赘述。
+具体参考官网：https://www.xuxueli.com/xxl-job 中**三、任务详解** 部分，不做赘述。
 
 ## 相关配置
 
