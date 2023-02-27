@@ -139,6 +139,7 @@ public class MybatisPlusGenerator {
                     });
             injectionConfig.customMap(Collections.singletonMap("preAuthorize", false))
                     .beforeOutputFile((tableInfo, objectMap) -> {
+                        DTOAndVOTemplateMap.clear();
                         DTOAndVOTemplateMap.put(tableInfo.getEntityName() + "QueryDTO.java", "/templates/queryDto.java.ftl");
                         DTOAndVOTemplateMap.put(tableInfo.getEntityName() + "DTO.java", "/templates/dto.java.ftl");
                         DTOAndVOTemplateMap.put(tableInfo.getEntityName() + "VO.java", "/templates/vo.java.ftl");
@@ -194,7 +195,6 @@ public class MybatisPlusGenerator {
 
         /**
          * 开放身份验证
-         * 生成xml
          *
          * @param yesOrNo 是或否
          */
