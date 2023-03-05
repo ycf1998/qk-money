@@ -14,6 +14,9 @@
  Date: 20/02/2023 22:14:42
 */
 
+CREATE DATABASE IF NOT EXISTS `qk_money` CHARACTER SET 'utf8mb4';
+USE qk_money;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
