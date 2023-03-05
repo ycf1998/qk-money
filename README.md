@@ -67,7 +67,7 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提�
 | `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS对象存储模块：提供本地文件OSS和七牛云OSS。                |
 | `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供Swagger接口集成（Open API 3）。            |
 | `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 RBAC 模型和 JWT 认证授权能力。 |
-| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块：**使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。 |
+| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。 |
 | `xxl-job-admin`                                              | 👉**XXL-JOB调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。 |
 
 > 点击📃查看对应模块使用文档，📜开发前建议先看。
