@@ -1,10 +1,10 @@
 # 简介
 
-QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提供如实现 RBAC 模型、基于 JWT 的权限认证解决方案、多租户等可拆卸模块化功能组件的**单体**快速后台开发框架。
+QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提供如实现 RBAC 权限模型、基于 JWT 的权限认证解决方案、多租户等可拆卸模块化功能组件的**单体**快速后台开发框架。
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
 - 采用组件化思想，拆分功能模块，尽可能"低水平"、低耦合高内聚
-- 按需引入，开箱即用，不强依赖Redis
+- 按需引入，开箱即用，不强依赖 Redis
 - 采用前后端分离架构，前端基于 [vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/) 魔改
 
 # 版本依赖
@@ -22,22 +22,22 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提�
 | Qiniu        | 7.7.0  |
 | XXL-JOB      | 2.3.1  |
 
-- 本项目的模块版本声明都在根目录下的`POM.xml`，称为**主POM**
-- 第三方依赖版本声明都在`qk-money-parent`包下的`POM.xml`，称为**清单POM**
+- 本项目的模块版本声明都在根目录下的 `POM.xml`，称为**主POM**
+- 第三方依赖版本声明都在 `qk-money-parent` 包下的 `POM.xml`，称为**清单POM**
 
 # 功能清单
 
-- [x] 通用web功能（全局响应、全局异常处理、访问日志）
-- [x] 基于RBAC模型和JWT的权限认证解决方案
+- [x] 通用 Web 功能（全局响应、全局异常处理、访问日志）
+- [x] 基于 RBAC 权限模型和 JWT 的权限认证解决方案
     - [x] 与前端配套的系统管理（用户管理、角色管理、权限管理、字典管理、租户管理）
 - [x] 多租户（基于表字段）
-- [x] 对象存储OSS
+- [x] 对象存储 OSS
     - [x] 本地
     - [x] 七牛云
 - [x] 缓存模块
     - [x] Hutool Cache
     - [ ] Caffeine
-    - [x] Redis（支持Spring Cache）
+    - [x] Redis（支持 Spring Cache）
 - [x] 发送邮件
 - [x] 定时任务（XXL-JOB）
 - [x] 国际化（多语言、多时区）
@@ -50,25 +50,25 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提�
 
 # 工程结构
 
-| 模块                                                         | 描述                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM依赖版本清单**。建议其他模块不写具体版本号，新增依赖先在这声明版本。 |
-| `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                |
-| `qk-money-app`/`money-app-api`                               | 应用api模块：放常量枚举、异常、Entity、DTO、VO等。           |
-| `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper等。                |
-| `qk-money-app`/`money-app-system`                            | 应用系统模块：提供和前端配套的基于 RBAC 模型和 JWT 的权限认证、数据字典等系统管理功能，也是安全模块的实现，biz 模块默认会引入。 |
-| `qk-money-common`                                            | 👉**通用模块：各种方便易用的功能包**                          |
+| 模块                                                         | 描述                                                                                                 |
+| ------------------------------------------------------------ |----------------------------------------------------------------------------------------------------|
+| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM依赖版本清单**。建议其他模块不写具体版本号，新增依赖先在这声明版本。                                                     |
+| `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                                                                 |
+| `qk-money-app`/`money-app-api`                               | 应用api模块：放常量枚举、异常、Entity、DTO、VO等。                                                                   |
+| `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper等。                                                                 |
+| `qk-money-app`/`money-app-system`                            | 应用系统模块：提供和前端配套的基于 RBAC 模型和 JWT 的权限认证、数据字典等系统管理功能，也是安全模块的实现，biz 模块默认会引入。                            |
+| `qk-money-common`                                            | 👉**通用模块：各种方便易用的功能包**                                                                              |
 | ~~`qk-money-common`/`money-common-core`~~                    | ~~（整合进common-web）通用核心模块：核心的常量枚举、通用异常和工具类（工具类能用[Hutool](https://www.hutool.cn/docs/#/)就不要重复造轮子）等。~~ |
-| `qk-money-common`/`money-common-web`[📜](./doc/money-common-web.md) | 通用web模块： **建议至少引入的模块**。<br />提供默认全局的响应返回、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少项目的基础构建。 |
-| `qk-money-common`/`money-common-mybatis`[📃](./doc/money-common-mybatis.md) | MyBatis 模块：使用 MyBatis-Plus 增强库，默认已配置分页插件、审计字段默认值填充（需继承`BaseEntity`）和代码生成器。 |
-| `qk-money-common/money-common-cache`                         | 缓存模块：提供本地缓存和集中式缓存`Redis`。                  |
-| `qk-money-common/money-common-mail`[📃](./doc/money-common-mail.md) | 邮件模块：提供邮件发送功能。                                 |
-| `qk-money-common/money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：提供集成XXL-JOB定时任务。                      |
-| `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS对象存储模块：提供本地文件OSS和七牛云OSS。                |
-| `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供Swagger接口集成（Open API 3）。            |
-| `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 RBAC 模型和 JWT 认证授权能力。 |
-| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。 |
-| `xxl-job-admin`                                              | 👉**XXL-JOB调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。 |
+| `qk-money-common`/`money-common-web`[📜](./doc/money-common-web.md) | 通用 Web模块： Web 开发的核心模块。<br />提供默认全局的响应返回、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少项目的基础构建。                   |
+| `qk-money-common`/`money-common-mybatis`[📃](./doc/money-common-mybatis.md) | MyBatis 模块：使用 MyBatis-Plus 增强库，默认已配置分页插件、审计字段默认值填充（需继承 `BaseEntity`）和代码生成器。                        |
+| `qk-money-common/money-common-cache`                         | 缓存模块：提供本地缓存和集中式缓存 `Redis`。                                                                         |
+| `qk-money-common/money-common-mail`[📃](./doc/money-common-mail.md) | 邮件模块：提供邮件发送功能。                                                                                     |
+| `qk-money-common/money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：提供集成 XXL-JOB 定时任务。                                                                          |
+| `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS对象存储模块：提供本地文件 OSS 和七牛云 OSS。                                                                     |
+| `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供 Swagger 接口集成（Open API 3）。                                                                |
+| `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 RBAC 权限模型和 JWT 认证授权能力。                                     |
+| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。                                                   |
+| `xxl-job-admin`                                              | 👉**XXL-JOB调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。                         |
 
 > 点击📃查看对应模块使用文档，📜开发前建议先看。
 
