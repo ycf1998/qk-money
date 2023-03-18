@@ -44,12 +44,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("请求认证 {} {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI());
             try {
                 String username = securityTokenSupport.getUsername(token);
-                log.info("解析token成功，认证用户为：{}", username);
                 UserDetails userDetails = securityUserService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("认证成功！");
+                log.info("认证成功：{}", username);
                 // 提供用户日志追踪
                 MDC.put("userId", username);
             } catch (AuthenticationException | JwtException e) {
