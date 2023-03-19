@@ -41,13 +41,13 @@
 
 ### context（请求上下文）
 
-自定义过滤器`WebRequestContextFilter`，从请求头中获取请求上下文 `WebRequestContext` ，包括 `requestId(链路追踪)`、`lang(语言)`、`timezone(时区)`，并交由请求上下文持有者 `WebRequestContextHolder` 管理，提供静态方法便于获取。
+提供自定义过滤器 `WebRequestContextFilter`，从请求头中获取请求上下文 `WebRequestContext` ，包括 `requestId(链路追踪)`、`lang(语言)`、`timezone(时区)`，并交由请求上下文持有者 `WebRequestContextHolder` 管理，提供静态方法便于获取。
 
 > 请求头键名在 `WebRequestConstant` 里，并没有提供配置修改，若需使用别的请求头键值直接修改 `WebRequestConstant` 里相应的常量即可。
 
 - `requestId`（提供日志链路追踪使用）
 
-  - 请求日志里最前面打印的就是 `requestId`。在排查线上问题时，可以通过前端传的 requestId 在日志中过滤出当前请求的日志。
+  - 日志里最前面打印的就是 `requestId`。在排查线上问题时，可以通过前端传的 requestId 在日志中过滤出当前请求的日志。
 
 - `lang`（客户端语言，为了支持国际化多语言）
 

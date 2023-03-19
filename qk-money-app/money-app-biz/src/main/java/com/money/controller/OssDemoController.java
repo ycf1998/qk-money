@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @createTime : 2022-07-02 21:41:19
  */
 @RestController
-@RequestMapping("/test/oss")
+@RequestMapping("/demo/oss")
 @RequiredArgsConstructor
 public class OssDemoController {
 

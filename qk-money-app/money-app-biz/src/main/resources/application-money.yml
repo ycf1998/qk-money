@@ -80,7 +80,7 @@ money:
         - /webjars/**
         - /v3/**
         - /assets/**
-        - /test/**
+        - /demo/**
   # 邮件服务
   mail:
     host: smtp.shahow.top # 邮箱服务器
