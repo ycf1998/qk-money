@@ -34,7 +34,7 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements De
     public PageVO<DemoVO> list(DemoQueryDTO queryDTO) {
         Page<Demo> page = this.lambdaQuery()
                 .last(StrUtil.isNotBlank(queryDTO.getSort()), queryDTO.getOrderBySql())
-                .page(PageUtil.toPage(queryDTO, Demo.class));
+                .page(PageUtil.toPage(queryDTO));
         return VOUtil.toPageVO(page, DemoVO.class);
     }
 
