@@ -1,20 +1,19 @@
 package com.money.service.impl;
 
-import com.money.entity.Demo;
-import com.money.mapper.DemoMapper;
-import com.money.service.DemoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-import com.money.util.PageUtil;
-import com.money.util.VOUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.vo.PageVO;
 import com.money.dto.Demo.DemoDTO;
 import com.money.dto.Demo.DemoQueryDTO;
 import com.money.dto.Demo.DemoVO;
+import com.money.entity.Demo;
+import com.money.mapper.DemoMapper;
+import com.money.service.DemoService;
+import com.money.util.PageUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements De
         Page<Demo> page = this.lambdaQuery()
                 .last(StrUtil.isNotBlank(queryDTO.getSort()), queryDTO.getOrderBySql())
                 .page(PageUtil.toPage(queryDTO));
-        return VOUtil.toPageVO(page, DemoVO.class);
+        return PageUtil.toPageVO(page, DemoVO::new);
     }
 
     @Override
