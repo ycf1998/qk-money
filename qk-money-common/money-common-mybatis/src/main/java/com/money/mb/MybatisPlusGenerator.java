@@ -234,7 +234,7 @@ public class MybatisPlusGenerator {
          * @param yesOrNo 是或否
          */
         public void extendBaseEntity(String yesOrNo) {
-            strategyConfig.entityBuilder().enableLombok().disableSerialVersionUID();
+            strategyConfig.entityBuilder().enableLombok().disableSerialVersionUID().enableChainModel();
             if ("Y".equalsIgnoreCase(yesOrNo)) {
                 strategyConfig.entityBuilder().superClass(BaseEntity.class)
                         .addIgnoreColumns("create_time", "create_by", "update_by", "update_time", "id");
