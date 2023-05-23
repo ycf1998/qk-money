@@ -27,7 +27,8 @@
         <springdoc-openapi.version>1.5.11</springdoc-openapi.version>
         <hutool.version>5.8.4</hutool.version>
         <jackson.version>2.12.4</jackson.version>
-        <log4j.version>2.16.0</log4j.version>
+        <fastjson.version>2.0.32</fastjson.version>
+        <log4j.version>2.20.0</log4j.version>
     </properties>
 
     <dependencies>
@@ -88,6 +89,12 @@
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
+            </dependency>
+            <!-- fastjson -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
             <!-- jackson -->
             <dependency>
