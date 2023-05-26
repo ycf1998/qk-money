@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Schema(description = "个人信息VO")
-public class OwnInfoVO implements Serializable {
+@Schema(description = "用户信息VO")
+public class UserInfoVO implements Serializable {
 
     private static final long serialVersionUID = -1933526574639909374L;
     /**
