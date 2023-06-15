@@ -10,7 +10,7 @@ import lombok.Data;
 * </p>
 *
 * @author money
-* @since 2023-04-30
+* @since 2023-06-15
 */
 @Data
 @Accessors(chain = true)
@@ -19,10 +19,10 @@ public class DemoVO {
 
     private Long id;
 
-    @Schema(description="名称")
+    @Schema(description = "名称")
     private String name;
 
-    @Schema(description="状态")
+    @Schema(description = "状态")
     private String status;
 
 }

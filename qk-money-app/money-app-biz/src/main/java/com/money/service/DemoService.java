@@ -7,7 +7,7 @@ import com.money.dto.Demo.DemoDTO;
 import com.money.dto.Demo.DemoQueryDTO;
 import com.money.dto.Demo.DemoVO;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * <p>
@@ -15,7 +15,7 @@ import java.util.Set;
  * </p>
  *
  * @author money
- * @since 2022-09-03
+ * @since 2023-06-15
  */
 public interface DemoService extends IService<Demo> {
 
@@ -25,5 +25,5 @@ public interface DemoService extends IService<Demo> {
 
     void update(DemoDTO updateDTO);
 
-    void delete(Set<Long> ids);
+    void delete(Collection<Long> ids);
 }

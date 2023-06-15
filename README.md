@@ -1,20 +1,19 @@
 # 简介
 
-QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提供如实现 RBAC 权限模型、基于 JWT 的权限认证解决方案、多租户等可拆卸模块化功能组件的**单体**快速后台开发框架。
+QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MyBatis-Plus 等实现的快速后台开发框架。
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
-- 采用组件化思想，拆分功能模块，尽可能"低水平"、低耦合高内聚
-- 按需引入，开箱即用，不强依赖 Redis
-- 采用前后端分离架构，前端基于 [vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/) 魔改
+- 采用组件化思想，拆分功能模块，按需引入，开箱即用
+- 采用前后端分离架构，面向 API 接口开发
 
 # 版本依赖
 
 | 依赖         | 版本   |
 | ------------ | ------ |
-| JDK          | 1.8    |
+| JDK          | 1.8+   |
 | Maven        | 3.8.1  |
 | Spring Boot  | 2.6.10 |
-| Mybatis-plus | 3.5.2  |
+| MyBatis-Plus | 3.5.2  |
 | JJWT         | 0.11.2 |
 | Hutool       | 5.8.4  |
 | Jackson      | 2.12.4 |
@@ -22,14 +21,13 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提�
 | Qiniu        | 7.7.0  |
 | XXL-JOB      | 2.3.1  |
 
-- 本项目的模块版本声明都在根目录下的 `POM.xml`，称为**主POM**
-- 第三方依赖版本声明都在 `qk-money-parent` 包下的 `POM.xml`，称为**清单POM**
+- 本项目的模块版本声明都在根目录下的 `pom.xml`，称为 **主POM**
+- 第三方依赖版本声明都在 `qk-money-parent` 包下的 `pom.xml`，称为 **清单POM**
 
 # 功能清单
 
-- [x] 通用 Web 功能（全局响应、全局异常处理、访问日志）
-- [x] 基于 RBAC 权限模型和 JWT 的权限认证解决方案
-    - [x] 与前端配套的系统管理（用户管理、角色管理、权限管理、字典管理、租户管理）
+- [x] 通用 Web 功能（全局响应处理、全局异常处理、日志链路追踪）
+- [x] 基于 JWT 认证和 RBAC 模型的权限认证解决方案
 - [x] 多租户（基于表字段）
 - [x] 对象存储 OSS
     - [x] 本地
@@ -41,90 +39,107 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MybatisPlus 并提�
 - [x] 发送邮件
 - [x] 定时任务（XXL-JOB）
 - [x] 国际化（多语言、多时区）
-- [x] 接口文档（OpenAPI3）
+- [x] 接口文档（OpenAPI 3）
 - [x] 代码生成器（CRUD）
-- [x] 日志（logback），链路追踪
-    - [x] 日志本地化
-    - [x] MDC
+- [x] 日志本地化（Logback）
 - [x] ~~系统监控（Spring Boot Admin）~~
 
 # 工程结构
 
-| 模块                                                         | 描述                                                                                                 |
-| ------------------------------------------------------------ |----------------------------------------------------------------------------------------------------|
-| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM依赖版本清单**。建议其他模块不写具体版本号，新增依赖先在这声明版本。                                                     |
-| `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                                                                 |
-| `qk-money-app`/`money-app-api`                               | 应用api模块：放常量枚举、异常、Entity、DTO、VO等。                                                                   |
-| `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper等。                                                                 |
-| `qk-money-app`/`money-app-system`                            | 应用系统模块：提供和前端配套的基于 RBAC 模型和 JWT 的权限认证、数据字典等系统管理功能，也是安全模块的实现，biz 模块默认会引入。                            |
-| `qk-money-common`                                            | 👉**通用模块：各种方便易用的功能包**                                                                              |
-| ~~`qk-money-common`/`money-common-core`~~                    | ~~（整合进common-web）通用核心模块：核心的常量枚举、通用异常和工具类（工具类能用[Hutool](https://www.hutool.cn/docs/#/)就不要重复造轮子）等。~~ |
-| `qk-money-common`/`money-common-web`[📜](./doc/money-common-web.md) | 通用 Web模块： Web 开发的核心模块。<br />提供默认全局的响应返回、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少项目的基础构建。                   |
-| `qk-money-common`/`money-common-mybatis`[📃](./doc/money-common-mybatis.md) | MyBatis 模块：使用 MyBatis-Plus 增强库，默认已配置分页插件、审计字段默认值填充（需继承 `BaseEntity`）和代码生成器。                        |
-| `qk-money-common/money-common-cache`                         | 缓存模块：提供本地缓存和集中式缓存 `Redis`。                                                                         |
-| `qk-money-common/money-common-mail`[📃](./doc/money-common-mail.md) | 邮件模块：提供邮件发送功能。                                                                                     |
-| `qk-money-common/money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：提供集成 XXL-JOB 定时任务。                                                                          |
-| `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS对象存储模块：提供本地文件 OSS 和七牛云 OSS。                                                                     |
-| `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供 Swagger 接口集成（Open API 3）。                                                                |
-| `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 RBAC 权限模型和 JWT 认证授权能力。                                     |
-| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。                                                   |
-| `xxl-job-admin`                                              | 👉**XXL-JOB调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。                         |
+| 模块                                                         | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM（依赖版本清单）**。<br />建议其他模块依赖不写具体版本号，第三方依赖版本均在此声明，统一管理。 |
+| `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                |
+| `qk-money-app`/`money-app-api`                               | 应用 API 模块：放常量枚举、异常、Entity、DTO、VO 等。        |
+| `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper 等，启动类所在。   |
+| `qk-money-app`/`money-app-system`                            | 系统管理模块：QK-MOENY 预设的一套权限管理系统，单独模块方便拆卸。 |
+| `qk-money-common`                                            | 👉**通用模块：各种方便易用的功能包**                          |
+| `qk-money-common`/`money-common-web`[📜](./doc/money-common-web.md) | 通用 Web 模块： Web 开发的核心模块。<br />提供默认的全局响应处理、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少 Web 项目的基础构建。 |
+| `qk-money-common`/`money-common-mybatis`[📃](./doc/money-common-mybatis.md) | MyBatis 模块：使用 MyBatis-Plus 增强库，默认配置分页插件、审计字段默认值填充（需继承 `BaseEntity`）和代码生成器。 |
+| `qk-money-common/money-common-cache`                         | 缓存模块：提供本地缓存和集中式缓存 Redis。                   |
+| `qk-money-common/money-common-mail`[📃](./doc/money-common-mail.md) | 邮件模块：提供邮件发送功能。                                 |
+| `qk-money-common/money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：提供集成 XXL-JOB 定时任务。                    |
+| `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS 对象存储模块：提供本地文件存储和七牛云对象存储。         |
+| `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供 Swagger 接口文档集成（OpenAPI 3）。       |
+| `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 Token 和 RBAC 模型的认证授权能力。 |
+| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。 |
+| `xxl-job-admin`                                              | 👉**XXL-JOB 调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。 |
 
 > 点击📃查看对应模块使用文档，📜开发前建议先看。
 
-# 快速使用手册
+# 本地启动指南
 
-## 开发模块 qk-money-app
+1. 克隆项目
 
-二次开发的主要模块。
+    ```bash
+    git clone https://github.com/ycf1998/qk-money
+    ```
 
-```
-qk-money
-├── qk-money-app -- 开发模块
-    ├── money-app-api -- api模块，常量枚举、异常、Entity、DTO、VO等，biz 默认引入
-    ├── money-app-biz -- 业务模块，编写 Controller、Service、Mapper，配置也都在这个工程下的 resource
-    └── money-app-system -- 权限管理系统，开箱即用，biz 默认引入
-```
+2. 创建 & 初始化数据库
 
-## 启动步骤
+    - 命令行方式：`mysql -u root < qk_money.sql`
+    - 图形化如 Navicat
 
-1. 初始化数据库 `qk_money.sql`
-2. 修改数据库连接池配置 `application-dev.yml`
-3. 启动
+    ![image-20230612234418878](README.assets/image-20230612234418878.png)
 
-> 此为最小依赖启动，仅仅依靠该工程和一个数据库，但是功能是齐全的。如果要使用一些其他依赖第三方组件的功能（如 Redis、七牛云、定时任务 XXL-JOB)，可在工程结构介绍里找到对应的功能模块，查看对应的使用文档。
+3. 修改数据库连接信息 
 
-## 开发步骤
+    ![image-20230612234100801](README.assets/image-20230612234100801.png)
 
-1. **创建相关表**
+4. 运行 qk-money-biz 下 QkMoneyApplication 的 Main 函数
 
-    ![image-20230305120606906](README.assets/image-20230305120606906.png)
+# 二次开发手册
 
-    > 高亮字段是建议的必要字段，和 `BaseEntity` 实体类对应，当然使用代码生成器的时候可以选择不继承。
+1. 建表
 
-2. **生成CRUD代码** `qk-money-common/money-common-mybatis/src/main/java/com/money/mb/MybatisPlusGenerator.java`，生成代码结构如下
+    ```sql
+    CREATE TABLE `qk-money`.`demo`  (
+      `id` bigint UNSIGNED NOT NULL,
+      `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
+      `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+      `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+      `update_time` datetime NOT NULL,
+      `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
+      PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+    ```
 
-![image-20220903122011922](README.assets/image-20220903122011922.png)
+    基础字段：可搭配继承 BaseEntity 使用
 
-> 生成的CRUD虽然能直接启动使用，但是它不包含业务逻辑，比如查询只有分页条件没有具体业务条件，名字不能重复等，这些生成后需要去补齐。生成的CRUD除了少写一些代码，更多的是给出一套开发的风格与规范，希望开发人员以统一的风格书写这些常用的操作。
+    - id：主键
+    - create_by：创建者
+    - create_time：创建时间
+    - update_by：更新者
+    - update_time：创建时间
 
-3. **自行补充业务代码**
+    可选字段：
+
+    - tenant_id：租户 id
+
+2. 运行 money-common-mybatis 下的代码生成器 MybatisPlusGenerator
+
+    ![image-20230615223325803](README.assets/image-20230615223325803.png)
+
+3. 生成代码结构如下，调整并补充业务代码
+
+    ![image-20230615224938978](README.assets/image-20230615224938978.png)
 
 # 系统截图
 
-![image-20220731111232903](README.assets/image-20220731111232903.png) 
+![image-20230615230201028](README.assets/image-20230615230201028.png)
 
-![image-20220731111301378](README.assets/image-20220731111301378.png)
+![image-20230615230217963](README.assets/image-20230615230217963.png)
 
-![image-20220731111320209](README.assets/image-20220731111320209.png)
+![image-20230615230228541](README.assets/image-20230615230228541.png)
 
-![image-20220731111334536](README.assets/image-20220731111334536.png)
+![image-20230615230243117](README.assets/image-20230615230243117.png)
 
-![image-20220731111504176](README.assets/image-20220731111504176.png)
+![image-20230615230254029](README.assets/image-20230615230254029.png)
 
 # 配置总览
 
-**客制化配置：**`qk-money-app/money-app-biz/resources/application-money.yml`
+**客制化配置：**qk-money-app/money-app-biz/resources/application-money.yml
 
 ~~~yml
 spring:
@@ -232,7 +247,7 @@ money:
     fromAlias: 麦尼 # 发件人别名
 ~~~
 
-**OSS配置：**`qk-money-app/money-app-biz/resources/oss.properties`
+**OSS配置：**qk-money-app/money-app-biz/resources/oss.properties
 
 ~~~properties
 # ================================= 本地
@@ -259,7 +274,7 @@ qiniu.token-expire = 3600
 qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$(x:fname)\",\"age\":\"$(x:age)\"}
 ~~~
 
-**日志配置：**`qk-money-app/money-app-biz/resources/logback-spring.xml`
+**日志配置：**qk-money-app/money-app-biz/resources/logback-spring.xml
 
 ~~~xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -341,6 +356,6 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
 </configuration>
 ~~~
 
-# 项目使用
+# 使用登记
 
 [麦尼收银系统](https://github.com/ycf1998/money-pos)

@@ -12,7 +12,7 @@ import com.money.common.dto.ValidGroup;
 * </p>
 *
 * @author money
-* @since 2023-04-30
+* @since 2023-06-15
 */
 @Data
 @Accessors(chain = true)
@@ -22,10 +22,10 @@ public class DemoDTO {
     @NotNull(groups = ValidGroup.Update.class)
     private Long id;
 
-    @Schema(description="名称")
+    @Schema(description = "名称")
     private String name;
 
-    @Schema(description="状态")
+    @Schema(description = "状态")
     private String status;
 
 }

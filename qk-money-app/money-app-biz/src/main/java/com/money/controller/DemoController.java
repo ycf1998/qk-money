@@ -1,26 +1,27 @@
 package com.money.controller;
 
-import com.money.common.dto.ValidGroup;
+import lombok.RequiredArgsConstructor;
+import java.util.Set;
+import org.springframework.web.bind.annotation.*;
 import com.money.common.vo.PageVO;
+import com.money.common.dto.ValidGroup;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+
+import com.money.service.DemoService;
 import com.money.dto.Demo.DemoDTO;
 import com.money.dto.Demo.DemoQueryDTO;
 import com.money.dto.Demo.DemoVO;
-import com.money.service.DemoService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 /**
  * <p>
  *  前端控制器
  * </p>
  *
  * @author money
- * @since 2022-09-03
+ * @since 2023-06-15
  */
 @Tag(name = "demo", description = "")
 @RestController

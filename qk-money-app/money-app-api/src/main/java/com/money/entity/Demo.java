@@ -4,6 +4,7 @@ import com.money.mb.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -11,20 +12,21 @@ import lombok.Setter;
  * </p>
  *
  * @author money
- * @since 2022-09-03
+ * @since 2023-06-15
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @Schema(description = "")
 public class Demo extends BaseEntity {
 
     @Schema(description="名称")
     private String name;
 
-    private Integer sort;
+    @Schema(description="状态")
+    private String status;
 
     @Schema(description="租户id")
     private Long tenantId;
-
 
 }

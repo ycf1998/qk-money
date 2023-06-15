@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 26/05/2023 22:37:33
+ Date: 15/06/2023 22:59:53
 */
 
 CREATE DATABASE IF NOT EXISTS `qk_money` CHARACTER SET 'utf8mb4';
@@ -48,7 +48,6 @@ CREATE TABLE `sys_dict`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典名',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典描述',
-  `sort` int NOT NULL DEFAULT 999 COMMENT '排序',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_time` datetime NOT NULL,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -59,9 +58,9 @@ CREATE TABLE `sys_dict`  (
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES (1, 'switch', '开关', 1, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
-INSERT INTO `sys_dict` VALUES (2, 'permissionType', '权限类型', 1, '', '2022-03-06 12:02:55', '', '2022-03-06 12:02:58');
-INSERT INTO `sys_dict` VALUES (3, 'yesOrNo', '是否', 2, '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
+INSERT INTO `sys_dict` VALUES (1, 'switch', '开关', '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
+INSERT INTO `sys_dict` VALUES (2, 'permissionType', '权限类型', '', '2022-03-06 12:02:55', '', '2022-03-06 12:02:58');
+INSERT INTO `sys_dict` VALUES (3, 'yesOrNo', '是否', '', '2022-03-05 16:22:32', '', '2022-03-05 16:22:34');
 
 -- ----------------------------
 -- Table structure for sys_dict_detail
@@ -155,7 +154,6 @@ CREATE TABLE `sys_role`  (
   `description` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色描述',
   `count` bigint NOT NULL DEFAULT 0 COMMENT '角色人数',
   `enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '可用状态：0-禁用；1-启用',
-  `sort` int NOT NULL DEFAULT 999 COMMENT '排序',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_time` datetime NOT NULL,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -167,9 +165,9 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, 'SUPER_ADMIN', '超级管理员', 0, '拥有全部权限的人', 1, 1, 999, '', '2021-09-07 22:49:27', 'admin', '2022-03-06 11:40:47', 0);
-INSERT INTO `sys_role` VALUES (1502845638751055873, 'ADMIN', '管理员', 1, '管理员', 1, 1, 999, 'admin', '2022-03-13 11:14:56', 'admin', '2022-03-13 11:14:56', 0);
-INSERT INTO `sys_role` VALUES (1502845786646409218, 'GUEST', '游客', 99, '只能查不能改', 1, 1, 999, 'admin', '2022-03-13 11:15:32', 'admin', '2022-03-13 11:15:42', 0);
+INSERT INTO `sys_role` VALUES (1, 'SUPER_ADMIN', '超级管理员', 0, '拥有全部权限的人', 1, 1, '', '2021-09-07 22:49:27', 'admin', '2022-03-06 11:40:47', 0);
+INSERT INTO `sys_role` VALUES (1502845638751055873, 'ADMIN', '管理员', 1, '管理员', 1, 1, 'admin', '2022-03-13 11:14:56', 'admin', '2022-03-13 11:14:56', 0);
+INSERT INTO `sys_role` VALUES (1502845786646409218, 'GUEST', '游客', 99, '只能查不能改', 1, 1, 'admin', '2022-03-13 11:15:32', 'admin', '2022-03-13 11:15:42', 0);
 
 -- ----------------------------
 -- Table structure for sys_role_permission_relation
@@ -181,7 +179,7 @@ CREATE TABLE `sys_role_permission_relation`  (
   `role_id` bigint UNSIGNED NOT NULL COMMENT '角色id',
   `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1507375871487504391 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色资源权限关联表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1662099895966998535 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色资源权限关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role_permission_relation
@@ -222,15 +220,14 @@ CREATE TABLE `sys_tenant`  (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `sort` int NOT NULL DEFAULT 99,
   `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '租户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_tenant
 -- ----------------------------
-INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2022-05-29 10:15:22', '', '2022-03-26 14:06:28', 99, 0);
+INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2022-05-29 10:15:22', '', '2022-03-26 14:06:28', 0);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -248,7 +245,6 @@ CREATE TABLE `sys_user`  (
   `enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '可用状态：0-禁用；1-启用',
   `init_login` tinyint(1) NOT NULL DEFAULT 1 COMMENT '初次登录：0-不是；1-是',
   `last_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登录时间',
-  `sort` int NOT NULL DEFAULT 99,
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -261,9 +257,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-05-26 22:13:51', 99, '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
-INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120803972', 'admin@qq.com', '', 1, 1, '2023-05-26 22:14:39', 99, 'money', '2022-03-11 20:04:32', 'money', '2023-05-26 21:52:38', 0);
-INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800002', 'guest@qq.com', '', 1, 1, '2023-05-26 22:23:55', 99, 'money', '2022-03-18 08:15:49', 'money', '2023-05-26 21:09:11', 0);
+INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-05-26 22:13:51', '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
+INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120803972', 'admin@qq.com', '', 1, 1, '2023-05-26 22:14:39', 'money', '2022-03-11 20:04:32', 'money', '2023-05-26 21:52:38', 0);
+INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800002', 'guest@qq.com', '', 1, 1, '2023-05-26 22:23:55', 'money', '2022-03-18 08:15:49', 'money', '2023-05-26 21:09:11', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role_relation
