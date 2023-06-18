@@ -1,10 +1,11 @@
 package com.money.dto.Demo;
 
+import com.money.common.dto.ValidGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
 import javax.validation.constraints.NotNull;
-import com.money.common.dto.ValidGroup;
 
 /**
 * <p>
@@ -12,7 +13,7 @@ import com.money.common.dto.ValidGroup;
 * </p>
 *
 * @author money
-* @since 2023-06-15
+* @since 2023-06-18
 */
 @Data
 @Accessors(chain = true)
@@ -24,8 +25,5 @@ public class DemoDTO {
 
     @Schema(description = "名称")
     private String name;
-
-    @Schema(description = "状态")
-    private String status;
 
 }

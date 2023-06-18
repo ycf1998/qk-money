@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 80026
  Source Host           : localhost:3306
- Source Schema         : qk-money-pure
+ Source Schema         : qk_money
 
  Target Server Type    : MySQL
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 15/06/2023 22:59:53
+ Date: 18/06/2023 10:39:57
 */
 
 CREATE DATABASE IF NOT EXISTS `qk_money` CHARACTER SET 'utf8mb4';
@@ -27,7 +27,6 @@ DROP TABLE IF EXISTS `demo`;
 CREATE TABLE `demo`  (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
-  `sort` int NOT NULL DEFAULT 999,
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,

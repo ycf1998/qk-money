@@ -8,18 +8,18 @@ QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MyBatis-Plus 等实
 
 # 版本依赖
 
-| 依赖         | 版本   |
-| ------------ | ------ |
-| JDK          | 1.8+   |
-| Maven        | 3.8.1  |
-| Spring Boot  | 2.6.10 |
-| MyBatis-Plus | 3.5.2  |
-| JJWT         | 0.11.2 |
-| Hutool       | 5.8.4  |
-| Jackson      | 2.12.4 |
-| Spring Doc   | 1.5.11 |
-| Qiniu        | 7.7.0  |
-| XXL-JOB      | 2.3.1  |
+| 依赖         | 版本      |
+| ------------ |---------|
+| JDK          | 1.8+    |
+| Maven        | 3.8.1   |
+| Spring Boot  | 2.7.12  |
+| MyBatis-Plus | 3.5.3.1 |
+| JJWT         | 0.11.5  |
+| Hutool       | 5.8.20  |
+| Jackson      | 2.13.5  |
+| Spring Doc   | 1.7.0   |
+| Qiniu        | 7.13.1  |
+| XXL-JOB      | 2.3.1   |
 
 - 本项目的模块版本声明都在根目录下的 `pom.xml`，称为 **主POM**
 - 第三方依赖版本声明都在 `qk-money-parent` 包下的 `pom.xml`，称为 **清单POM**

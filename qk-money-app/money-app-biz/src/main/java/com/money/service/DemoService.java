@@ -15,7 +15,7 @@ import java.util.Collection;
  * </p>
  *
  * @author money
- * @since 2023-06-15
+ * @since 2023-06-18
  */
 public interface DemoService extends IService<Demo> {
 

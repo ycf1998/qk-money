@@ -12,7 +12,7 @@ import com.money.common.dto.QueryRequest;
 * </p>
 *
 * @author money
-* @since 2023-06-15
+* @since 2023-06-18
 */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -22,8 +22,5 @@ public class DemoQueryDTO extends QueryRequest {
 
     @Schema(description = "名称")
     private String name;
-
-    @Schema(description = "状态")
-    private String status;
 
 }
