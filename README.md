@@ -1,6 +1,6 @@
 # 简介
 
-QK-MONEY 是一个基于 Spring Boot 2.6、Spring Security、MyBatis-Plus 等实现的快速后台开发框架。
+QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实现的快速后台开发框架。
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
 - 采用组件化思想，拆分功能模块，按需引入，开箱即用
