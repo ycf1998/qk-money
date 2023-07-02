@@ -2,7 +2,7 @@
 
 该模块是 QK-MONEY 进行 Web 开发的核心模块，提供了许多 Web 开发的通用功能和配置。包含功能如下：
 
-- 默认全局响应返回
+- 默认全局响应处理
 - 默认全局异常处理
 - 默认请求日志切面
 - 全局请求上下文
@@ -21,85 +21,160 @@
 </dependency>
 ~~~
 
-## 功能结构
+## 包结构
 
-每个功能的核心类都在对应的包里。
+```java
+|-- qk-money
+    |-- qk-money-common
+        |-- money-common-web
+            |-- com.money.common
+                |-- config // 配置（默认 Jackson 配置、mvc 配置等）
+                |-- constant // 常量
+                |-- context // 请求上下文
+                |-- dto // 通用 DTO
+                |-- exception // 异常相关，如默认全局异常处理
+                |-- i18n // 多语言
+                |-- log // 日志相关，如请求日志切面
+                |-- response // 响应相关、如默认全局响应处理
+                |-- timezone // 多时区处理
+                |-- util // 常用工具类
+                |-- vo // 通用 VO
+```
 
-### constant（常量）
+## 功能介绍
 
-通用的常量
+#### 默认全局响应处理
 
-### config（配置）
+通常我们开发的 Rest 接口返回值都会包装在一个 `ResultVO<T>` 对象里，QK-MONEY 也不例外，只不过类名比较简短叫 `R<T>` ：
 
-提供默认 MVC 配置，如支持日期类转换配置、Jackson 配置、跨域等。
-
-### log（请求日志切面）
-
-提供默认全局访问日志切面 `DefaultWebLogAspect`，将一次访问的相关信息输出到单独的日志文件 log/${date}/access.log 。
-
-![image-20230318120610260](money-common-web.assets/image-20230318120610260.png)
-
-### context（请求上下文）
-
-提供自定义过滤器 `WebRequestContextFilter`，从请求头中获取请求上下文 `WebRequestContext` ，包括 `requestId(链路追踪)`、`lang(语言)`、`timezone(时区)`，并交由请求上下文持有者 `WebRequestContextHolder` 管理，提供静态方法便于获取。
-
-> 请求头键名在 `WebRequestConstant` 里，并没有提供配置修改，若需使用别的请求头键值直接修改 `WebRequestConstant` 里相应的常量即可。
-
-- `requestId`（提供日志链路追踪使用）
-
-  - 日志里最前面打印的就是 `requestId`。在排查线上问题时，可以通过前端传的 requestId 在日志中过滤出当前请求的日志。
-
-- `lang`（客户端语言，为了支持国际化多语言）
-
-- `timezone`（客户端时区，为了支持国际化多时区）
-
-  这两个国际化的支持，当遇到了一些默认提供的支持无法处理的情况，可以自己取出来进行特殊处理。如时区是对返回的数据进行时间转换重写，而对于一些数据量巨大，或有特殊的处理，可以从持有者取出来客户端时区，直接在sql里根据时区查询。
-
-~~~java
-WebRequestContextHolder.getContext().getLang(); // 获取上下文的语言环境
-~~~
-
-### response（全局响应）
-
-提供默认全局响应处理器 `DefaultResponseHandler`。该处理器的作用是将 Controller 的返回值包装在 `R<T>` 中进行返回，这样的好处是 Controller 开发中无需显示的返回 `R<T>`，开启后如果该请求不需要进行包装，可在类或者方法上添加注解 `IgnoreGlobalResponse`。**而对于返回非 200，建议用抛异常的方式让全局异常处理返回，而不要自己包装非 200 的`R<T>`**
-
-`R<T>` 结构如下
-
-~~~json
+```json
 {
     "code": 200,
     "data": T,
     "message": "操作成功"
 }
-~~~
+```
 
-### exception（全局异常）
+早期常见的是由自己返回包装类的硬编码方式，如：
 
-提供默认全局异常处理器 `DefaultExceptionHandler` 和基础业务异常 `BaseException`。开启后，所有的异常都会被捕获并包装在 `R<T>` 中返回。
+```java
+@Getting("/rest")
+public R<Object> rest() {
+    return new R<Object>(200, new Object(), "操作成功");
+}
+```
+
+现在越多越多人采用 Spring Boot 提供的 `ResponseBodyAdvice` 来进行全局响应处理，如 QK-MONEY 实现的 `DefaultResponseHandler` 便统一将返回值进行包装：
+
+```java
+// 部分核心代码
+@Override
+    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        // 当已经是R类型就无需处理
+        if (o instanceof R) {
+            return o;
+        }
+        // 当返回类型是String时，用的是StringHttpMessageConverter转换器，无法转换为Json格式
+        if (o instanceof String) {
+            return DefaultJackson.writeAsString(R.success(o));
+        }
+        return R.success(o);
+    }
+```
+
+也就是说，我们的接口无需显示的包装 `R<T>` ，全局响应处理会帮我们包装，即接口书写改为：
+
+```java
+@Getting("/rest")
+public Object rest() {
+    return new Object();
+}
+```
+
+但是全局响应处理返回的 code 都是 200，如果我们需要返回其他状态码，可以接口直接返回 `R<T>` 或者将 `@IgnoreGlobalResponse` 标注在接口方法或类上，表示忽略全局响应处理，后者更常用于导出接口。
+
+> 返回 code 非 200，建议使用抛异常的方式 `throw new BaseException(RStatus.FAILED) `，由全局异常处理器将其包装至 `R<T>` 中返回。也就是说，在开发中，应该尽量避免使用到 `R<T>`。
+
+#### 默认全局异常处理
+
+全局异常处理是通过 `@RestControllerAdvice` + `@ExceptionHandler` 增强 Controller ，对执行中抛出的异常进行统一拦截和响应返回。QK-MONEY 提供了默认的全局异常处理器 `DefaultExceptionHandler` ，针对以下异常返回包装类 `R<T>`：
 
 | 捕获异常类                                                   | HTTP 状态码 | code   | 描述                                                         |
 | ------------------------------------------------------------ | ----------- | ------ | ------------------------------------------------------------ |
-| Exception.class                                              | 500         | 500    | 兜底异常                                                     |
+| Exception.class                                              | 500         | 500    | 兜底异常，防止暴露意料之外的异常                             |
 | BindException.class \| MethodArgumentNotValidException.class | 400         | 400    | @Valid 校验的参数异常                                        |
-| BaseException.class                                          | 200         | 自定义 | 业务异常，开发中业务相关异常只能抛此类或其子类（可继承该类做更细粒度的业务异常划分） |
+| BaseException.class                                          | 200         | 自定义 | 业务异常，开发中业务相关异常应抛此类或其子类（可继承该类做更细粒度的业务异常划分） |
 
-### i18n（多语言）
+#### 默认请求日志切面
 
-提供国际化多语言能力，开启后返回的 `R<T>` 里的 message 会从请求上下文中获取客户端语言从相对应的多语言映射文件中获取并返回对应的语言内容。开启多语言后，项目启动便会加载多语言文件。
+QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息 `WebLog` 对象，包含请求 id、请求时间、请求 IP、请求方法、URL、请求参数、返回结果等。结合当前 Logback 日志本地化的配置，将其打印在了单独的日志文件中：log/yyyy-MM-dd/access.log。
 
-使用步骤：
+![image-20230622145759807](money-common-web.assets/image-20230622145759807.png)
 
-- 开启多语言，配置支持的语言（配置项见相关配置）
-  - 未传请求头或找不到支持的语言将原内容返回
-- 维护多语言映射文件（路径：classpath:i18n/message_{自己配置的支持语言}.properties）
+> TODO：该切面可以提供一个后置扩展点，让我们获取 `WebLog` 对象进行采集、统计，适用于实现操作记录。
 
-核心类 `I18nSupport`，可使用 `I18nSupport.get(key)` 硬编码方式获取内容，这可以用于应对内容中有变量的消息提示。
+#### 全局请求上下文 & 日志链路追踪
 
-> 目前我自己使用的话，开发中还是写中文，然后如果有配置多语言，properties 里的 key 就是中文。因为如果使用变量的方式，我至少要提供一个中文的映射文件；而使用中文，因为未传请求头或找不到支持的语言将原内容返回，我可以不写中文的映射文件，hhh...
+请求上下文是与调用方（前端）约定的每次请求携带的一些信息，使用请求头进行传递，由过滤器 `WebRequestContextFilter` 进行拦截填充。当前上下文仅包含请求 id、语言和时区，请求头 key 声明在 `WebRequestConstant` 常量中：
 
-### timezone（多时区）
+```java
+public interface WebRequestConstant {
 
-提供国际化多时区能力，客户时区依旧是从请求上下文中获取。原理就是一个切面 `TimeZoneAspect`，对标注了 `@TZProcess` 的 Controller 的入参（需标注`@TZParam`）和返回值（需标注`@TZRep`）进行时区处理。对于入参是将客户时区转为默认时区，出参是将默认时区转为客户时区，这样保证了进入方法后的所有操作，数据都在默认时区。
+    /**
+     * 请求头 请求id
+     */
+    String HEADER_REQUEST_ID = "X-qk-request";
+
+    /**
+     * 请求头 语言
+     */
+    String HEADER_LANG = "X-qk-lang";
+
+    /**
+     * 请求头 时区
+     */
+    String HEADER_TIMEZONE = "X-qk-timezone";
+}
+```
+
+我们可以通过上下文持有者获取信息：
+
+```java
+WebRequestContextHolder.getContext().getRequestId();
+WebRequestContextHolder.getContext().getLang();
+WebRequestContextHolder.getContext().getTimezone();
+```
+
+其中请求 id 是协助我们定位一次请求相关日志的重要标识，也就是常说的日志链路追踪。结合 MDC（映射调试上下文，Logback 提供的一种方便在多线程条件下记录日志的功能），将请求 id 打入日志。
+
+![image-20230622153527045](money-common-web.assets/image-20230622153527045.png)
+
+#### 多语言
+
+提供多语言能力，核心类 `I18nSupport` ，开启后程序启动时会根据配置预加载多语言文件。
+
+![image-20230623161113124](money-common-web.assets/image-20230623161113124.png)
+
+```properties
+# i18n/messages_en.properties
+操作成功=success
+操作失败=failure
+参数检验失败=Parameter verification failure
+暂未登录或token已经过期=Not logged in yet or the token has expired
+没有相关权限=No relevant permissions
+找不到页面=Page not found
+...
+```
+
+语言文件需放在 resource/i18n 下，命名方式如 `messages_{支持的语言}.properties`。我这里直接使用中文作为 key，一个是图方便，不用多声明一份中文的映射文件；一个是适用于系统已经开发一部分，原本代码中都是中文的情景。但不适合一些如带有占位符的复杂场景，这种场景可以使用硬编码 `I18nSupport.get` 的方式或映射文件使用常规的变量方式。
+
+多语言的原理就是 `I18nSupport.get` 方法，通过获取上下文中的语言环境，对 `R<T>` 中的 message 和 `BaseException` 的 message 进行多语言映射。
+
+![image-20230623162114853](money-common-web.assets/image-20230623162114853.png)
+
+#### 多时区
+
+提供多时区能力，客户时区依旧是从请求上下文中获取。原理就是通过切面 `TimeZoneAspect`，对标注 `@TZProcess` 的 接口入参（需标注 `@TZParam`）和返回值（需标注 `@TZRep`）进行时区处理。对于入参是将客户时区转为默认时区，出参则是将默认时区转为客户时区，这样保证进入方法后的所有操作，数据均为默认时区。
 
 > 比如客户是东九区，那他在页面操作的时间都是东九区的时间，所以对于入参我们得转为东八，保证无论客户哪个时区，我们进行操作和存入数据库的时间都是东八区，然后返回的时候将数据洗成客户对应的时区展示。
 
@@ -107,37 +182,34 @@ WebRequestContextHolder.getContext().getLang(); // 获取上下文的语言环�
 
 目前支持的数据类型：
 
-- LocalDateTime
+- Bean（递归成员变量，对标注 `@TZParam` 的字段进行转换）
+- LocalDateTime（日期时间类）
 - String（如 2022-05-13 13:15:00，格式可自定义但需是日期时间）
-- Map（对包含 time 或者 date 的键进行转换）
-- List（递归对泛型类型是目前支持的类型转换）
+- Map（对键包含 time 或者 date 的值进行转换）
+- List（循环递归转换）
 - PageVO（对 record，其实就是 List 进行转换）
 
-**🌰`TimeZoneDemoController`**
+#### DTO 和 VO
 
-### DTO、VO
+`ISortRequest`：排序请求接口，支持提交如 *createTime,desc;id,asc;*  的排序值，并配备转换为 order by 语句的方法。
 
-一些通用的DTO、VO。
+`PageRequest`：分页请求参数，里面规定了分页请求的键为 *page*、*size* 。
 
-`PageRequest`：分页请求，里面规定了分页请求的键为 *page*、*size*，如果前端就是不要用这两，那就改这个类。
+`SortRequest`：排序请求参数，实现 `ISortRequest` ，并设置排序字段为 *orderBy* 。
 
-`SortRequest`：排序请求，实现 `ISortRequest`，排序字段为 *sort*，值应如 *createTime,desc;id,asc;* 形式，配备方便获取 order by 语句的方法。
+`QueryRequest`：查询请求参数，继承 `PageRequest` 和实现 `ISortRequest` ，设置排序字段为 *orderBy* ，供常规查询 DTO 继承使用。
 
-`QueryRequest`：查询请求，即 `PageRequest` + `SortRequest`，供查询DTO继承使用。
+`ValidGroup`：验证组，用于数据校验 @Validated 分组。
 
-`ValidGroup`：验证组，用于数据校验 @Validated 分组
+`PageVO<T>`：统一的分页 VO，money-app-api 提供 `PageUtil` 工具类，方便 MyBatis-Plus 分页对象进行转换。
 
-`PageVO`：统一分页返回 VO，返回分页数据应统一为该 VO，`money-app-api`有提供 VOUtil 工具方便转换。
+#### 工具类
 
-### util（工具类）
+`BeanMapUtil`：对象复制工具类，简单包装了一下 Hutool 的 `BeanUtil.copyProperties` 。
 
-`IpUtil`：获取客户端真实 IP 和真实地址
+`IpUtil`：IP 相关工具类，如获取客户端真实 IP 和地理位置。
 
-`JwtUtil`：JWT相关工具
-
-`WebUtil`：web工具，如直接通过response流写回
-
-> 还是建议所有工具 Hutool 有的用 Hutool
+`WebUtil`：Web 相关工具类，如获取当前 Request 、Response 对象，使用 Response 直接响应等。
 
 ## 相关配置
 
