@@ -3,9 +3,9 @@ package com.money.service;
 import com.money.entity.Demo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.money.common.vo.PageVO;
-import com.money.dto.Demo.DemoDTO;
-import com.money.dto.Demo.DemoQueryDTO;
-import com.money.dto.Demo.DemoVO;
+import com.money.dto.demo.DemoDTO;
+import com.money.dto.demo.DemoQueryDTO;
+import com.money.dto.demo.DemoVO;
 
 import java.util.Collection;
 
@@ -14,8 +14,8 @@ import java.util.Collection;
  *  服务类
  * </p>
  *
- * @author money
- * @since 2023-06-18
+ * @author baomidou
+ * @since 2023-08-12
  */
 public interface DemoService extends IService<Demo> {
 

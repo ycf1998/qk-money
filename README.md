@@ -13,7 +13,7 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 | JDK          | 1.8+    |
 | Maven        | 3.8.1   |
 | Spring Boot  | 2.7.12  |
-| MyBatis-Plus | 3.5.3.1 |
+| MyBatis-Plus | 3.5.3.2 |
 | JJWT         | 0.11.5  |
 | Hutool       | 5.8.20  |
 | Jackson      | 2.13.5  |
@@ -139,7 +139,7 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 
 # 配置总览
 
-**客制化配置：**qk-money-app/money-app-biz/resources/application-money.yml
+**客制化配置：** qk-money-app/money-app-biz/resources/application-money.yml
 
 ~~~yml
 spring:
@@ -247,7 +247,7 @@ money:
     fromAlias: 麦尼 # 发件人别名
 ~~~
 
-**OSS配置：**qk-money-app/money-app-biz/resources/oss.properties
+**OSS配置：** qk-money-app/money-app-biz/resources/oss.properties
 
 ~~~properties
 # ================================= 本地
@@ -274,7 +274,7 @@ qiniu.token-expire = 3600
 qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$(x:fname)\",\"age\":\"$(x:age)\"}
 ~~~
 
-**日志配置：**qk-money-app/money-app-biz/resources/logback-spring.xml
+**日志配置：** qk-money-app/money-app-biz/resources/logback-spring.xml
 
 ~~~xml
 <?xml version="1.0" encoding="UTF-8"?>

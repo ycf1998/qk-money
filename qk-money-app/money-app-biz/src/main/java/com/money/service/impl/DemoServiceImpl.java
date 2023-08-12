@@ -11,9 +11,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.money.common.vo.PageVO;
-import com.money.dto.Demo.DemoDTO;
-import com.money.dto.Demo.DemoQueryDTO;
-import com.money.dto.Demo.DemoVO;
+import com.money.dto.demo.DemoDTO;
+import com.money.dto.demo.DemoQueryDTO;
+import com.money.dto.demo.DemoVO;
 
 import java.util.Collection;
 
@@ -22,8 +22,8 @@ import java.util.Collection;
  *  服务实现类
  * </p>
  *
- * @author money
- * @since 2023-06-18
+ * @author baomidou
+ * @since 2023-08-12
  */
 @Service
 @RequiredArgsConstructor

@@ -1,11 +1,12 @@
+<#assign entityUncap = table.entityName?uncap_first>
 package ${package.Service};
 
 import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
 import com.money.common.vo.PageVO;
-import ${package.Other}.${table.entityName}.${table.entityName}DTO;
-import ${package.Other}.${table.entityName}.${table.entityName}QueryDTO;
-import ${package.Other}.${table.entityName}.${table.entityName}VO;
+import ${packageOther}.${entityUncap}.${table.entityName}DTO;
+import ${packageOther}.${entityUncap}.${table.entityName}QueryDTO;
+import ${packageOther}.${entityUncap}.${table.entityName}VO;
 
 import java.util.Collection;
 

@@ -5,13 +5,12 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.money.entity.Demo">
         <result column="name" property="name" />
-        <result column="sort" property="sort" />
         <result column="tenant_id" property="tenantId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        name, sort, tenant_id
+        name, tenant_id
     </sql>
 
 </mapper>
