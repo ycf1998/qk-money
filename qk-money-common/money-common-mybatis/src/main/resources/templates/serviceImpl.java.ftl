@@ -1,4 +1,4 @@
-<#assign entityUncap = table.entityName?uncap_first>
+<#assign entityLower = table.entityName?lower_case>
 package ${package.ServiceImpl};
 
 import ${package.Entity}.${entity};
@@ -12,9 +12,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.money.common.vo.PageVO;
-import ${packageOther}.${entityUncap}.${table.entityName}DTO;
-import ${packageOther}.${entityUncap}.${table.entityName}QueryDTO;
-import ${packageOther}.${entityUncap}.${table.entityName}VO;
+import ${packageOther}.${entityLower}.${table.entityName}DTO;
+import ${packageOther}.${entityLower}.${table.entityName}QueryDTO;
+import ${packageOther}.${entityLower}.${table.entityName}VO;
 
 import java.util.Collection;
 

@@ -160,13 +160,13 @@ public class MybatisPlusGenerator {
             customMap.put("packageOther", "com.money.dto");
             String dtoFilePath = PROJECT_PATH + "/money-app-api/src/main/java/com/money/dto";
             CustomFile.Builder queryDTO = new CustomFile.Builder().fileName("").filePath(dtoFilePath)
-                    .formatNameFunction((tableInfo -> StrUtil.lowerFirst(tableInfo.getEntityName()) + File.separator + tableInfo.getEntityName() + "QueryDTO.java"))
+                    .formatNameFunction((tableInfo -> tableInfo.getEntityName().toLowerCase() + File.separator + tableInfo.getEntityName() + "QueryDTO.java"))
                     .templatePath("/templates/queryDto.java.ftl");
             CustomFile.Builder DTO = new CustomFile.Builder().fileName("").filePath(dtoFilePath)
-                    .formatNameFunction((tableInfo -> StrUtil.lowerFirst(tableInfo.getEntityName()) + File.separator +tableInfo.getEntityName() + "DTO.java"))
+                    .formatNameFunction((tableInfo -> tableInfo.getEntityName().toLowerCase() + File.separator +tableInfo.getEntityName() + "DTO.java"))
                     .templatePath("/templates/dto.java.ftl");
             CustomFile.Builder VO = new CustomFile.Builder().fileName("").filePath(dtoFilePath)
-                    .formatNameFunction((tableInfo -> StrUtil.lowerFirst(tableInfo.getEntityName()) + File.separator +tableInfo.getEntityName() + "VO.java"))
+                    .formatNameFunction((tableInfo -> tableInfo.getEntityName().toLowerCase() + File.separator +tableInfo.getEntityName() + "VO.java"))
                     .templatePath("/templates/vo.java.ftl");
             return ListUtil.of(queryDTO, DTO, VO);
         }

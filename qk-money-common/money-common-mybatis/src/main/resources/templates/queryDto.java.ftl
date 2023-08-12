@@ -1,5 +1,5 @@
-<#assign entityUncap = table.entityName?uncap_first>
-package ${packageOther}.${entityUncap};
+<#assign entityLower = table.entityName?lower_case>
+package ${packageOther}.${entityLower};
 
 <#list table.importPackages as pkg>
 <#if pkg!="com.baomidou.mybatisplus.annotation.TableName" && pkg!="com.money.mb.base.BaseEntity"

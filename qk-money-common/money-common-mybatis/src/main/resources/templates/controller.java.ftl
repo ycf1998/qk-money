@@ -1,3 +1,4 @@
+<#assign entityLower = table.entityName?lower_case>
 <#assign entityUncap = table.entityName?uncap_first>
 <#assign serviceVar = table.serviceName?uncap_first>
 package ${package.Controller};
@@ -24,9 +25,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.money.common.dto.ValidGroup;
 import com.money.common.vo.PageVO;
 import ${package.Service}.${table.serviceName};
-import ${packageOther}.${entityUncap}.${table.entityName}DTO;
-import ${packageOther}.${entityUncap}.${table.entityName}QueryDTO;
-import ${packageOther}.${entityUncap}.${table.entityName}VO;
+import ${packageOther}.${entityLower}.${table.entityName}DTO;
+import ${packageOther}.${entityLower}.${table.entityName}QueryDTO;
+import ${packageOther}.${entityLower}.${table.entityName}VO;
 
 import java.util.Set;
 
