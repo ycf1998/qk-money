@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 18/06/2023 10:39:57
+ Date: 14/08/2023 22:30:52
 */
 
 CREATE DATABASE IF NOT EXISTS `qk_money` CHARACTER SET 'utf8mb4';
@@ -44,7 +44,7 @@ CREATE TABLE `demo`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict`;
 CREATE TABLE `sys_dict`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint UNSIGNED NOT NULL,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典名',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典描述',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `sys_dict`  (
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict
@@ -66,7 +66,7 @@ INSERT INTO `sys_dict` VALUES (3, 'yesOrNo', '是否', '', '2022-03-05 16:22:32'
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict_detail`;
 CREATE TABLE `sys_dict_detail`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint UNSIGNED NOT NULL,
   `dict` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典名',
   `label` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典标签',
   `value` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典值',
@@ -77,7 +77,7 @@ CREATE TABLE `sys_dict_detail`  (
   `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典详情表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典详情表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_detail
@@ -173,12 +173,12 @@ INSERT INTO `sys_role` VALUES (1502845786646409218, 'GUEST', '游客', 99, '只�
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_permission_relation`;
 CREATE TABLE `sys_role_permission_relation`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint UNSIGNED NOT NULL,
   `permission_id` bigint UNSIGNED NOT NULL COMMENT '资源权限id',
   `role_id` bigint UNSIGNED NOT NULL COMMENT '角色id',
   `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1662099895966998535 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色资源权限关联表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1662099895966998534 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色资源权限关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role_permission_relation
@@ -250,13 +250,13 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_username`(`username`, `tenant_id`) USING BTREE
+  UNIQUE INDEX `uk_username`(`username` ASC, `tenant_id` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-05-26 22:13:51', '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
+INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-06-22 14:46:51', '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
 INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120803972', 'admin@qq.com', '', 1, 1, '2023-05-26 22:14:39', 'money', '2022-03-11 20:04:32', 'money', '2023-05-26 21:52:38', 0);
 INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', '18120800002', 'guest@qq.com', '', 1, 1, '2023-05-26 22:23:55', 'money', '2022-03-18 08:15:49', 'money', '2023-05-26 21:09:11', 0);
 
