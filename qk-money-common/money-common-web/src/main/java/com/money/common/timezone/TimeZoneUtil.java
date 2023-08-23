@@ -1,6 +1,7 @@
 package com.money.common.timezone;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.money.common.timezone.annotation.TZParam;
 import com.money.common.timezone.converter.DefaultTimeZoneConverter;
 import com.money.common.timezone.converter.TimeZoneConverter;
@@ -81,7 +82,7 @@ public class TimeZoneUtil {
             if (!targetClass.getName().contains("com.money")) {
                 return;
             }
-            Field[] fields = targetClass.getDeclaredFields();
+            Field[] fields = ReflectUtil.getFieldsDirectly(targetClass, true);
             for (Field field : fields) {
                 field.setAccessible(true);
                 TZParam tzParam = field.getAnnotation(TZParam.class);
