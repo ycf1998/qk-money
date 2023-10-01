@@ -4,7 +4,7 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
 - 采用组件化思想，拆分功能模块，按需引入，开箱即用
-- 采用前后端分离架构，面向 API 接口开发
+- 采用前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-web)，面向 API 接口开发
 
 # 版本依赖
 
