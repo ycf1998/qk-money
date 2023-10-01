@@ -1,20 +1,26 @@
 package com.money.controller;
 
 import com.money.common.dto.ValidGroup;
+import com.money.common.vo.PageVO;
 import com.money.dto.SysRoleDTO;
 import com.money.dto.query.SysRoleQueryDTO;
-import com.money.entity.SysRole;
 import com.money.security.SecurityGuard;
 import com.money.service.SysAuthService;
 import com.money.service.SysRoleService;
-import com.money.common.vo.PageVO;
 import com.money.vo.SysRoleVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +38,7 @@ public class SysRoleController {
     @Operation(summary = "获取所有角色信息")
     @GetMapping("/all")
     @PreAuthorize("@rbac.hasPermission('role:list', 'user:add', 'user:edit')")
-    public List<SysRole> getAllRoles() {
+    public List<SysRoleVO> getAllRoles() {
         return sysRoleService.getAll();
     }
 
@@ -68,7 +74,7 @@ public class SysRoleController {
         sysRoleService.deleteById(ids);
     }
 
-    @Operation(summary = "角色配置权限")
+    @Operation(summary = "配置权限")
     @PostMapping("/{id}/permission")
     @PreAuthorize("@rbac.hasPermission('role:edit')")
     public void configurePermissions(@PathVariable Long id, @RequestBody Set<Long> permissions) {

@@ -31,6 +31,7 @@ public class RbacAuthorityService {
         // 获取当前用户的所有权限
         SecurityUserDetail userDetail = (SecurityUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<String> userPermissions = userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        // todo 超级管理员放行所有权限
         // 判断当前用户的所有权限是否包含接口上定义的权限
         return userPermissions.contains("SUPER_ADMIN") || Arrays.stream(permissions).anyMatch(userPermissions::contains);
     }

@@ -99,13 +99,13 @@ public class DefaultWebLogAspect {
             Parameter parameter = parameters[i];
             String typeName = parameter.getParameterizedType().getTypeName();
             // 忽略 Request 和 Response
-            if (ignoreParams.contains(typeName)) {
+            if (ignoreParams.contains(typeName) || typeName.contains("org.springframework")) {
                 continue;
             }
             // 将 RequestParam 注解修饰的参数作为请求参数
             RequestParam requestParam = parameter.getAnnotation(RequestParam.class);
             if (requestParam != null) {
-                String key = requestParam.value().equals("") ? parameter.getName() : requestParam.value();
+                String key = requestParam.value().isEmpty() ? parameter.getName() : requestParam.value();
                 argList.add(Collections.singletonMap(key, args[i]));
             } else {
                 argList.add(Collections.singletonMap(parameter.getName(), args[i]));

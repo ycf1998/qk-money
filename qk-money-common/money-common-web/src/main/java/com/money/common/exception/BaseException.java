@@ -3,6 +3,7 @@ package com.money.common.exception;
 
 import com.money.common.i18n.I18nSupport;
 import com.money.common.response.IStatus;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
  * @description : 基础异常
  * @createTime : 2022-01-01 13:25:02
  */
+@Getter
 @NoArgsConstructor
 public class BaseException extends RuntimeException {
 
@@ -35,7 +37,4 @@ public class BaseException extends RuntimeException {
         this.errorCode = status.getCode();
     }
 
-    public int getErrorCode() {
-        return errorCode;
-    }
 }

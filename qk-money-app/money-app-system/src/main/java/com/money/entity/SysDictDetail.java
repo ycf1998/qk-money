@@ -36,4 +36,7 @@ public class SysDictDetail extends BaseEntity {
     @Schema(description = "排序")
     private Integer sort;
 
+    @Schema(description = "是否隐藏")
+    private Boolean hidden;
+
 }

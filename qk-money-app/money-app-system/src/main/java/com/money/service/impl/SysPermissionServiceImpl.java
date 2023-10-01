@@ -6,8 +6,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.exception.BaseException;
-import com.money.constant.SysErrorStatus;
 import com.money.constant.PermissionType;
+import com.money.constant.SysErrorStatus;
 import com.money.dto.SysPermissionDTO;
 import com.money.dto.query.SysPermissionQueryDTO;
 import com.money.entity.SysPermission;
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 
     private final SysRolePermissionRelationService sysRolePermissionRelationService;
@@ -70,7 +71,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void add(SysPermissionDTO permissionDTO) {
         this.checkDTO(permissionDTO);
         if (StrUtil.isNotBlank(permissionDTO.getPermission())) {
@@ -87,7 +87,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void updateById(SysPermissionDTO permissionDTO) {
         this.checkDTO(permissionDTO);
         if (StrUtil.isNotBlank(permissionDTO.getPermission())) {
@@ -106,7 +105,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Set<Long> ids) {
         // 非根节点，更新父节点的子节点数
         this.listByIds(ids).stream().filter(sysPermission -> sysPermission.getParentId() != 0L)
@@ -122,8 +120,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         this.removeBatchByIds(temp);
     }
 
-    @Override
-    public List<Long> getAllSubIds(Long id) {
+    /**
+     * 返回所有子节点ID，包含自身ID
+     *
+     * @param id id
+     * @return {@link List}<{@link Long}>
+     */
+    private List<Long> getAllSubIds(Long id) {
         List<Long> allSubIds = new ArrayList<>();
         allSubIds.add(id);
         recursionFillSubIds(id, allSubIds);
@@ -161,7 +164,10 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      * @param sysPermissionVO 系统许可VO
      */
     private void recursionFillChildren(SysPermissionVO sysPermissionVO) {
-        List<SysPermission> children = this.lambdaQuery().eq(SysPermission::getParentId, sysPermissionVO.getId()).list();
+        List<SysPermission> children = this.lambdaQuery()
+                .eq(SysPermission::getParentId, sysPermissionVO.getId())
+                .orderByAsc(SysPermission::getSort)
+                .list();
         if (CollectionUtil.isNotEmpty(children)) {
             sysPermissionVO.setChildren(children.stream().map(sysPermission -> {
                 SysPermissionVO vo = new SysPermissionVO();
@@ -184,10 +190,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                 throw new BaseException("路由地址不允许为空");
             }
         } else if (PermissionType.MENU.name().equals(permissionType)) {
-            if (StrUtil.isBlank(permissionDTO.getPermission())) {
-                throw new BaseException("权限标识不允许为空");
-            }
-            if (!permissionDTO.getIframe()) {
+            if (permissionDTO.getIframe() != null && !permissionDTO.getIframe()) {
                 if (StrUtil.isBlank(permissionDTO.getComponentName())) {
                     throw new BaseException("组件名称不允许为空");
                 }

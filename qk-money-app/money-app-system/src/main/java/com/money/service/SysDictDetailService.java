@@ -9,13 +9,21 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author money
  * @since 2022-03-30
  */
 public interface SysDictDetailService extends IService<SysDictDetail> {
+
+    /**
+     * 根据字典名获取详情
+     *
+     * @param dict 字典名
+     * @return {@link List}<{@link SysDictDetail}>
+     */
+    List<SysDictDetail> getByDict(String dict);
 
     /**
      * 查询字典详情列表

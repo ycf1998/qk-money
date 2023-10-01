@@ -14,9 +14,6 @@ public class UpdateProfileDTO {
     @NotBlank
     private String nickname;
 
-    @Schema(description = "头像")
-    private String avatar;
-
     @Schema(description = "手机号")
     private String phone;
 

@@ -2,11 +2,11 @@ package com.money.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.money.common.vo.PageVO;
 import com.money.dto.SysRoleDTO;
 import com.money.dto.query.SysRoleQueryDTO;
 import com.money.entity.SysRole;
 import com.money.entity.SysUserRoleRelation;
-import com.money.common.vo.PageVO;
 import com.money.vo.SysRoleVO;
 
 import java.util.Collection;
@@ -40,9 +40,9 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 获取所有角色
      *
-     * @return {@link List}<{@link SysRole}>
+     * @return {@link List}<{@link SysRoleVO}>
      */
-    List<SysRole> getAll();
+    List<SysRoleVO> getAll();
 
     /**
      * 查询角色列表

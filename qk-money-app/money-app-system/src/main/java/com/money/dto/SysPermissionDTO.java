@@ -36,7 +36,6 @@ public class SysPermissionDTO {
     private String routerPath;
 
     @Schema(description = "是否外链菜单")
-    @NotNull(groups = {ValidGroup.Save.class})
     private Boolean iframe;
 
     @Schema(description = "是否隐藏")

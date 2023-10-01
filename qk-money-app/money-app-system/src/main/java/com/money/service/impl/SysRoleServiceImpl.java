@@ -7,11 +7,15 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.exception.BaseException;
+import com.money.common.util.BeanMapUtil;
 import com.money.common.vo.PageVO;
 import com.money.constant.SysErrorStatus;
 import com.money.dto.SysRoleDTO;
 import com.money.dto.query.SysRoleQueryDTO;
-import com.money.entity.*;
+import com.money.entity.SysPermission;
+import com.money.entity.SysRole;
+import com.money.entity.SysRolePermissionRelation;
+import com.money.entity.SysUserRoleRelation;
 import com.money.mapper.SysRoleMapper;
 import com.money.service.SysPermissionService;
 import com.money.service.SysRolePermissionRelationService;
@@ -23,7 +27,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +42,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     private final SysPermissionService sysPermissionService;
@@ -58,8 +67,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<SysRole> getAll() {
-        return this.lambdaQuery().eq(SysRole::getEnabled, true).orderByAsc(SysRole::getLevel).list();
+    public List<SysRoleVO> getAll() {
+        return BeanMapUtil.to(this.lambdaQuery().eq(SysRole::getEnabled, true).orderByAsc(SysRole::getLevel).list(), SysRoleVO::new);
     }
 
     @Override
@@ -105,7 +114,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Collection<Long> ids) {
         // 删除角色用户关联关系
         sysUserRoleRelationService.lambdaUpdate().in(SysUserRoleRelation::getRoleId, ids).remove();
@@ -115,7 +123,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void configurePermissions(Long id, Set<Long> permissions) {
         // 先删除在重新关联
         sysRolePermissionRelationService.lambdaUpdate().eq(SysRolePermissionRelation::getRoleId, id).remove();
@@ -129,14 +136,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void relate(List<SysUserRoleRelation> userRoleRelations) {
         sysUserRoleRelationService.saveBatch(userRoleRelations);
         this.updateCount(userRoleRelations.stream().map(SysUserRoleRelation::getRoleId).collect(Collectors.toList()), 1);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void relevanceByUser(Long userId) {
         List<Long> roleIdList = sysUserRoleRelationService.getRelationByUser(userId)
                 .stream().map(SysUserRoleRelation::getRoleId).collect(Collectors.toList());

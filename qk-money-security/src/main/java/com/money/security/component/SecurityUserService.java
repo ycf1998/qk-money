@@ -1,7 +1,9 @@
 package com.money.security.component;
 
 import com.money.security.custom.RbacSecurityConfig;
+import com.money.security.model.RbacUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +20,14 @@ import org.springframework.stereotype.Service;
 public class SecurityUserService implements UserDetailsService {
 
     private final RbacSecurityConfig rbacSecurityConfig;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new SecurityUserDetail(rbacSecurityConfig.loadRbacUser(username));
+        RbacUser rbacUser = rbacSecurityConfig.loadRbacUser(username);
+        if (!rbacUser.getEnabled()) {
+            throw new DisabledException("Account [" + username + "] has been disabled");
+        }
+        return new SecurityUserDetail(rbacUser);
     }
 
 }

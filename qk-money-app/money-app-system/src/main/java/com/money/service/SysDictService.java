@@ -1,22 +1,30 @@
 package com.money.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.money.common.vo.PageVO;
 import com.money.dto.SysDictDTO;
 import com.money.dto.query.SysDictQueryDTO;
 import com.money.entity.SysDict;
-import com.money.common.vo.PageVO;
 
 import java.util.Set;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author money
  * @since 2022-03-05
  */
 public interface SysDictService extends IService<SysDict> {
+
+    /**
+     * 根据字典名获取字典
+     *
+     * @param name 字典名
+     * @return {@link SysDict}
+     */
+    SysDict getByName(String name);
 
     /**
      * 查询字典列表

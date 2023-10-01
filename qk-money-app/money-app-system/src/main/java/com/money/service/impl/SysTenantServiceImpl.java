@@ -8,17 +8,28 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.money.common.exception.BaseException;
-import com.money.dto.SysTenantDTO;
-import com.money.dto.query.SysTenantQueryDTO;
+import com.money.common.response.RStatus;
 import com.money.common.vo.PageVO;
 import com.money.constant.SysErrorStatus;
-import com.money.entity.*;
+import com.money.dto.SysTenantDTO;
+import com.money.dto.query.SysTenantQueryDTO;
+import com.money.entity.SysPermission;
+import com.money.entity.SysRole;
+import com.money.entity.SysRolePermissionRelation;
+import com.money.entity.SysTenant;
+import com.money.entity.SysUser;
+import com.money.entity.SysUserRoleRelation;
 import com.money.mapper.SysTenantMapper;
 import com.money.oss.OSSDelegate;
 import com.money.oss.core.FileNameStrategy;
 import com.money.oss.core.FolderPath;
 import com.money.oss.local.LocalOSS;
-import com.money.service.*;
+import com.money.service.SysPermissionService;
+import com.money.service.SysRolePermissionRelationService;
+import com.money.service.SysRoleService;
+import com.money.service.SysTenantService;
+import com.money.service.SysUserRoleRelationService;
+import com.money.service.SysUserService;
 import com.money.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -114,12 +125,14 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Set<Long> ids) {
-        // 主租户不可删除
-        List<Long> filterIds = ids.stream().filter(id -> 0 != id).collect(Collectors.toList());
-        if (CollUtil.isEmpty(filterIds)) {
-            throw new BaseException("不可以删除主租户");
+        // 逻辑删除
+        if (CollUtil.isNotEmpty(ids)) {
+            // 主租户不可删除
+            if (ids.contains(0L)) {
+                throw new BaseException(RStatus.FORBIDDEN);
+            }
+            this.lambdaUpdate().set(SysTenant::getDeleted, true).in(SysTenant::getId, ids).update();
         }
-        this.lambdaUpdate().set(SysTenant::getDeleted, true).in(SysTenant::getId, filterIds).update();
 //        this.removeBatchByIds(ids);
 //        sysUserService.lambdaUpdate().in(SysUser::getTenantId, ids).remove();
 //        sysUserRoleRelationService.lambdaUpdate().in(SysUserRoleRelation::getTenantId, ids).remove();

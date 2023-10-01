@@ -95,6 +95,9 @@ public class SysAuthServiceImpl implements SysAuthService {
         if (sysUser == null || !passwordEncoder.matches(loginDto.getPassword(), sysUser.getPassword())) {
             throw new BaseException(SysErrorStatus.USER_NOT_FOUND);
         }
+        if (!sysUser.getEnabled()) {
+            throw new BaseException(SysErrorStatus.USER_NOT_ENABLED);
+        }
         AuthTokenVO authTokenVO = new AuthTokenVO();
         authTokenVO.setTokenType(securityTokenSupport.getTokenConfig().getTokenType());
         authTokenVO.setAccessToken(securityTokenSupport.generateToken(sysUser.getUsername()));

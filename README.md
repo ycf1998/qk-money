@@ -4,7 +4,7 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
 - 采用组件化思想，拆分功能模块，按需引入，开箱即用
-- 采用前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-web)，面向 API 接口开发
+- 采用前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-ui)，面向 API 接口开发
 
 # 版本依赖
 
@@ -15,7 +15,7 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 | Spring Boot  | 2.7.12  |
 | MyBatis-Plus | 3.5.3.2 |
 | JJWT         | 0.11.5  |
-| Hutool       | 5.8.20  |
+| Hutool       | 5.8.22  |
 | Jackson      | 2.13.5  |
 | Spring Doc   | 1.7.0   |
 | Qiniu        | 7.13.1  |
@@ -127,15 +127,17 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 
 # 系统截图
 
-![image-20230615230201028](README.assets/image-20230615230201028.png)
+![1520](README.assets/1520.png)
 
-![image-20230615230217963](README.assets/image-20230615230217963.png)
+![1520_(1)](README.assets/1520_(1).png)
 
-![image-20230615230228541](README.assets/image-20230615230228541.png)
+![1520_(2)](README.assets/1520_(2).png)
 
-![image-20230615230243117](README.assets/image-20230615230243117.png)
+![1520_(3)](README.assets/1520_(3).png)
 
-![image-20230615230254029](README.assets/image-20230615230254029.png)
+![1520_(4)](README.assets/1520_(4).png)
+
+![1520_(5)](README.assets/1520_(5).png)
 
 # 配置总览
 

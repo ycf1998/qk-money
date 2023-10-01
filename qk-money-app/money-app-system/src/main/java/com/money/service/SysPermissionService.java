@@ -55,11 +55,4 @@ public interface SysPermissionService extends IService<SysPermission> {
      */
     void deleteById(Set<Long> ids);
 
-    /**
-     * 返回所有子节点ID，包含自身ID
-     *
-     * @return {@link List}<{@link Long}>
-     */
-    List<Long> getAllSubIds(Long id);
-
 }

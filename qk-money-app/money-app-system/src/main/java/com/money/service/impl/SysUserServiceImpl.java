@@ -37,8 +37,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @CacheConfig(cacheNames = "user")
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -104,7 +105,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void add(SysUserDTO sysUserDTO) {
         // 唯一性判断
         if (this.getByUsername(sysUserDTO.getUsername()) != null) {
@@ -126,7 +126,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void updateById(SysUserDTO sysUserDTO) {
         SysUser sysUser = new SysUser();
         BeanUtil.copyProperties(sysUserDTO, sysUser);
@@ -147,7 +146,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Set<Long> ids) {
         this.removeBatchByIds(ids);
         // 删除角色关联

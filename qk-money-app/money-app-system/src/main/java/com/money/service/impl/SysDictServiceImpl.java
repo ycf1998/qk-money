@@ -32,9 +32,15 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     private final SysDictDetailService sysDictDetailService;
+
+    @Override
+    public SysDict getByName(String name) {
+        return this.lambdaQuery().eq(SysDict::getName, name).last("LIMIT 1").one();
+    }
 
     @Override
     public PageVO<SysDict> list(SysDictQueryDTO queryDTO) {
@@ -69,7 +75,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Set<Long> ids) {
         List<String> dictList = this.listByIds(ids).stream().map(SysDict::getName).collect(Collectors.toList());
         this.removeBatchByIds(ids);

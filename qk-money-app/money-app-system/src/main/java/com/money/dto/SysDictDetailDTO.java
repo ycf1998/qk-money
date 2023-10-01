@@ -27,6 +27,9 @@ public class SysDictDetailDTO {
     private String value;
 
     @Schema(description = "排序")
-    @NotNull(groups = {ValidGroup.Save.class})
     private Integer sort;
+
+    @Schema(description = "是否隐藏")
+    private Boolean hidden;
+
 }
