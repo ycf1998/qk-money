@@ -1,10 +1,12 @@
-# 简介
+<h3 align="center">🎉 Qk-MONEY 后台快速开发框架 </h3>
 
-QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实现的快速后台开发框架。
+<p align="center">Money - 基于 Spring Boot 2.7、Spring Security、MyBatis-Plus </p>
+
+# 特性
 
 - 基于主流技术构建，注重代码规范，干净的代码风格
 - 采用组件化思想，拆分功能模块，按需引入，开箱即用
-- 采用前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-ui)，面向 API 接口开发
+- 面向 API 接口开发，前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-ui)，
 
 # 版本依赖
 
@@ -82,11 +84,11 @@ QK-MONEY 是一个基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等实
 
     ![image-20230612234418878](README.assets/image-20230612234418878.png)
 
-3. 修改数据库连接信息 
+3. 修改数据库连接信息 [application-dev.yml](./qk-money/qk-money-app/money-app-biz/src/main/resources/application-dev.yml) 
 
     ![image-20230612234100801](README.assets/image-20230612234100801.png)
 
-4. 运行 qk-money-biz 下 QkMoneyApplication 的 Main 函数
+4. 运行  [QkMoneyApplication](./qk-money/qk-money-app/money-app-biz/src/main/java/com/money/QkMoneyApplication.java)
 
 # 二次开发手册
 

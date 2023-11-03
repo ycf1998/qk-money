@@ -203,7 +203,7 @@ DROP TABLE IF EXISTS `sys_tenant`;
 CREATE TABLE `sys_tenant`  (
                                `id` bigint UNSIGNED NOT NULL,
                                `tenant_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户code',
-                               `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'https://i.postimg.cc/CKZZ6RD1/logo.png' COMMENT 'logo',
+                               `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'https://7up.pics/images/2023/10/21/logo.png' COMMENT 'logo',
                                `ico` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ico',
                                `domain` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '域名',
                                `tenant_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '租户名称',
@@ -220,7 +220,7 @@ CREATE TABLE `sys_tenant`  (
 -- ----------------------------
 -- Records of sys_tenant
 -- ----------------------------
-INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://i.postimg.cc/CKZZ6RD1/logo.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2023-10-01 17:05:41', '', '2022-03-26 14:06:28', 0);
+INSERT INTO `sys_tenant` VALUES (0, 'M', 'https://7up.pics/images/2023/10/21/logo.png', '', 'www.money.com', '麦尼科技', '主租户', 0, '', '2023-10-01 17:05:41', '', '2022-03-26 14:06:28', 0);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -231,7 +231,7 @@ CREATE TABLE `sys_user`  (
                              `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
                              `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
                              `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
-                             `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'https://i.postimg.cc/Hny7JfS2/superhero.png' COMMENT '头像',
+                             `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'https://7up.pics/images/2023/10/21/superhero.png' COMMENT '头像',
                              `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
                              `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
                              `remark` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
@@ -250,9 +250,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://i.postimg.cc/1RjgG5w3/batman.png', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-10-01 12:45:28', '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
-INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://i.postimg.cc/Hny7JfS2/superhero.png', '18120803972', 'admin@qq.com', '', 1, 1, '2023-05-26 22:33:39', 'money', '2022-03-11 20:04:32', 'money', '2023-05-26 21:52:38', 0);
-INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://i.postimg.cc/Hny7JfS2/superhero.png', '18120800002', 'guest@qq.com', '', 1, 1, '2023-05-26 22:23:55', 'money', '2022-03-18 08:15:49', 'money', '2023-09-30 12:01:33', 0);
+INSERT INTO `sys_user` VALUES (1, 'money', '$2a$10$W6oaOSARIA3DsZy1DkdfUuqI3L7a885Ci7AYvpQK.9NGbeVhcZihi', 'money', 'https://7up.pics/images/2023/10/21/batman.png', '18120800000', 'money@qq.com', '俺是一个超级管理员！', 1, 1, '2023-10-01 12:45:28', '', '2022-03-03 23:12:57', 'money', '2023-05-25 23:54:31', 0);
+INSERT INTO `sys_user` VALUES (1502254138862391297, 'admin', '$2a$10$630Mdca6BcyUJpKC2LNT7eT93.k9pmpcQoes4qm/j2o.pnb725zE6', 'admin', 'https://7up.pics/images/2023/10/21/superhero.png', '18120803972', 'admin@qq.com', '', 1, 1, '2023-05-26 22:33:39', 'money', '2022-03-11 20:04:32', 'money', '2023-05-26 21:52:38', 0);
+INSERT INTO `sys_user` VALUES (1504612500111388673, 'guest', '$2a$10$Nj/4Tn.cj2SEdoIUqMz7FOczatNV/AltEu07ieTpAO.5hEGV7lZqC', 'guest', 'https://7up.pics/images/2023/10/21/superhero.png', '18120800002', 'guest@qq.com', '', 1, 1, '2023-05-26 22:23:55', 'money', '2022-03-18 08:15:49', 'money', '2023-09-30 12:01:33', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role_relation
