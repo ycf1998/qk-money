@@ -12,7 +12,7 @@ import lombok.experimental.UtilityClass;
  * @createTime : 2023-06-18 12:08:56
  */
 @UtilityClass
-public class DefaultJackson {
+public class JacksonUtil {
 
     @SneakyThrows
     public String writeAsString(Object o) {
