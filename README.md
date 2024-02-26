@@ -50,7 +50,7 @@
 
 | 模块                                                         | 描述                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM（依赖版本清单）**。<br />建议其他模块依赖不写具体版本号，第三方依赖版本均在此声明，统一管理。 |
+| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM（依赖版本清单）**<br />建议其他模块依赖不写具体版本号，第三方依赖版本均在此声明，统一管理。 |
 | `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                |
 | `qk-money-app`/`money-app-api`                               | 应用 API 模块：放常量枚举、异常、Entity、DTO、VO 等。        |
 | `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper 等，启动类所在。   |
@@ -185,14 +185,14 @@ money:
     local:
       # 提供者 hutool（默认）、caffeine
       provider: hutool
-      # 过期时间：ms，0代表永不过期
-      ttl: 86400000
       # hutool-cache参数
       hutool:
         # 失效策略：LRU（默认）、LFU、FIFO、TIMED、WEAK
         strategy: LRU
         # 容量
         capacity: 102400
+        # 过期时间：ms，0代表永不过期
+        ttl: 86400000
     # redis 缓存
     redis:
       # 开关，默认关闭
