@@ -10,18 +10,18 @@
 
 # 版本依赖
 
-| 依赖         | 版本      |
-| ------------ |---------|
-| JDK          | 1.8+    |
-| Maven        | 3.8.1   |
-| Spring Boot  | 2.7.17  |
-| MyBatis-Plus | 3.5.3.2 |
-| JJWT         | 0.11.5  |
-| Hutool       | 5.8.22  |
-| Jackson      | 2.13.5  |
-| Spring Doc   | 1.7.0   |
-| Qiniu        | 7.13.1  |
-| XXL-JOB      | 2.3.1   |
+| 依赖         | 版本     |
+| ------------ |--------|
+| JDK          | 1.8+   |
+| Maven        | 3.8.1  |
+| Spring Boot  | 2.7.18 |
+| MyBatis-Plus | 3.5.7  |
+| JJWT         | 0.11.5 |
+| Hutool       | 5.8.34 |
+| Jackson      | 2.13.5 |
+| Spring Doc   | 1.8.0  |
+| Qiniu        | 7.13.1 |
+| XXL-JOB      | 2.3.1  |
 
 - 本项目的模块版本声明都在根目录下的 `pom.xml`，称为 **主POM**
 - 第三方依赖版本声明都在 `qk-money-parent` 包下的 `pom.xml`，称为 **清单POM**
