@@ -1,7 +1,7 @@
 package com.money.controller;
-import com.money.common.timezone.annotation.TZParam;
-import com.money.common.timezone.annotation.TZProcess;
-import com.money.common.timezone.annotation.TZRep;
+import com.money.web.timezone.annotation.TZParam;
+import com.money.web.timezone.annotation.TZProcess;
+import com.money.web.timezone.annotation.TZRep;
 import com.money.dto.timezone.TimeZoneDTO;
 import com.money.dto.timezone.TimeZoneVO;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -9,7 +9,7 @@
 - 日志链路追踪
 - 多语言
 - 多时区
-- 其他常用工具
+- 其他常用工具类
 
 ## 依赖
 
@@ -27,15 +27,15 @@
 |-- qk-money
     |-- qk-money-common
         |-- money-common-web
-            |-- com.money.common
+            |-- com.money.web
                 |-- config // 配置（默认 Jackson 配置、mvc 配置等）
                 |-- constant // 常量
                 |-- context // 请求上下文
                 |-- dto // 通用 DTO
                 |-- exception // 异常相关，如默认全局异常处理
                 |-- i18n // 多语言
-                |-- log // 日志相关，如请求日志切面
-                |-- response // 响应相关、如默认全局响应处理
+                |-- log // 日志相关，如默认请求日志切面
+                |-- response // 响应相关，如默认全局响应处理
                 |-- timezone // 多时区处理
                 |-- util // 常用工具类
                 |-- vo // 通用 VO
@@ -102,7 +102,7 @@ public Object rest() {
 | 捕获异常类                                                   | HTTP 状态码 | code   | 描述                                                         |
 | ------------------------------------------------------------ | ----------- | ------ | ------------------------------------------------------------ |
 | Exception.class                                              | 500         | 500    | 兜底异常，防止暴露意料之外的异常                             |
-| BindException.class \| MethodArgumentNotValidException.class | 400         | 400    | @Valid 校验的参数异常                                        |
+| BindException.class \| <br />MethodArgumentNotValidException.class \|<br />ConstraintViolationException.class | 400         | 400    | @Valid 校验的参数异常                                        |
 | BaseException.class                                          | 200         | 自定义 | 业务异常，开发中业务相关异常应抛此类或其子类（可继承该类做更细粒度的业务异常划分） |
 
 #### 默认请求日志切面
@@ -197,7 +197,7 @@ WebRequestContextHolder.getContext().getTimezone();
 
 `SortRequest`：排序请求参数，实现 `ISortRequest` ，并设置排序字段为 *orderBy* 。
 
-`QueryRequest`：查询请求参数，继承 `PageRequest` 和实现 `ISortRequest` ，设置排序字段为 *orderBy* ，供常规查询 DTO 继承使用。
+`PageQueryRequest`：分页查询请求参数，继承 `PageRequest` 和实现 `ISortRequest` ，设置排序字段为 *orderBy* ，供常规分页查询 DTO 继承使用。
 
 `ValidGroup`：验证组，用于数据校验 @Validated 分组。
 
@@ -211,6 +211,8 @@ WebRequestContextHolder.getContext().getTimezone();
 
 `WebUtil`：Web 相关工具类，如获取当前 Request 、Response 对象，使用 Response 直接响应等。
 
+`ValidationUtil`：检验工具类，即对对象进行校验，同 `@Validated`，手动版。
+
 ## 相关配置
 
 ~~~yaml
@@ -221,7 +223,9 @@ money:
     # 全局异常处理器
     exception-handler: true
     # 全局请求日志切面
-    web-log-aspect: true
+    web-log-aspect:
+      enabled: true
+      mode: ignore_get_result
     # 多语言
     i18n:
       enabled: true
@@ -229,5 +233,6 @@ money:
         - en
     # 多时区
     timezone:
+      enabled: true
       default-time-zone: GMT+08:00
 ~~~

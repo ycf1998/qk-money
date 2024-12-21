@@ -10,8 +10,8 @@ import lombok.experimental.Accessors;
  * 
  * </p>
  *
- * @author baomidou
- * @since 2023-08-12
+ * @author money
+ * @since 2024-12-21
  */
 @Getter
 @Setter
@@ -22,6 +22,11 @@ public class Demo extends BaseEntity {
      * 名称
      */
     private String name;
+
+    /**
+     * 状态
+     */
+    private String status;
 
     /**
      * 租户id

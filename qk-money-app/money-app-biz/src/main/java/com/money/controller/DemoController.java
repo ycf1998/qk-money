@@ -1,5 +1,6 @@
 package com.money.controller;
 
+import com.money.web.exception.BaseException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,22 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.money.common.dto.ValidGroup;
-import com.money.common.vo.PageVO;
+import com.money.web.dto.ValidGroup;
+import com.money.web.vo.PageVO;
 import com.money.service.DemoService;
 import com.money.dto.demo.DemoDTO;
-import com.money.dto.demo.DemoQueryDTO;
+import com.money.dto.demo.DemoPageQueryDTO;
 import com.money.dto.demo.DemoVO;
 
 import java.util.Set;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
- * @author baomidou
- * @since 2023-08-12
+ * @author money
+ * @since 2024-12-21
  */
 @RestController
 @RequestMapping("/demo")
@@ -36,14 +37,17 @@ public class DemoController {
 
     @GetMapping
     @PreAuthorize("@rbac.hasPermission('demo:list')")
-    public PageVO<DemoVO> list(@Validated DemoQueryDTO queryDTO) {
+    public PageVO<DemoVO> list(@Validated DemoPageQueryDTO queryDTO) {
+        if (true) {
+            throw new BaseException("测试");
+        }
         return demoService.list(queryDTO);
     }
 
     @PostMapping
     @PreAuthorize("@rbac.hasPermission('demo:add')")
-    public void add(@Validated(ValidGroup.Save.class) @RequestBody DemoDTO addDTO) {
-        demoService.add(addDTO);
+    public Long add(@Validated(ValidGroup.Save.class) @RequestBody DemoDTO addDTO) {
+        return demoService.add(addDTO);
     }
 
     @PutMapping

@@ -10,9 +10,9 @@ import com.money.util.PageUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.money.common.vo.PageVO;
+import com.money.web.vo.PageVO;
 import com.money.dto.demo.DemoDTO;
-import com.money.dto.demo.DemoQueryDTO;
+import com.money.dto.demo.DemoPageQueryDTO;
 import com.money.dto.demo.DemoVO;
 
 import java.util.Collection;
@@ -22,15 +22,15 @@ import java.util.Collection;
  *  服务实现类
  * </p>
  *
- * @author baomidou
- * @since 2023-08-12
+ * @author money
+ * @since 2024-12-21
  */
 @Service
 @RequiredArgsConstructor
 public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements DemoService {
 
     @Override
-    public PageVO<DemoVO> list(DemoQueryDTO queryDTO) {
+    public PageVO<DemoVO> list(DemoPageQueryDTO queryDTO) {
         Page<Demo> page = this.lambdaQuery()
                 .last(StrUtil.isNotBlank(queryDTO.getOrderBy()), queryDTO.getOrderBySql())
                 .page(PageUtil.toPage(queryDTO));
@@ -38,10 +38,11 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements De
     }
 
     @Override
-    public void add(DemoDTO addDTO) {
+    public Long add(DemoDTO addDTO) {
         Demo demo = new Demo();
         BeanUtil.copyProperties(addDTO, demo);
         this.save(demo);
+        return demo.getId();
     }
 
     @Override

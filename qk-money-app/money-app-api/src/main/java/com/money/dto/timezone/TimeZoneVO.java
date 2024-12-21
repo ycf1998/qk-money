@@ -1,6 +1,6 @@
 package com.money.dto.timezone;
 
-import com.money.common.timezone.annotation.TZParam;
+import com.money.web.timezone.annotation.TZParam;
 import lombok.Data;
 
 import java.time.LocalDateTime;

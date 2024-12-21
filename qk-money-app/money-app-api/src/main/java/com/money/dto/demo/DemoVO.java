@@ -8,8 +8,8 @@ import lombok.experimental.Accessors;
 * 
 * </p>
 *
-* @author baomidou
-* @since 2023-08-12
+* @author money
+* @since 2024-12-21
 */
 @Data
 @Accessors(chain = true)
@@ -21,5 +21,10 @@ public class DemoVO {
     * 名称
     */
     private String name;
+
+    /**
+    * 状态
+    */
+    private String status;
 
 }

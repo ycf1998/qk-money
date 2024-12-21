@@ -152,10 +152,6 @@
 **客制化配置：** qk-money-app/money-app-biz/resources/application-money.yml
 
 ~~~yml
-spring:
-  config:
-    # 引入对象存储的配置
-    import: oss.properties  
 money:
   web:
     # 全局响应处理器
@@ -163,7 +159,9 @@ money:
     # 全局异常处理器
     exception-handler: true
     # 全局请求日志切面
-    web-log-aspect: true
+    web-log-aspect:
+      enabled: true
+      mode: ignore_get_result
     # 多语言
     i18n:
       enabled: true
@@ -171,6 +169,7 @@ money:
         - en
     # 多时区
     timezone:
+      enabled: true
       default-time-zone: GMT+08:00
   # 多租户
   tenant:
@@ -238,7 +237,7 @@ money:
         - /webjars/**
         - /v3/**
         - /assets/**
-        - /test/**
+        - /demo/**
   # 邮件服务
   mail:
     host: smtp.shahow.top # 邮箱服务器
@@ -292,11 +291,13 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
     <!-- 引入Spring上下文配置属性 -->
     <springProperty scope="context" name="app_name" source="spring.application.name" defaultValue="app"/>
     <!-- 设置变量 -->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-    <property name="FILE_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
-    <property name="ACCESS_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level- [%thread] %logger{0} : %msg%n"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
+    <property name="ACCESS_LOG_PATTERN"
+              value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level- [%thread] %logger{0} : %msg%n"/>
     <property name="LOG_PATH" value="log"/>
-    
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
@@ -354,14 +355,14 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
         </encoder>
     </appender>
 
-    <logger name="com.money.common.log.DefaultWebLogAspect" level="info" additivity="false">
-        <appender-ref ref="ACCESS_LOG" />
+    <logger name="com.money.web.log.DefaultWebLogAspect" level="info" additivity="false">
+        <appender-ref ref="ACCESS_LOG"/>
     </logger>
 
     <root level="info">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE_INFO" />
-        <appender-ref ref="FILE_ERROR" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE_INFO"/>
+        <appender-ref ref="FILE_ERROR"/>
     </root>
 </configuration>
 ~~~
