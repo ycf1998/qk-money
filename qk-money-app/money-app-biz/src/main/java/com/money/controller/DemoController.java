@@ -1,6 +1,14 @@
 package com.money.controller;
 
-import com.money.web.exception.BaseException;
+import com.money.dto.demo.DemoDTO;
+import com.money.dto.demo.DemoPageQueryDTO;
+import com.money.dto.demo.DemoVO;
+import com.money.service.DemoService;
+import com.money.web.dto.ValidGroup;
+import com.money.web.vo.PageVO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,15 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import com.money.web.dto.ValidGroup;
-import com.money.web.vo.PageVO;
-import com.money.service.DemoService;
-import com.money.dto.demo.DemoDTO;
-import com.money.dto.demo.DemoPageQueryDTO;
-import com.money.dto.demo.DemoVO;
 
 import java.util.Set;
 
@@ -38,9 +37,6 @@ public class DemoController {
     @GetMapping
     @PreAuthorize("@rbac.hasPermission('demo:list')")
     public PageVO<DemoVO> list(@Validated DemoPageQueryDTO queryDTO) {
-        if (true) {
-            throw new BaseException("测试");
-        }
         return demoService.list(queryDTO);
     }
 

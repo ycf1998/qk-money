@@ -1,157 +1,158 @@
-<h3 align="center">🎉 Qk-MONEY 后台快速开发框架 </h3>
+<h2 align="center">🎉 Qk-MONEY 后台快速开发框架</h2>
 
-<p align="center">Money - 基于 Spring Boot 2.7、Spring Security、MyBatis-Plus </p>
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
+  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.x-brightgreen" alt="Spring Boot">
+  <img src="https://img.shields.io/badge/MyBatis--Plus-3.5.x-blue" alt="MyBatis-Plus">
+  <img src="https://img.shields.io/badge/Hutool-5.8.x-yellow" alt="Hutool">
+</p>
 
-# 特性
+<p align="center">Money - 基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 的后台快速开发框架</p>
 
-- 基于主流技术构建，注重代码规范，干净的代码风格
-- 采用组件化思想，拆分功能模块，按需引入，开箱即用
-- 面向 API 接口开发，前后端分离架构 [👉前端配套代码](https://github.com/ycf1998/qk-money-ui)
 
-# 版本依赖
+## ✨ 特性
+
+- **主流技术栈**：基于 Spring Boot 2.7、Spring Security、MyBatis-Plus 等主流技术构建，代码规范，风格干净。
+- **组件化设计**：采用组件化思想，功能模块按需引入，开箱即用。
+- **前后端分离**：面向 API 接口开发，前端配套代码：[Qk-MONEY UI](https://github.com/ycf1998/qk-money-ui)。
+
+
+## 📦 版本依赖
 
 | 依赖         | 版本     |
-| ------------ |--------|
-| JDK          | 1.8+   |
-| Maven        | 3.8.1  |
-| Spring Boot  | 2.7.18 |
-| MyBatis-Plus | 3.5.7  |
-| JJWT         | 0.11.5 |
-| Hutool       | 5.8.34 |
-| Jackson      | 2.13.5 |
-| Spring Doc   | 1.8.0  |
-| Qiniu        | 7.13.1 |
-| XXL-JOB      | 2.3.1  |
+| ------------ | -------- |
+| JDK          | 1.8+     |
+| Maven        | 3.8.1    |
+| Spring Boot  | 2.7.18   |
+| MyBatis-Plus | 3.5.7    |
+| JJWT         | 0.11.5   |
+| Hutool       | 5.8.34   |
+| Jackson      | 2.13.5   |
+| Spring Doc   | 1.8.0    |
+| Qiniu        | 7.13.1   |
+| XXL-JOB      | 2.3.1    |
 
-- 本项目的模块版本声明都在根目录下的 `pom.xml`，称为 **主POM**
-- 第三方依赖版本声明都在 `qk-money-parent` 包下的 `pom.xml`，称为 **清单POM**
+- **主 POM**：根目录下的 `pom.xml`，声明模块版本。
+- **清单 POM**：`qk-money-parent` 包下的 `pom.xml`，声明第三方依赖版本。
 
-# 功能清单
 
-- [x] 通用 Web 功能（全局响应处理、全局异常处理、日志链路追踪）
-- [x] 基于 JWT 认证和 RBAC 模型的权限认证解决方案
-- [x] 多租户（基于表字段）
-- [x] 对象存储 OSS
-    - [x] 本地
-    - [x] 七牛云
-- [x] 缓存模块
-    - [x] Hutool Cache
-    - [ ] Caffeine
-    - [x] Redis（支持 Spring Cache）
-- [x] 发送邮件
-- [x] 定时任务（XXL-JOB）
-- [x] 国际化（多语言、多时区）
-- [x] 接口文档（OpenAPI 3）
-- [x] 代码生成器（CRUD）
-- [x] 日志本地化（Logback）
-- [x] ~~系统监控（Spring Boot Admin）~~
+## 🛠️ 功能清单
 
-# 工程结构
+| 功能模块         | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| **通用 Web 功能** | 全局响应处理、全局异常处理、日志链路追踪。                   |
+| **权限认证**     | 基于 JWT 和 RBAC 模型的认证授权解决方案。                    |
+| **多租户**       | 基于表字段的多租户支持。                                     |
+| **对象存储 OSS** | 支持本地存储和七牛云存储。                                   |
+| **缓存模块**     | 支持 Hutool Cache、Redis（集成 Spring Cache）。              |
+| **邮件发送**     | 提供邮件发送功能。                                           |
+| **定时任务**     | 集成 XXL-JOB，支持分布式定时任务。                           |
+| **国际化**       | 支持多语言、多时区。                                         |
+| **接口文档**     | 集成 OpenAPI 3，自动生成接口文档。                           |
+| **代码生成器**   | 提供 CRUD 代码生成功能。                                     |
+| **日志管理**     | 使用 Logback 实现日志本地化。                                |
 
-| 模块                                                         | 描述                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `qk-money-parent`[📜](./doc/qk-money-parent.md)               | 👉**父模块：BOM（依赖版本清单）**<br />建议其他模块依赖不写具体版本号，第三方依赖版本均在此声明，统一管理。 |
-| `qk-money-app`                                               | 👉**应用模块：主要开发的模块**                                |
-| `qk-money-app`/`money-app-api`                               | 应用 API 模块：放常量枚举、异常、Entity、DTO、VO 等。        |
-| `qk-money-app`/`money-app-biz`                               | 应用业务模块：Controller、Service、Mapper 等，启动类所在。   |
-| `qk-money-app`/`money-app-system`                            | 系统管理模块：QK-MOENY 预设的一套权限管理系统，单独模块方便拆卸。 |
-| `qk-money-common`                                            | 👉**通用模块：各种方便易用的功能包**                          |
-| `qk-money-common`/`money-common-web`[📜](./doc/money-common-web.md) | 通用 Web 模块： Web 开发的核心模块。<br />提供默认的全局响应处理、异常处理、请求日志切面、日志链路追踪、多语言、多时区等功能，减少 Web 项目的基础构建。 |
-| `qk-money-common`/`money-common-mybatis`[📃](./doc/money-common-mybatis.md) | MyBatis 模块：使用 MyBatis-Plus 增强库，默认配置分页插件、审计字段默认值填充（需继承 `BaseEntity`）和代码生成器。 |
-| `qk-money-common/money-common-cache`                         | 缓存模块：提供本地缓存和集中式缓存 Redis。                   |
-| `qk-money-common/money-common-mail`[📃](./doc/money-common-mail.md) | 邮件模块：提供邮件发送功能。                                 |
-| `qk-money-common/money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：提供集成 XXL-JOB 定时任务。                    |
-| `qk-money-common`/`money-common-oss`[📃](./doc/money-common-oss.md) | OSS 对象存储模块：提供本地文件存储和七牛云对象存储。         |
-| `qk-money-common/money-common-swagger`[📃](./doc/money-common-swagger.md) | 接口文档模块：提供 Swagger 接口文档集成（OpenAPI 3）。       |
-| `qk-money-security`[📃](./doc/qk-money-security.md)           | 👉**安全模块**：基于 Spring Security 框架封装，提供基于 Token 和 RBAC 模型的认证授权能力。 |
-| `qk-money-tenant`[📃](./doc/qk-money-tenant.md)               | 👉**多租户模块**：使用 MyBatis-Plus 多租户插件实现的基于表字段的多租户功能。 |
-| `xxl-job-admin`                                              | 👉**XXL-JOB 调度中心**：[官方文档](https://www.xuxueli.com/xxl-job)，简单使用看定时任务模块文档即可。 |
 
-> 点击📃查看对应模块使用文档，📜开发前建议先看。
+## 🏗️ 工程结构
 
-# 本地启动指南
+| 模块                                                          | 描述                                                         |
+|-------------------------------------------------------------| ------------------------------------------------------------ |
+| **`qk-money-parent`**[📜](./doc/qk-money-parent.md)         | 👉 **父模块：BOM（依赖版本清单）**<br />统一管理第三方依赖版本。 |
+| **`qk-money-app`**                                          | 👉 **应用模块：主要开发的模块**                               |
+| `money-app-api`                                             | 应用 API 模块：常量枚举、异常、Entity、DTO、VO 等。          |
+| `money-app-biz`                                             | 应用业务模块：Controller、Service、Mapper 等，启动类所在。   |
+| `money-app-system`                                          | 系统管理模块：预设的权限管理系统，可单独拆卸。               |
+| **`qk-money-common`**                                       | 👉 **通用模块：各种方便易用的功能包**                         |
+| `money-common-web`[📜](./doc/money-common-web.md)           | 通用 Web 模块：全局响应处理、异常处理、日志链路追踪等。      |
+| `money-common-mybatis`[📃](./doc/money-common-mybatis.md)   | MyBatis 模块：分页插件、审计字段填充、代码生成器。           |
+| `money-common-cache`                                        | 缓存模块：本地缓存和 Redis 缓存。                            |
+| `money-common-mail`[📃](./doc/money-common-mail.md)         | 邮件模块：邮件发送功能。                                     |
+| `money-common-schedule`[📃](./doc/money-common-schedule.md) | 定时任务模块：集成 XXL-JOB。                                 |
+| `money-common-oss`[📃](./doc/money-common-oss.md)           | OSS 模块：本地存储和七牛云存储。                             |
+| `money-common-swagger`[📃](./doc/money-common-swagger.md)   | 接口文档模块：集成 Swagger（OpenAPI 3）。                    |
+| **`qk-money-security`**[📃](./doc/qk-money-security.md)     | 👉 **安全模块**：基于 Spring Security 的认证授权功能。        |
+| **`qk-money-tenant`**[📃](./doc/qk-money-tenant.md)         | 👉 **多租户模块**：基于 MyBatis-Plus 的多租户支持。           |
+| **`xxl-job-admin`**                                         | 👉 **XXL-JOB 调度中心**：分布式任务调度。                     |
 
-1. 克隆项目
+点击📃查看对应模块使用文档，📜开发前建议先看。
 
-    ```bash
-    git clone https://github.com/ycf1998/qk-money
-    ```
 
-2. 创建 & 初始化数据库
+## 🚀 本地启动指南
 
-    ```
-    MySQL 8 以下版本，需要全局替换脚本内：
-    utf8mb4 -> utf8
-    utf8mb4_general_ci -> utf8_general_ci
-    ```
+1. **克隆项目**
 
+   ```bash
+   git clone https://github.com/ycf1998/qk-money
+   ```
+
+2. **创建 & 初始化数据库**
+
+    - 使用 MySQL 8 以下版本时，替换脚本中的 `utf8mb4` 为 `utf8`，`utf8mb4_general_ci` 为 `utf8_general_ci`。
     - 命令行方式：`mysql -u root < qk_money.sql`
-    - 图形化如 Navicat
+    - 图形化工具（如 Navicat）：
 
-    ![image-20230612234418878](README.assets/image-20230612234418878.png)
+      ![数据库初始化](README.assets/image-20230612234418878.png)
 
-3. 修改数据库连接信息 [application-dev.yml](./qk-money-app/money-app-biz/src/main/resources/application-dev.yml) 
+3. **修改数据库连接信息**
 
-    ![image-20230612234100801](README.assets/image-20230612234100801.png)
+   编辑 `application-dev.yml` 文件，配置数据库连接信息：
 
-4. 运行  [QkMoneyApplication](./qk-money-app/money-app-biz/src/main/java/com/money/QkMoneyApplication.java)
+   ![数据库配置](README.assets/image-20230612234100801.png)
 
-# 二次开发手册
+4. **启动项目**
 
-1. 建表
+   运行 [`QkMoneyApplication`](./qk-money-app/money-app-biz/src/main/java/com/money/QkMoneyApplication.java) 启动项目。
 
-    ```sql
-    CREATE TABLE `qk-money`.`demo`  (
-      `id` bigint UNSIGNED NOT NULL,
-      `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
-      `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-      `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-      `update_time` datetime NOT NULL,
-      `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
-      PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-    ```
 
-    基础字段：可搭配继承 BaseEntity 使用
+## 🛠️ 二次开发手册
 
-    - id：主键
-    - create_by：创建者
-    - create_time：创建时间
-    - update_by：更新者
-    - update_time：创建时间
+1. **建表**
 
-    可选字段：
+   ```sql
+   CREATE TABLE `qk-money`.`demo` (
+     `id` bigint UNSIGNED NOT NULL,
+     `name` varchar(255) NOT NULL COMMENT '名称',
+     `create_by` varchar(32) NOT NULL,
+     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     `update_by` varchar(32) NOT NULL,
+     `update_time` datetime NOT NULL,
+     `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户id',
+     PRIMARY KEY (`id`) USING BTREE
+   ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+   ```
 
-    - tenant_id：租户 id
+    - **基础字段**：`id`、`create_by`、`create_time`、`update_by`、`update_time`。（搭配继承 `BaseEntity`）
+    - **可选字段**：`tenant_id`（租户 ID）。
 
-2. 运行 money-common-mybatis 下的代码生成器 MybatisPlusGenerator
+2. **运行代码生成器**
 
-    ![image-20230615223325803](README.assets/image-20230615223325803.png)
+   运行 `money-common-mybatis` 模块下的 `MybatisPlusGenerator`：
 
-3. 生成代码结构如下，调整并补充业务代码
+   ![代码生成器](README.assets/image-20230615223325803.png)
 
-    ![image-20230615224938978](README.assets/image-20230615224938978.png)
+3. **调整并补充业务代码**
 
-# 系统截图
+   根据生成的代码结构，调整并补充业务逻辑：
 
-![1520](README.assets/1520.png)
+   ![代码结构](README.assets/image-20230615224938978.png)
 
-![1520_(1)](README.assets/1520_(1).png)
 
-![1520_(2)](README.assets/1520_(2).png)
+## 🖼️ 系统截图
 
-![1520_(3)](README.assets/1520_(3).png)
+| 功能模块       | 截图                                                         |
+|------------| ------------------------------------------------------------ |
+| **用户管理**   | ![登录页面](README.assets/1520.png)                          |
+| **角色管理**   | ![仪表板](README.assets/1520_(1).png)                        |
+| **权限管理**   | ![用户管理](README.assets/1520_(2).png)                      |
+| **字典管理**   | ![角色管理](README.assets/1520_(3).png)                      |
+| **租户管理**   | ![权限管理](README.assets/1520_(4).png)                      |
+| **个人信息管理** | ![系统设置](README.assets/1520_(5).png)                      |
 
-![1520_(4)](README.assets/1520_(4).png)
 
-![1520_(5)](README.assets/1520_(5).png)
+## ⚙️ 配置总览
+### **客制化配置：** `qk-money-app/money-app-biz/resources/application-money.yml`
 
-# 配置总览
-
-**客制化配置：** qk-money-app/money-app-biz/resources/application-money.yml
-
-~~~yml
+```yml
 money:
   web:
     # 全局响应处理器
@@ -254,11 +255,10 @@ money:
     protocol: smtps # 协议
     default-encoding: utf-8
     fromAlias: 麦尼 # 发件人别名
-~~~
+```
+### OSS 配置： `qk-money-app/money-app-biz/resources/oss.properties`
 
-**OSS配置：** qk-money-app/money-app-biz/resources/oss.properties
-
-~~~properties
+```properties
 # ================================= 本地
 # 目标空间
 local.bucket = F:/qk-money/
@@ -281,73 +281,69 @@ qiniu.region = huanan
 qiniu.token-expire = 3600
 # 上传策略 https://developer.qiniu.com/kodo/1206/put-policy
 qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$(x:fname)\",\"age\":\"$(x:age)\"}
-~~~
+```
 
-**日志配置：** qk-money-app/money-app-biz/resources/logback-spring.xml
+### 日志配置： `qk-money-app/money-app-biz/resources/logback.xml`
 
-~~~xml
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- 引入Spring上下文配置属性 -->
     <springProperty scope="context" name="app_name" source="spring.application.name" defaultValue="app"/>
+
     <!-- 设置变量 -->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <property name="FILE_LOG_PATTERN"
-              value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
-    <property name="ACCESS_LOG_PATTERN"
-              value="%X{requestId}|%X{userId}> %d{HH:mm:ss.SSS} %-5level- [%thread] %logger{0} : %msg%n"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="FILE_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
+    <property name="ACCESS_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] : %msg%n"/>
     <property name="LOG_PATH" value="log"/>
 
+    <!-- 控制台日志输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
     <!-- 访问日志 -->
     <appender name="ACCESS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/access.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志名格式 -->
             <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/access.log</fileNamePattern>
-            <!-- 日志保留一周 -->
             <maxHistory>7</maxHistory>
-            <!-- 且所有日志大小总和不能超过5GB -->
             <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${ACCESS_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
     <!-- INFO级别及以上日志 -->
     <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/service.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
-            <onMismatch>ACCEPT</onMismatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志名格式 -->
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/info.log</fileNamePattern>
-            <!-- 日志保留一个月 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/service.log</fileNamePattern>
             <maxHistory>30</maxHistory>
-            <!-- 且所有日志大小总和不能超过9GB -->
             <totalSizeCap>9GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
     <!-- ERROR级别日志 -->
     <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/error.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志名格式 -->
             <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/error.log</fileNamePattern>
-            <!-- 日志保留一个月 -->
             <maxHistory>30</maxHistory>
-            <!-- 且所有日志大小总和不能超过9GB -->
             <totalSizeCap>9GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
@@ -355,18 +351,27 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
         </encoder>
     </appender>
 
+    <!-- 异步日志 -->
+    <appender name="ASYNC_FILE_INFO" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE_INFO" />
+    </appender>
+
+    <!-- 特定日志记录器配置 -->
     <logger name="com.money.web.log.DefaultWebLogAspect" level="info" additivity="false">
-        <appender-ref ref="ACCESS_LOG"/>
+        <appender-ref ref="ACCESS_LOG" />
     </logger>
 
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE_INFO"/>
-        <appender-ref ref="FILE_ERROR"/>
+    <!-- 根日志记录器配置 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ASYNC_FILE_INFO" />
+        <appender-ref ref="FILE_ERROR" />
     </root>
 </configuration>
-~~~
+```
 
-# 使用登记
+## 📝 使用登记
 
-[麦尼收银系统](https://github.com/ycf1998/money-pos)
+- [麦尼收银系统](https://github.com/ycf1998/money-pos)

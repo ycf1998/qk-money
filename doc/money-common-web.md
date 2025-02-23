@@ -107,11 +107,9 @@ public Object rest() {
 
 #### 默认请求日志切面
 
-QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息 `WebLog` 对象，包含请求 id、请求时间、请求 IP、请求方法、URL、请求参数、返回结果等。结合当前 Logback 日志本地化的配置，将其打印在了单独的日志文件中：log/yyyy-MM-dd/access.log。
+QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息，包含请求 IP、请求方法、URL、请求参数、返回结果和请求耗时。结合当前 Logback 日志本地化的配置，将其打印在了单独的日志文件中：log/yyyy-MM-dd/access.log。
 
 ![image-20230622145759807](money-common-web.assets/image-20230622145759807.png)
-
-> TODO：该切面可以提供一个后置扩展点，让我们获取 `WebLog` 对象进行采集、统计，适用于实现操作记录。
 
 #### 全局请求上下文 & 日志链路追踪
 
