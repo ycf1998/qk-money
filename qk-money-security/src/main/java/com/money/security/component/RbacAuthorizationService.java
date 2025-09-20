@@ -21,22 +21,46 @@ import java.util.stream.Collectors;
 public class RbacAuthorizationService {
 
     /**
-     * 权限检测
+     * 是否拥有角色
      *
-     * @param permissions 许可
+     * @param roles 角色
      * @return boolean
      */
-    public boolean hasPermission(String... permissions) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityUserDetail userDetail = (SecurityUserDetail) authentication.getPrincipal();
-        // 获取当前用户的所有权限
-        Set<String> userPermissions = userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    public boolean hasRole(String... roles) {
+        Set<String> userAuthorities = this.getUserAuthorities();
         // todo 超级管理员放行所有权限
-        if (userPermissions.contains("SUPER_ADMIN")) {
+        if (userAuthorities.contains("ROLE_SUPER_ADMIN")) {
             return true;
         }
         // 判断当前用户的所有权限是否包含接口上定义的权限
-        return Arrays.stream(permissions).anyMatch(userPermissions::contains);
+        return Arrays.stream(roles).map(role -> "ROLE_" + role).anyMatch(userAuthorities::contains);
+    }
+
+    /**
+     * 是否拥有权限
+     *
+     * @param permissions 权限码
+     * @return boolean
+     */
+    public boolean hasPermission(String... permissions) {
+        Set<String> userAuthorities = this.getUserAuthorities();
+        // todo 超级管理员放行所有权限
+        if (userAuthorities.contains("ROLE_SUPER_ADMIN")) {
+            return true;
+        }
+        // 判断当前用户的所有权限是否包含接口上定义的权限
+        return Arrays.stream(permissions).anyMatch(userAuthorities::contains);
+    }
+
+    /**
+     * 获取当前用户所有权限
+     *
+     * @return {@link Set }<{@link String }>
+     */
+    private Set<String> getUserAuthorities() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityUserDetail userDetail = (SecurityUserDetail) authentication.getPrincipal();
+        return userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
     }
 
 }

@@ -28,7 +28,8 @@ public class SecurityUserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.concat(user.getRoles().stream(), user.getPermissions().stream())
+        // 兼容 Spring Security 规范，角色追加 ROLE_ 前缀，见 SecurityExpressionRoot.defaultRolePrefix
+        return Stream.concat(user.getRoles().stream().map(role -> "ROLE_" + role), user.getPermissions().stream())
                 .filter(StrUtil::isNotBlank)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
