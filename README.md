@@ -207,23 +207,23 @@ money:
       ttl: 86400000
   # 安全
   security:
-    # token配置
+    # Token 配置
     token:
-      # token请求头名称
+      # Token 请求头键名
       header: Authorization
-      # 令牌类型：完整token："{tokenType} {accessToken}"
+      # 令牌类型：完整 Token："{tokenType} {accessToken}"
       token-type: Bearer
       # 密钥
       secret: money
-      # access token过期时间 ms，默认8小时
+      # Access Token 过期时间（ms），默认8小时
       ttl: 28800000
-      # refresh token过期时间 ms，默认30天
+      # Refresh Token 过期时间（ms），默认30天
       refresh-ttl: 2592000000
       # 策略：jwt（自动过期，默认）、redis
       strategy: jwt
-      # 缓存键名
+      # 缓存键名前缀
       cache-key: "security:token:"
-    # 忽略的url
+    # 忽略的 URL
     ignore:
       get:
         - /tenants/byCode
@@ -292,10 +292,13 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
     <springProperty scope="context" name="app_name" source="spring.application.name" defaultValue="app"/>
 
     <!-- 设置变量 -->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-    <property name="FILE_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{36} : %msg%n"/>
-    <property name="ACCESS_LOG_PATTERN" value="%X{requestId}|%X{userId}> %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] : %msg%n"/>
     <property name="LOG_PATH" value="log"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d %highlight(%-5level) [%15.15t] %cyan(%c{15}) %magenta([%X{requestId:--}]) %X{userId} : %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d %-5level [%15.15t] %c{15} [%X{requestId:--}] %X{userId} : %msg%n"/>
+    <property name="ACCESS_LOG_PATTERN"
+              value="%d %-5level [%15.15t] [%X{requestId:--}] %X{userId} : %msg%n"/>
 
     <!-- 控制台日志输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -322,8 +325,6 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
         <file>${LOG_PATH}/service.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/service.log</fileNamePattern>
@@ -351,23 +352,16 @@ qiniu.policy.returnBody = {\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fname\":\"$
         </encoder>
     </appender>
 
-    <!-- 异步日志 -->
-    <appender name="ASYNC_FILE_INFO" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>512</queueSize>
-        <discardingThreshold>0</discardingThreshold>
-        <appender-ref ref="FILE_INFO" />
-    </appender>
-
-    <!-- 特定日志记录器配置 -->
-    <logger name="com.money.web.log.DefaultWebLogAspect" level="info" additivity="false">
-        <appender-ref ref="ACCESS_LOG" />
+    <!-- 访问日志记录器配置 -->
+    <logger name="com.money.web.log.DefaultWebLogAspect" level="info">
+        <appender-ref ref="ACCESS_LOG"/>
     </logger>
 
     <!-- 根日志记录器配置 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="ASYNC_FILE_INFO" />
-        <appender-ref ref="FILE_ERROR" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE_INFO"/>
+        <appender-ref ref="FILE_ERROR"/>
     </root>
 </configuration>
 ```

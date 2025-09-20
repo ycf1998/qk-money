@@ -107,9 +107,11 @@ public Object rest() {
 
 #### 默认请求日志切面
 
-QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息，包含请求 IP、请求方法、URL、请求参数、返回结果和请求耗时。结合当前 Logback 日志本地化的配置，将其打印在了单独的日志文件中：log/yyyy-MM-dd/access.log。
+QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息，包含请求 IP、请求方法、URL、请求参数、返回结果和请求耗时。结合当前 Logback 日志本地化的配置， 额外将其打印在单独的日志文件中：log/yyyy-MM-dd/access.log。
 
 ![image-20230622145759807](money-common-web.assets/image-20230622145759807.png)
+
+![image-20250920183659272](money-common-web.assets/image-20250920183659272.png)
 
 #### 全局请求上下文 & 日志链路追踪
 
@@ -145,7 +147,7 @@ WebRequestContextHolder.getContext().getTimezone();
 
 其中请求 id 是协助我们定位一次请求相关日志的重要标识，也就是常说的日志链路追踪。结合 MDC（映射调试上下文，Logback 提供的一种方便在多线程条件下记录日志的功能），将请求 id 打入日志。
 
-![image-20230622153527045](money-common-web.assets/image-20230622153527045.png)
+![image-20250920183917166](money-common-web.assets/image-20250920183917166.png)
 
 #### 多语言
 
@@ -189,7 +191,7 @@ WebRequestContextHolder.getContext().getTimezone();
 
 #### DTO 和 VO
 
-`ISortRequest`：排序请求接口，支持提交如 *createTime,desc;id,asc;*  的排序值，并配备转换为 order by 语句的方法。
+`ISortRequest`：排序请求接口，支持提交如 *createTime,desc;id,asc*  的排序值，并配备转换为 order by 语句的方法。
 
 `PageRequest`：分页请求参数，里面规定了分页请求的键为 *page*、*size* 。
 

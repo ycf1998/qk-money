@@ -17,7 +17,7 @@ import java.nio.file.Paths;
  * @createTime : 2022-05-14 10:07:58
  */
 @RestController
-@RequestMapping("/demo/mail")
+@RequestMapping("/test/mail")
 @RequiredArgsConstructor
 public class MailDemoController {
 
@@ -25,7 +25,7 @@ public class MailDemoController {
 
     @GetMapping
     public void sendMail(String to) {
-        // curl "http://localhost:9000/qk-money/demo/mail?to=你的邮箱"
+        // curl "http://localhost:9000/qk-money/test/mail?to=你的邮箱"
 
         MailRequest mailRequest = new MailRequest(to, "邮件测试", "<h1>你好，玛卡巴卡！你好，无锡底细</h1>")
                 // 内容解析为html

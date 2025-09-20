@@ -1,8 +1,8 @@
 # 安全模块
 
-​		认证鉴权是每个项目最基础的功能，但是在配置和使用上相对复杂，于是通过封装Spring Security ，提供基于token（JWT）的认证和基于 RBAC 权限模型的鉴权能力，让项目能更便捷的拥有该能力。
+认证鉴权是每个项目最基础的功能，但是在配置和使用上相对复杂，于是通过封装 Spring Security ，提供基于 Token（JWT）的认证和基于 RBAC 权限模型的鉴权能力，让项目能更便捷的拥有该能力。
 
-> money-app-system其实就是该模块的一个实现
+> money-app-system 其实就是该模块的一个实现
 
 ## 依赖
 
@@ -16,7 +16,7 @@
 
 ## 接入
 
-​		提供配置类`RbacSecurityConfig`。模块并不关心你的数据库是如何设计的，它只需要你提供一个`RbacUser`。
+提供配置类 `RbacSecurityConfig`。模块并不关心你的数据库是如何设计的，它只需要你提供一个 `RbacUser`。
 
 ~~~java
 @Bean
@@ -52,26 +52,26 @@ public RbacSecurityConfig rbacSecurityConfig() {
 ## 相关配置
 
 ~~~yaml
-money:
+money:  
   # 安全
   security:
-    # token配置
+    # Token 配置
     token:
-      # token请求头名称
+      # Token 请求头键名
       header: Authorization
-      # 令牌类型：完整token："{tokenType} {accessToken}"
+      # 令牌类型：完整 Token："{tokenType} {accessToken}"
       token-type: Bearer
       # 密钥
       secret: money
-      # access token过期时间 ms，默认8小时
+      # Access Token 过期时间（ms），默认8小时
       ttl: 28800000
-      # refresh token过期时间 ms，默认30天
+      # Refresh Token 过期时间（ms），默认30天
       refresh-ttl: 2592000000
       # 策略：jwt（自动过期，默认）、redis
       strategy: jwt
-      # 缓存键名
+      # 缓存键名前缀
       cache-key: "security:token:"
-    # 忽略的url
+    # 忽略的 URL
     ignore:
       get:
         - /tenants/byCode
@@ -86,14 +86,13 @@ money:
         - /webjars/**
         - /v3/**
         - /assets/**
-        - /test/**
 ~~~
 
 ## 认证
 
-​		认证主要由过滤器`JwtAuthenticationFilter` 实现，过程如下
+认证主要由过滤器`JwtAuthenticationFilter` 实现，过程如下
 
-1. 获取头部的token
+1. 获取头部的 Token
 2. 解析出用户名
 3. 调用配置的 `RbacSecurityConfig` 进行认证
 4. 认证成功，用户信息放入上下文
@@ -105,13 +104,11 @@ money:
 private final SecurityTokenSupport securityTokenSupport;
 ~~~
 
-该类提供了生成、刷新、删除、验证、获取Token配置的方法。用户登录后，通过该类生成token，如
+该类提供了生成、刷新、删除、验证、获取 Token 信息的方法。用户登录后，通过该类生成 Token，如
 
 ![image-20230212115131984](qk-money-security.assets/image-20230212115131984.png)
 
-对于过期，如果策略使用的是`jwt`是无法手动过期的，`redis` 策略才能手动过期。策略也可以自己扩展，实现 `TokenStrategy` 即可，如`redis`策略实现如下：
-
-然后配置文件中策略名改为你设置的havingValue即可。
+对于过期，如果策略使用的是 `jwt` 则无法手动过期，`redis` 策略才能手动过期。策略也可以自己扩展，实现 `TokenStrategy` 即可，如 `redis` 策略实现如下：
 
 ~~~java
 @Component
@@ -139,6 +136,8 @@ public class TokenStrategyByRedis implements TokenStrategy {
 }
 ~~~
 
+然后配置文件中策略名改为你设置的 havingValue 即可。
+
 ### 密码加密器
 
 ~~~java
@@ -154,18 +153,20 @@ private final PasswordEncoder passwordEncoder;
     SecurityGuard.getRbacUser()
     ~~~
 
-2. 通过Controller的入参注解@CurrentUser
+2. 通过 Controller 的入参注解 `@CurrentUser`
 
     > ~~~java
     > /**
+    >  * 标记当前登录用户信息
+    >  * <pre>
+    >  * 在 Controller 方法参数上使用此注解，可自动注入当前登录用户信息
+    >  * 参数类型为 {@link com.money.security.model.RbacUser} 时注入 RbacUser
+    >  * 参数类型为 Long 时注入用户ID
+    >  * 参数类型为 String 时注入用户名
+    >  * </pre>
+    >  *
     >  * @author : money
-    >  * @version : 1.0.0
-    >  * @description :
-    >  * 在controller的方法入参上添加该注解，则注入当前登录人信息
-    >  * 参数类型为 {@link com.money.security.model.RbacUser} 注入RbacUser
-    >  * 参数类型为 Long 注入用户id
-    >  * 参数类型为 String 注入用户名
-    >  * @createTime : 2022-03-26 11:47:33
+    >  * @since : 1.0.0
     >  */
     > @Target(ElementType.PARAMETER)
     > @Retention(RetentionPolicy.RUNTIME)
@@ -177,8 +178,8 @@ private final PasswordEncoder passwordEncoder;
 
 ## 鉴权
 
-​		鉴权的核心类是`RbacAuthorityService`，其原理就是通过配置的 `RbacSecurityConfig` 返回的`RbacUser`中的角色和权限码与**注解**提供的权限码比较来判断是否放行。
+鉴权的核心类是 `RbacAuthorityService`，其原理就是通过配置的 `RbacSecurityConfig` 返回的 `RbacUser` 中的角色和权限码与**注解**提供的权限码比较来判断是否放行。
 
 ![image-20230212120207518](qk-money-security.assets/image-20230212120207518.png)
 
-注解都是Spring Security 提供的注解，更多使用查阅其相关资料即可。
+注解都是 Spring Security 提供的注解，更多使用查阅其[相关资料](https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/el-access.html#filtering-using-prefilter-and-postfilter)即可。

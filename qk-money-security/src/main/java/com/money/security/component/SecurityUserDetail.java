@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 安全用户详细信息
+ *
  * @author : money
- * @version : 1.0.0
- * @description : 安全用户细节
- * @createTime : 2022-01-01 15:03:17
+ * @since : 1.0.0
  */
 @Data
 @AllArgsConstructor
