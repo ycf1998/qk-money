@@ -39,8 +39,9 @@ public class TenantConfiguration {
                 @Override
                 public Expression getTenantId() {
                     ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-                    assert servletRequestAttributes != null;
-                    String tenantId = servletRequestAttributes.getRequest().getHeader(tenantProperties.getHeader());
+                    String tenantId = servletRequestAttributes != null 
+                        ? servletRequestAttributes.getRequest().getHeader(tenantProperties.getHeader())
+                        : null;
                     if (StrUtil.isBlank(tenantId)) {
                         tenantId = tenantProperties.getDefaultTenantId();
                     }
