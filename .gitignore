@@ -16,3 +16,9 @@ log/
 **/target/
 !**/src/main/**
 !**/src/test/**
+
+# Claude Code
+.claude
+CLAUDE.md
+.qwen
+QWEN.md

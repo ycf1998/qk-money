@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import com.money.util.PageUtil;
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.money.web.util.BeanMapUtil;
 import com.money.web.vo.PageVO;
 import com.money.dto.demo.DemoDTO;
 import com.money.dto.demo.DemoPageQueryDTO;
@@ -18,12 +18,10 @@ import com.money.dto.demo.DemoVO;
 import java.util.Collection;
 
 /**
- * <p>
  *  服务实现类
- * </p>
  *
  * @author money
- * @since 2024-12-21
+ * @since 2026-03-17
  */
 @Service
 @RequiredArgsConstructor
@@ -39,16 +37,14 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements De
 
     @Override
     public Long add(DemoDTO addDTO) {
-        Demo demo = new Demo();
-        BeanUtil.copyProperties(addDTO, demo);
+        Demo demo = BeanMapUtil.to(addDTO, Demo::new);
         this.save(demo);
         return demo.getId();
     }
 
     @Override
     public void update(DemoDTO updateDTO) {
-        Demo demo = new Demo();
-        BeanUtil.copyProperties(updateDTO, demo);
+        Demo demo = BeanMapUtil.to(updateDTO, Demo::new);
         this.updateById(demo);
     }
 

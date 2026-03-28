@@ -5,11 +5,12 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+
 /**
+ * 时间区域 VO
+ *
  * @author : money
- * @version : 1.0.0
- * @description : 时间区VO
- * @createTime : 2022-05-13 22:23:53
+ * @since : 1.0.0
  */
 @Data
 public class TimeZoneVO {

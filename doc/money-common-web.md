@@ -127,6 +127,13 @@ money:
     web-log-aspect:
       enabled: true
       mode: ignore_get_result
+      # 脱敏字段列表（为空时不脱敏）
+      desensitize-fields:
+        - password
+        - token
+        - secret
+        - accessToken
+        - refreshToken
 ```
 
 **mode 说明**：
@@ -294,21 +301,28 @@ money:
   web:
     # 全局响应处理器
     response-handler: true
-    
+
     # 全局异常处理器
     exception-handler: true
-    
+
     # 全局请求日志切面
     web-log-aspect:
       enabled: true
       mode: ignore_get_result
-    
+      # 脱敏字段列表（为空时不脱敏）
+      desensitize-fields:
+        - password
+        - token
+        - secret
+        - accessToken
+        - refreshToken
+
     # 多语言
     i18n:
       enabled: true
       support:
         - en
-    
+
     # 多时区
     timezone:
       enabled: true

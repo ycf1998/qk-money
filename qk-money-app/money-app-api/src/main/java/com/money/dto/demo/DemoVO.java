@@ -4,13 +4,11 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
-* <p>
-* 
-* </p>
-*
-* @author money
-* @since 2024-12-21
-*/
+ *  VO
+ *
+ * @author money
+ * @since 2026-03-17
+ */
 @Data
 @Accessors(chain = true)
 public class DemoVO {
@@ -18,13 +16,13 @@ public class DemoVO {
     private Long id;
 
     /**
-    * 名称
-    */
+     * 名称
+     */
     private String name;
 
     /**
-    * 状态
-    */
+     * 状态
+     */
     private String status;
 
 }

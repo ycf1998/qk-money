@@ -6,15 +6,16 @@ import com.money.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.Paths;
 
 /**
+ * 邮件演示控制器
+ *
  * @author : money
- * @version : 1.0.0
- * @description : 邮件演示控制器
- * @createTime : 2022-05-14 10:07:58
+ * @since : 1.0.0
  */
 @RestController
 @RequestMapping("/test/mail")
@@ -24,7 +25,7 @@ public class MailDemoController {
     private final MailService mailService;
 
     @GetMapping
-    public void sendMail(String to) {
+    public boolean sendMail(@RequestParam("to") String to) {
         // curl "http://localhost:9000/qk-money/test/mail?to=你的邮箱"
 
         MailRequest mailRequest = new MailRequest(to, "邮件测试", "<h1>你好，玛卡巴卡！你好，无锡底细</h1>")
@@ -49,7 +50,7 @@ public class MailDemoController {
                 })
                 // 添加附件
                 .addAttachment("附件1", Paths.get("D://money.jpg").toFile());
-        mailService.send(mailRequest);
+        return mailService.send(mailRequest);
     }
 
 }
