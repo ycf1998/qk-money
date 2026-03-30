@@ -1,185 +1,185 @@
-# 安全模块
+# qk-money-security - 安全模块
 
-认证鉴权是每个项目最基础的功能，但是在配置和使用上相对复杂，于是通过封装 Spring Security ，提供基于 Token（JWT）的认证和基于 RBAC 权限模型的鉴权能力，让项目能更便捷的拥有该能力。
+## 概述
 
-> money-app-system 其实就是该模块的一个实现
+安全模块基于 Spring Security 实现认证授权功能，提供基于 JWT 的 Token 认证和基于 RBAC 模型的权限控制。
+
+**设计优势**：
+- **开箱即用**：封装 Spring Security 复杂配置，简化使用
+- **JWT 认证**：基于 JWT 的无状态 Token 认证
+- **RBAC 授权**：基于角色的访问控制模型
+- **双 Token 机制**：Access Token + Refresh Token
+- **灵活策略**：支持 JWT 和 Redis 两种 Token 策略（可扩展）
+- **便捷获取**：支持上下文和注解两种方式获取当前用户
 
 ## 依赖
 
-~~~xml
+```xml
 <!-- 安全模块 -->
 <dependency>
     <groupId>com.money</groupId>
     <artifactId>qk-money-security</artifactId>
 </dependency>
-~~~
+```
 
-## 接入
+## 使用方式
 
-提供配置类 `RbacSecurityConfig`。模块并不关心你的数据库是如何设计的，它只需要你提供一个 `RbacUser`。
+### 1. 配置用户详情加载
 
-~~~java
+实现 `RbacSecurityConfig` 接口提供用户详情加载逻辑：
+
+```java
 @Bean
 public RbacSecurityConfig rbacSecurityConfig() {
     return username -> {
-        SysUser sysUser = Optional
-            .ofNullable(sysUserService.getByUsername(username))
-            .orElseThrow(() -> new UsernameNotFoundException("用户名或密码错误"));
-        List<SysRole> roles = sysUserService.getRoles(sysUser.getId());
-        List<String> roleCodeList = roles
-            .stream().map(SysRole::getRoleCode).collect(Collectors.toList());
-        List<String> permissions = sysUserService.getPermissions(sysUser.getId())
-            .stream().map(SysPermission::getPermission).collect(Collectors.toList());
-        // 返回装填的rbac user
+        // 从数据库加载用户信息
+        SysUser user = sysUserService.getByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("用户名或密码错误");
+        }
+        
+        // 加载角色和权限
+        List<String> roles = sysUserService.getRoles(user.getId())
+                .stream().map(SysRole::getRoleCode).collect(Collectors.toList());
+        List<String> permissions = sysUserService.getPermissions(user.getId())
+                .stream().map(SysPermission::getPermission).collect(Collectors.toList());
+        
+        // 构建 RbacUser
         RbacUser rbacUser = new RbacUser();
-        // 用户id
-        rbacUser.setUserId(sysUser.getId());
-        // 用户名
-        rbacUser.setUsername(sysUser.getUsername());
-        // 用户密码
-        rbacUser.setPassword(sysUser.getPassword());
-        // 是否启用
-        rbacUser.setEnabled(sysUser.getEnabled());
-        // 角色
-        rbacUser.setRoles(roleCodeList);
-        // 权限码
+        rbacUser.setUserId(user.getId());
+        rbacUser.setUsername(user.getUsername());
+        rbacUser.setPassword(user.getPassword());
+        rbacUser.setEnabled(user.getEnabled());
+        rbacUser.setRoles(roles);
         rbacUser.setPermissions(permissions);
         return rbacUser;
     };
 }
-~~~
+```
 
-## 相关配置
+### 2. 登录接口
 
-~~~yaml
-money:  
-  # 安全
-  security:
-    # Token 配置
-    token:
-      # Token 请求头键名
-      header: Authorization
-      # 令牌类型：完整 Token："{tokenType} {accessToken}"
-      token-type: Bearer
-      # 密钥
-      secret: money
-      # Access Token 过期时间（ms），默认8小时
-      ttl: 28800000
-      # Refresh Token 过期时间（ms），默认30天
-      refresh-ttl: 2592000000
-      # 策略：jwt（自动过期，默认）、redis
-      strategy: jwt
-      # 缓存键名前缀
-      cache-key: "security:token:"
-    # 忽略的 URL
-    ignore:
-      get:
-        - /tenants/byCode
-        - /auth/refreshToken
-      post:
-        - /auth/login
-        - /auth/logout
-      pattern:
-        - /error/**
-        - /actuator/**
-        - /swagger**/**
-        - /webjars/**
-        - /v3/**
-        - /assets/**
-~~~
-
-## 认证
-
-认证主要由过滤器`JwtAuthenticationFilter` 实现，过程如下
-
-1. 获取头部的 Token
-2. 解析出用户名
-3. 调用配置的 `RbacSecurityConfig` 进行认证
-4. 认证成功，用户信息放入上下文
-
-### Token
-
-~~~java
-// 注入该类使用
-private final SecurityTokenSupport securityTokenSupport;
-~~~
-
-该类提供了生成、刷新、删除、验证、获取 Token 信息的方法。用户登录后，通过该类生成 Token，如
-
-![image-20230212115131984](qk-money-security.assets/image-20230212115131984.png)
-
-对于过期，如果策略使用的是 `jwt` 则无法手动过期，`redis` 策略才能手动过期。策略也可以自己扩展，实现 `TokenStrategy` 即可，如 `redis` 策略实现如下：
-
-~~~java
-@Component
-@ConditionalOnProperty(prefix = "money.security.token", name = "strategy", havingValue = "redis")
+```java
+@RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
-public class TokenStrategyByRedis implements TokenStrategy {
+public class AuthController {
 
-    private final StringRedisTemplate redisTemplate;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityTokenSupport tokenSupport;
 
-    @Override
-    public void saveToken(String key, String token, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, token, timeout, unit);
-    }
-
-    @Override
-    public boolean isExpired(String key, @NonNull String targetToken) {
-        String token = redisTemplate.opsForValue().get(key);
-        return !targetToken.equals(token);
-    }
-
-    @Override
-    public void invalidateToken(String key, String token) {
-        redisTemplate.delete(key);
+    @PostMapping("/login")
+    public R<Map<String, String>> login(@RequestBody LoginDTO dto) {
+        // 认证
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
+        );
+        
+        // 生成 Token
+        String username = authentication.getName();
+        String accessToken = tokenSupport.generateToken(username);
+        String refreshToken = tokenSupport.generateRefreshToken(username);
+        
+        Map<String, String> tokens = Map.of(
+                "accessToken", accessToken,
+                "refreshToken", refreshToken
+        );
+        return R.success(tokens);
     }
 }
-~~~
+```
 
-然后配置文件中策略名改为你设置的 havingValue 即可。
+### 3. 权限控制
 
-### 密码加密器
+```java
+@RestController
+@RequestMapping("/users")
+public class UserController {
 
-~~~java
-// 注入该类使用
-private final PasswordEncoder passwordEncoder;
-~~~
+    // 需要特定权限
+    @PostMapping
+    @PreAuthorize("hasAuthority('system:user:add')")
+    public R<UserVO> create(@RequestBody UserCreateDTO dto) { }
 
-### 获取当前用户信息
+    // 需要特定角色
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public R<Void> delete(@PathVariable Long id) { }
+}
+```
 
-1. 通过上下文持有者 `SecurityGuard` 安全保安
+### 4. 获取当前用户信息
 
-    ~~~java
-    SecurityGuard.getRbacUser()
-    ~~~
+```java
+// 方式 1：通过上下文
+RbacUser user = SecurityGuard.getRbacUser();
 
-2. 通过 Controller 的入参注解 `@CurrentUser`
+// 方式 2：通过注解
+@GetMapping("/me")
+public R<UserVO> me(@CurrentUser RbacUser user) {
+    return R.success(userService.getVO(user.getUserId()));
+}
+```
 
-    > ~~~java
-    > /**
-    >  * 标记当前登录用户信息
-    >  * <pre>
-    >  * 在 Controller 方法参数上使用此注解，可自动注入当前登录用户信息
-    >  * 参数类型为 {@link com.money.security.model.RbacUser} 时注入 RbacUser
-    >  * 参数类型为 Long 时注入用户ID
-    >  * 参数类型为 String 时注入用户名
-    >  * </pre>
-    >  *
-    >  * @author : money
-    >  * @since : 1.0.0
-    >  */
-    > @Target(ElementType.PARAMETER)
-    > @Retention(RetentionPolicy.RUNTIME)
-    > public @interface CurrentUser {
-    > }
-    > ~~~
-    >
-    > ![image-20230212115817027](qk-money-security.assets/image-20230212115817027.png)
+## 配置说明
 
-## 鉴权
+```yaml
+money:
+  security:
+    token:
+      header: Authorization       # Token 请求头键名
+      token-type: Bearer          # 令牌类型
+      secret: your-secret         # 密钥（生产环境请修改）
+      ttl: 28800000               # Access Token 过期时间（ms），默认 8 小时
+      refresh-ttl: 2592000000     # Refresh Token 过期时间（ms），默认 30 天
+      strategy: jwt               # 策略：jwt（默认）、redis
+      cache-key: "security:token:"
+    
+    # 忽略的 URL（无需认证）
+    ignore:
+      pattern:
+        - /error/**
+        - /swagger**/**
+        - /auth/login
+```
 
-鉴权的核心类是 `RbacAuthorityService`，其原理就是通过配置的 `RbacSecurityConfig` 返回的 `RbacUser` 中的角色和权限码与**注解**提供的权限码比较来判断是否放行。
+## 核心类说明
 
-![image-20230212120207518](qk-money-security.assets/image-20230212120207518.png)
+| 类名/接口 | 说明 |
+|-----------|------|
+| `RbacUser` | 用户模型（userId、username、roles、permissions） |
+| `RbacSecurityConfig` | 用户详情加载配置接口 |
+| `SecurityTokenSupport` | Token 支持类（生成、解析、刷新、失效） |
+| `TokenStrategy` | Token 策略接口（JWT/Redis） |
+| `SecurityGuard` | 安全上下文持有者 |
+| `@CurrentUser` | 用户信息注入注解 |
 
-注解都是 Spring Security 提供的注解，更多使用查阅其[相关资料](https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/el-access.html#filtering-using-prefilter-and-postfilter)即可。
+## Token 策略
+
+| 策略 | 说明 | 适用场景 |
+|------|------|----------|
+| JWT | Token 自包含过期时间，无法手动失效 | 一般场景 |
+| Redis | 可手动失效 Token | 需要强制下线场景 |
+
+可通过实现 `TokenStrategy` 接口自定义策略。
+
+## 权限表达式
+
+| 表达式 | 说明 |
+|--------|------|
+| `hasAuthority('xxx')` | 是否有指定权限 |
+| `hasAnyAuthority('a', 'b')` | 是否有任一权限 |
+| `hasRole('ADMIN')` | 是否有指定角色 |
+| `hasAnyRole('ADMIN', 'USER')` | 是否有任一角色 |
+| `isAuthenticated()` | 是否已认证 |
+
+## 注意事项
+
+1. **密钥安全**：生产环境需修改 `secret` 配置
+2. **HTTPS**：生产环境建议使用 HTTPS 传输 Token
+3. **Token 过期时间**：根据业务需求合理设置
+
+## 相关链接
+
+- [Spring Security 官方文档](https://spring.io/projects/spring-security)
+- [JWT 官方文档](https://jwt.io/)

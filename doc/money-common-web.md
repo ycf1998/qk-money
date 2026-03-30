@@ -1,51 +1,41 @@
-# 通用 Web 模块
+# money-common-web - 通用 Web 模块
 
-该模块是 QK-MONEY 进行 Web 开发的核心模块，提供了许多 Web 开发的通用功能和配置。包含功能如下：
+## 概述
 
-- 默认全局响应处理
-- 默认全局异常处理
-- 默认请求日志切面
-- 全局请求上下文
-- 日志链路追踪
-- 多语言
-- 多时区
-- 其他常用工具类
+通用 Web 模块是 QK-MONEY 框架的核心基础模块，提供 Web 开发的通用功能和配置。包含全局响应处理、全局异常处理、日志链路追踪、多语言、多时区等核心功能。
 
 ## 依赖
 
-~~~xml
-<!-- Web 模块-->
+```xml
+<!-- Web 模块 -->
 <dependency>
     <groupId>com.money</groupId>
     <artifactId>money-common-web</artifactId>
 </dependency>
-~~~
+```
 
 ## 包结构
 
-```java
-|-- qk-money
-    |-- qk-money-common
-        |-- money-common-web
-            |-- com.money.web
-                |-- config // 配置（默认 Jackson 配置、mvc 配置等）
-                |-- constant // 常量
-                |-- context // 请求上下文
-                |-- dto // 通用 DTO
-                |-- exception // 异常相关，如默认全局异常处理
-                |-- i18n // 多语言
-                |-- log // 日志相关，如默认请求日志切面
-                |-- response // 响应相关，如默认全局响应处理
-                |-- timezone // 多时区处理
-                |-- util // 常用工具类
-                |-- vo // 通用 VO
+```
+com.money.web
+├── config/              # 配置类（Jackson、MVC 等）
+├── constant/            # 常量定义
+├── context/             # 请求上下文
+├── dto/                 # 通用 DTO
+├── exception/           # 异常处理
+├── i18n/                # 多语言支持
+├── log/                 # 日志切面
+├── response/            # 响应处理
+├── timezone/            # 多时区处理
+├── util/                # 工具类
+└── vo/                  # 通用 VO
 ```
 
-## 功能介绍
+## 核心功能
 
-#### 默认全局响应处理
+### 1. 全局响应处理
 
-通常我们开发的 Rest 接口返回值都会包装在一个 `ResultVO<T>` 对象里，QK-MONEY 也不例外，只不过类名比较简短叫 `R<T>` ：
+默认全局响应处理器 `DefaultResponseHandler` 将返回值统一包装为 `R<T>` 格式：
 
 ```json
 {
@@ -55,184 +45,287 @@
 }
 ```
 
-早期常见的是由自己返回包装类的硬编码方式，如：
+**接口无需手动包装 `R<T>`**，全局响应处理会自动包装。
 
 ```java
-@Getting("/rest")
-public R<Object> rest() {
-    return new R<Object>(200, new Object(), "操作成功");
+// ✅ 正确：直接返回业务对象
+@GetMapping("/user/{id}")
+public UserVO getUser(@PathVariable Long id) {
+    return userService.getById(id);
+}
+
+// ❌ 错误：无需手动包装
+@GetMapping("/user/{id}")
+public R<UserVO> getUser(@PathVariable Long id) {
+    return R.success(userService.getById(id));  // 不要这样做
 }
 ```
 
-现在越多越多人采用 Spring Boot 提供的 `ResponseBodyAdvice` 来进行全局响应处理，如 QK-MONEY 实现的 `DefaultResponseHandler` 便统一将返回值进行包装：
+**返回自定义状态码**：直接返回 `R<T>` 或抛出业务异常。
 
 ```java
-// 部分核心代码
-@Override
-    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        // 当已经是R类型就无需处理
-        if (o instanceof R) {
-            return o;
-        }
-        // 当返回类型是String时，用的是StringHttpMessageConverter转换器，无法转换为Json格式
-        if (o instanceof String) {
-            return DefaultJackson.writeAsString(R.success(o));
-        }
-        return R.success(o);
+// 方式 1：返回 R<T>
+@GetMapping("/check")
+public R<Void> check() {
+    if (someCondition) {
+        return R.failed("自定义错误");
     }
-```
+    return R.success();
+}
 
-也就是说，我们的接口无需显示的包装 `R<T>` ，全局响应处理会帮我们包装，即接口书写改为：
-
-```java
-@Getting("/rest")
-public Object rest() {
-    return new Object();
+// 方式 2：抛出业务异常（推荐）
+@GetMapping("/user/{id}")
+public UserVO getUser(@PathVariable Long id) {
+    User user = userService.getById(id);
+    if (user == null) {
+        throw new BaseException(RStatus.NOT_FOUND);  // 推荐
+    }
+    return user;
 }
 ```
 
-但是全局响应处理返回的 code 都是 200，如果我们需要返回其他状态码，可以接口直接返回 `R<T>` 或者将 `@IgnoreGlobalResponse` 标注在接口方法或类上，表示忽略全局响应处理，后者更常用于导出接口。
+**忽略全局响应处理**：使用 `@IgnoreGlobalResponse` 注解，常用于导出接口。
 
-> 返回 code 非 200，建议使用抛异常的方式 `throw new BaseException(RStatus.FAILED) `，由全局异常处理器将其包装至 `R<T>` 中返回。也就是说，在开发中，应该尽量避免使用到 `R<T>`。
+```java
+@IgnoreGlobalResponse
+@GetMapping("/export")
+public void export(HttpServletResponse response) {
+    // 直接写入响应流（如导出 Excel）
+}
+```
 
-#### 默认全局异常处理
+### 2. 全局异常处理
 
-全局异常处理是通过 `@RestControllerAdvice` + `@ExceptionHandler` 增强 Controller ，对执行中抛出的异常进行统一拦截和响应返回。QK-MONEY 提供了默认的全局异常处理器 `DefaultExceptionHandler` ，针对以下异常返回包装类 `R<T>`：
+默认全局异常处理器 `DefaultExceptionHandler` 拦截并处理各类异常：
 
-| 捕获异常类                                                   | HTTP 状态码 | code   | 描述                                                         |
-| ------------------------------------------------------------ | ----------- | ------ | ------------------------------------------------------------ |
-| Exception.class                                              | 500         | 500    | 兜底异常，防止暴露意料之外的异常                             |
-| BindException.class \| <br />MethodArgumentNotValidException.class \|<br />ConstraintViolationException.class | 400         | 400    | @Valid 校验的参数异常                                        |
-| BaseException.class                                          | 200         | 自定义 | 业务异常，开发中业务相关异常应抛此类或其子类（可继承该类做更细粒度的业务异常划分） |
+| 异常类型 | HTTP 状态码 | 说明 |
+|----------|------------|------|
+| `Exception` | 500 | 兜底异常 |
+| `BindException` / `MethodArgumentNotValidException` / `ConstraintViolationException` | 400 | 参数校验异常 |
+| `BaseException` | 200 | 业务异常 |
 
-#### 默认请求日志切面
+**业务异常使用**：
 
-QK-MONEY 提供了一个请求日志切面 `DefaultWebLogAspect`，来记录并打印一次请求的相关信息，包含请求 IP、请求方法、URL、请求参数、返回结果和请求耗时。结合当前 Logback 日志本地化的配置， 额外将其打印在单独的日志文件中：log/yyyy-MM-dd/access.log。
+```java
+// 抛出业务异常
+if (user == null) {
+    throw new BaseException(RStatus.NOT_FOUND);
+}
+```
 
-![image-20230622145759807](money-common-web.assets/image-20230622145759807.png)
+可继承 `BaseException` 创建更细粒度的业务异常。
 
-![image-20250920183659272](money-common-web.assets/image-20250920183659272.png)
+### 3. 请求日志切面
 
-#### 全局请求上下文 & 日志链路追踪
+`DefaultWebLogAspect` 记录请求日志，包含请求 IP、方法、URL、参数、返回结果和耗时。
 
-请求上下文是与调用方（前端）约定的每次请求携带的一些信息，使用请求头进行传递，由过滤器 `WebRequestContextFilter` 进行拦截填充。当前上下文仅包含请求 id、语言和时区，请求头 key 声明在 `WebRequestConstant` 常量中：
+**配置**：
+
+```yaml
+money:
+  web:
+    web-log-aspect:
+      enabled: true
+      mode: ignore_get_result
+```
+
+**mode 说明**：
+
+| mode | 说明 |
+|------|------|
+| `all` | 记录所有请求的日志（包括请求和响应） |
+| `ignore_get_result` | GET 请求不记录响应结果，其他请求正常记录 |
+| `simple` | 简单模式，不记录请求体和响应结果 |
+
+**日志输出示例**：
+
+```
+====================
+POST /qk-money/users
+{requestId:abc123, lang:zh_CN, timezone:GMT+08:00}
+> 192.168.1.100
+body: {"name":"test"}
+result: {"code":200,"data":{}}
+spend time: 15ms
+```
+
+日志单独输出到 `log/access.log` 文件，按日期滚动，保留 7 天。
+
+### 4. 请求上下文 & 链路追踪
+
+`WebRequestContextFilter` 过滤器处理请求上下文，传递请求 ID、语言、时区信息。
+
+**请求头常量**：
 
 ```java
 public interface WebRequestConstant {
-
-    /**
-     * 请求头 请求id
-     */
-    String HEADER_REQUEST_ID = "X-qk-request";
-
-    /**
-     * 请求头 语言
-     */
-    String HEADER_LANG = "X-qk-lang";
-
-    /**
-     * 请求头 时区
-     */
-    String HEADER_TIMEZONE = "X-qk-timezone";
+    String HEADER_REQUEST_ID = "X-qk-request";   // 请求 ID（链路追踪）
+    String HEADER_LANG = "X-qk-lang";            // 语言
+    String HEADER_TIMEZONE = "X-qk-timezone";    // 时区
 }
 ```
 
-我们可以通过上下文持有者获取信息：
+**获取上下文信息**：
 
 ```java
-WebRequestContextHolder.getContext().getRequestId();
-WebRequestContextHolder.getContext().getLang();
-WebRequestContextHolder.getContext().getTimezone();
+String requestId = WebRequestContextHolder.getContext().getRequestId();
+Locale lang = WebRequestContextHolder.getContext().getLang();
+TimeZone timezone = WebRequestContextHolder.getContext().getTimezone();
 ```
 
-其中请求 id 是协助我们定位一次请求相关日志的重要标识，也就是常说的日志链路追踪。结合 MDC（映射调试上下文，Logback 提供的一种方便在多线程条件下记录日志的功能），将请求 id 打入日志。
+请求 ID 通过 MDC 集成到日志中，方便链路追踪。
 
-![image-20250920183917166](money-common-web.assets/image-20250920183917166.png)
+### 5. 多语言支持
 
-#### 多语言
+`I18nSupport` 提供多语言支持，根据请求头 `X-qk-lang` 自动切换语言。
 
-提供多语言能力，核心类 `I18nSupport` ，开启后程序启动时会根据配置预加载多语言文件。
+**配置**：
 
-![image-20230623161113124](money-common-web.assets/image-20230623161113124.png)
+```yaml
+money:
+  web:
+    i18n:
+      enabled: true
+      support:
+        - en
+```
+
+**语言文件**：位于 `resources/i18n/` 目录下，命名格式为 `messages_{语言}.properties`。
+
+**文件示例**（`messages_en.properties`）：
 
 ```properties
-# i18n/messages_en.properties
 操作成功=success
 操作失败=failure
-参数检验失败=Parameter verification failure
-暂未登录或token已经过期=Not logged in yet or the token has expired
+暂未登录或 token 已经过期=Not logged in yet or the token has expired
 没有相关权限=No relevant permissions
-找不到页面=Page not found
-...
 ```
 
-语言文件需放在 resource/i18n 下，命名方式如 `messages_{支持的语言}.properties`。我这里直接使用中文作为 key，一个是图方便，不用多声明一份中文的映射文件；一个是适用于系统已经开发一部分，原本代码中都是中文的情景。但不适合一些如带有占位符的复杂场景，这种场景可以使用硬编码 `I18nSupport.get` 的方式或映射文件使用常规的变量方式。
+**使用方式**：
 
-多语言的原理就是 `I18nSupport.get` 方法，通过获取上下文中的语言环境，对 `R<T>` 中的 message 和 `BaseException` 的 message 进行多语言映射。
+```java
+// 自动多语言（异常 message 自动翻译）
+throw new BaseException(RStatus.FAILED);
 
-![image-20230623162114853](money-common-web.assets/image-20230623162114853.png)
+// 手动获取多语言文本
+String message = I18nSupport.get("操作成功");
+```
 
-#### 多时区
+### 6. 多时区支持
 
-提供多时区能力，客户时区依旧是从请求上下文中获取。原理就是通过切面 `TimeZoneAspect`，对标注 `@TZProcess` 的 接口入参（需标注 `@TZParam`）和返回值（需标注 `@TZRep`）进行时区处理。对于入参是将客户时区转为默认时区，出参则是将默认时区转为客户时区，这样保证进入方法后的所有操作，数据均为默认时区。
+`TimeZoneAspect` 切面处理多时区，将客户时区与服务器时区进行转换。
 
-> 比如客户是东九区，那他在页面操作的时间都是东九区的时间，所以对于入参我们得转为东八，保证无论客户哪个时区，我们进行操作和存入数据库的时间都是东八区，然后返回的时候将数据洗成客户对应的时区展示。
+**原理**：入参将客户时区转为默认时区，出参将默认时区转为客户时区，保证业务逻辑和数据库存储的时区一致性。
 
-默认转换器使用的转换工具类是 `TimeZoneUtil`，也可以自定义转换器通过注解的 `converter()` 参数传入。
+**配置**：
 
-目前支持的数据类型：
+```yaml
+money:
+  web:
+    timezone:
+      enabled: true
+      default-time-zone: GMT+08:00
+```
 
-- Bean（递归成员变量，对标注 `@TZParam` 的字段进行转换）
-- LocalDateTime（日期时间类）
-- String（如 2022-05-13 13:15:00，格式可自定义但需是日期时间）
-- Map（对键包含 time 或者 date 的值进行转换）
-- List（循环递归转换）
-- PageVO（对 record，其实就是 List 进行转换）
+**注解使用**：
 
-#### DTO 和 VO
+```java
+@TZProcess
+@PostMapping("/create")
+public R<UserVO> create(@RequestBody @TZParam UserDTO dto) {
+    // 入参已转换为默认时区时间
+    userService.create(dto);
+    // 出参自动转换为客户时区
+    return R.success(userService.getById(dto.getId()));
+}
+```
 
-`ISortRequest`：排序请求接口，支持提交如 *createTime,desc;id,asc*  的排序值，并配备转换为 order by 语句的方法。
+**支持的数据类型**：
 
-`PageRequest`：分页请求参数，里面规定了分页请求的键为 *page*、*size* 。
+| 类型 | 说明 |
+|------|------|
+| `LocalDateTime` | 日期时间类 |
+| `String` | 日期时间格式的字符串 |
+| `Bean` | 递归处理标注 `@TZParam` / `@TZRep` 的字段 |
+| `List` / `Collection` | 集合类型（递归转换） |
+| `Map` | 键包含 `time` 或 `date` 的值 |
+| `PageVO` | 分页响应 VO |
 
-`SortRequest`：排序请求参数，实现 `ISortRequest` ，并设置排序字段为 *orderBy* 。
+**自定义转换器**：
 
-`PageQueryRequest`：分页查询请求参数，继承 `PageRequest` 和实现 `ISortRequest` ，设置排序字段为 *orderBy* ，供常规分页查询 DTO 继承使用。
+```java
+// 实现 TimeZoneConverter 接口
+public class CustomTimeZoneConverter implements TimeZoneConverter {
+    @Override
+    public Object convert(Object value, TimeZone from, TimeZone to) {
+        // 自定义转换逻辑
+        return convertedValue;
+    }
+}
 
-`ValidGroup`：验证组，用于数据校验 @Validated 分组。
+// 使用
+@TZProcess(converter = CustomTimeZoneConverter.class)
+```
 
-`PageVO<T>`：统一的分页 VO，money-app-api 提供 `PageUtil` 工具类，方便 MyBatis-Plus 分页对象进行转换。
+### 7. 常用工具类
 
-#### 工具类
+| 工具类 | 说明 |
+|--------|------|
+| `BeanMapUtil` | 对象属性复制（基于 Hutool） |
+| `IpUtil` | IP 工具类（获取真实 IP、地理位置） |
+| `WebUtil` | Web 工具类（获取 Request/Response、直接响应等） |
+| `ValidationUtil` | 手动参数校验 |
+| `JacksonUtil` | JSON 工具类 |
 
-`BeanMapUtil`：对象复制工具类，简单包装了一下 Hutool 的 `BeanUtil.copyProperties` 。
+## 通用 DTO/VO
 
-`IpUtil`：IP 相关工具类，如获取客户端真实 IP 和地理位置。
+| 类名 | 说明 |
+|------|------|
+| `PageRequest` | 分页请求参数（page、size） |
+| `SortRequest` | 排序请求参数（orderBy） |
+| `PageQueryRequest` | 分页查询请求（分页 + 排序） |
+| `PageVO<T>` | 分页响应 VO |
+| `ValidGroup` | 校验分组（Create、Update、Delete） |
 
-`WebUtil`：Web 相关工具类，如获取当前 Request 、Response 对象，使用 Response 直接响应等。
+## 配置总览
 
-`ValidationUtil`：检验工具类，即对对象进行校验，同 `@Validated`，手动版。
-
-## 相关配置
-
-~~~yaml
+```yaml
 money:
   web:
     # 全局响应处理器
     response-handler: true
+    
     # 全局异常处理器
     exception-handler: true
+    
     # 全局请求日志切面
     web-log-aspect:
       enabled: true
       mode: ignore_get_result
+    
     # 多语言
     i18n:
       enabled: true
       support:
         - en
+    
     # 多时区
     timezone:
       enabled: true
       default-time-zone: GMT+08:00
-~~~
+```
+
+## 核心类说明
+
+| 类名 | 说明 |
+|------|------|
+| `CommonWebConfiguration` | 自动配置类，注册各种 Web 组件 |
+| `R<T>` | 统一响应类 |
+| `BaseException` | 基础业务异常 |
+| `IStatus` | 状态码接口 |
+| `RStatus` | 内置状态码枚举 |
+
+## 相关链接
+
+- [Spring Boot 官方文档](https://spring.io/projects/spring-boot)
+- [Spring MVC 官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html)

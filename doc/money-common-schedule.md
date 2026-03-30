@@ -1,104 +1,124 @@
-# 定时任务模块
+# money-common-schedule - 定时任务模块
 
-​	该模块提供定时任务功能，使用第三方组件`XXL-JOB`，并没有做封装，模块仅事先配置好了配置类而已，所以参考官网文档开发即可，以下仅作简单使用介绍。
+## 概述
+
+定时任务模块集成 XXL-JOB 分布式任务调度框架，提供定时任务功能。模块通过配置类自动装配 XXL-JOB 执行器。
+
+**设计优势**：
+- **开箱即用**：自动配置 XXL-JOB 执行器，无需手动初始化
+- **配置集中**：通过 `XxlJobProperties` 统一管理配置
+- **注解支持**：支持 `@XxlJob`、`@XxlJobParam` 等注解
 
 ## 依赖
 
-~~~xml
+```xml
 <!-- 定时任务模块 -->
 <dependency>
     <groupId>com.money</groupId>
     <artifactId>money-common-schedule</artifactId>
 </dependency>
-~~~
+```
 
-## 使用
+## 使用方式
 
-### 1. 调度中心xxl-job-admin
+### 1. 调度中心（xxl-job-admin）
 
-#### 1.1. 初始化sql脚本
+调度中心为独立工程 `xxl-job-admin`：
 
-执行工程下 `xxl-job-admin/doc/db/tables_xxl_job.sql`脚本，会创建一个`xxl_job`的数据库
+1. 执行 `xxl-job-admin/doc/db/tables_xxl_job.sql` 初始化数据库
+2. 配置调度中心地址、访问令牌等
+3. 启动调度中心，访问管理面板
 
-#### 1.2. 修改配置
+### 2. 执行器（业务工程）
 
-该工程就是一个普通的Spring Boot工程，配置都一样，主要关注xxl相关的配置
+#### 配置
 
-`application.yml`
-
-~~~yml
-xxl:
-    job:
-    	# 访问令牌，执行器工程需填写相同令牌
-        accessToken: MONEY
-        # 国际化
-        i18n: zh_CN
-        # 日志保留天数
-        logretentiondays: 30
-        # 任务线程池
-        triggerpool:
-            fast:
-                max: 200
-            slow:
-                max: 100
-~~~
-
-### 2. 执行器工程money-app-biz
-
-#### 2.1. 引入依赖
-
-~~~xml
-<!-- 定时任务模块 -->
-<dependency>
-    <groupId>com.money</groupId>
-    <artifactId>money-common-schedule</artifactId>
-</dependency>
-~~~
-
-#### 2.2. 配置
-
-~~~yml
-# 定时任务XXL-JOB
+```yaml
 xxl:
   job:
-    access-token: MONEY # XXL-JOB调度中心设置的token
+    access-token: MONEY  # 调度中心访问令牌
     admin:
-      address: http://127.0.0.1:8000/xxl-job-admin # XXL-JOB调度中心地址
+      address: http://127.0.0.1:8000/xxl-job-admin  # 调度中心地址
     executor:
-      app-name: ${spring.application.name} # 执行器名称
-      address:
-      ip: # 指定IP注册，不填自动获取
-      port: 0 # 指定端口注册，填0自动获取
-      log-path: log/xxl-job/jobhandler # 日志存储路径
-      log-retention-days: 30 # 日志存储天数
-~~~
+      app-name: ${spring.application.name}  # 执行器名称
+      port: 0  # 执行器端口（0 表示自动获取）
+      log-path: log/xxl-job/jobhandler
+      log-retention-days: 30
+```
 
-### 3. XXL-JOB管理面板配置执行器
+#### 开发任务 Handler
 
-首先启动调度中心工程，访问调度中心：http://localhost:8000/xxl-job-admin，默认登录账号 “admin/123456”
+```java
+@XxlJob("demoJobHandler")
+public void demoJobHandler() throws Exception {
+    log.info("定时任务执行了");
+}
+```
 
-配置执行器，appName要和执行器工程配置的appName相同，才能被自动发现到
+#### 分片广播任务
 
-![image-20220722222543189](money-common-schedule.assets/image-20220722222543189.png)
+```java
+@XxlJob("shardingJobHandler")
+public void shardingJobHandler() throws Exception {
+    int shardIndex = XxlJobHelper.getShardIndex();
+    int shardTotal = XxlJobHelper.getShardTotal();
+    log.info("分片参数：当前第 {} 片，总共 {} 片", shardIndex, shardTotal);
+}
+```
 
-### 4. 配置任务
+### 3. 配置任务
 
-具体参考官网：https://www.xuxueli.com/xxl-job 中**三、任务详解** 部分，不做赘述。
+1. 登录调度中心管理面板
+2. 进入 **执行器管理**，新建执行器（appName 需与配置一致）
+3. 进入 **任务管理**，新建任务：
+   - 选择执行器
+   - 配置 JobHandler（与 `@XxlJob` 值一致）
+   - 配置 Cron 表达式
+   - 选择运行模式（BEAN）
 
-## 相关配置
+## 配置说明
 
-~~~yml
-# 定时任务XXL-JOB
-xxl:
-  job:
-    access-token: MONEY # XXL-JOB调度中心设置的token
-    admin:
-      address: http://127.0.0.1:8000/xxl-job-admin # XXL-JOB调度中心地址
-    executor:
-      app-name: ${spring.application.name} # 执行器名称
-      address:
-      ip: # 指定IP注册，不填自动获取
-      port: 0 # 指定端口注册，填0自动获取
-      log-path: log/xxl-job/jobhandler # 日志存储路径
-      log-retention-days: 30 # 日志存储天数
-~~~
+### Cron 表达式示例
+
+| Cron 表达式 | 说明 |
+|------------|------|
+| `0 0 12 * * ?` | 每天 12 点执行 |
+| `0 0/30 9-17 * * ?` | 工作日 9-17 点每 30 分钟执行 |
+| `0 0 2 ? * MON` | 每周一凌晨 2 点执行 |
+
+### 路由策略
+
+| 策略 | 说明 |
+|------|------|
+| 第一个/最后一个 | 固定选择节点 |
+| 轮询 | 按顺序轮询 |
+| 随机 | 随机选择 |
+| 一致性 HASH | 相同参数路由到同一节点 |
+| 分片广播 | 广播所有节点执行分片任务 |
+
+## 核心类说明
+
+| 类名 | 说明 |
+|------|------|
+| `XxlJobConfiguration` | 自动配置类，注册 `XxlJobSpringExecutor` |
+| `XxlJobProperties` | 配置属性类（admin、executor、accessToken） |
+
+## 常用注解
+
+| 注解 | 说明 |
+|------|------|
+| `@XxlJob` | 定义任务 Handler |
+| `@XxlJobParam` | 任务参数 |
+| `@XxlJobInit` / `@XxlJobStart` / `@XxlJobEnd` | 任务生命周期 |
+
+## 注意事项
+
+1. **执行器名称**：确保 `app-name` 与调度中心配置的执行器一致
+2. **访问令牌**：执行器和调度中心的 `access-token` 必须一致
+3. **网络连通**：执行器需能访问调度中心，调度中心需能回调执行器
+4. **任务幂等**：分布式环境下需保证任务幂等性
+
+## 相关链接
+
+- [XXL-JOB 官方文档](https://www.xuxueli.com/xxl-job/)
+- [XXL-JOB GitHub](https://github.com/xuxueli/xxl-job)
