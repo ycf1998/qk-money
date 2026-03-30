@@ -58,6 +58,8 @@ public class DefaultWebLogAspect {
         String body = "";
         if (logBody) {
             body = Opt.ofBlankAble(resolveBody(request)).orElse("-");
+            // 脱敏处理
+            body = desensitize(body);
             log.info("body: {}", body);
         }
 
@@ -69,7 +71,10 @@ public class DefaultWebLogAspect {
             long endTime = Instant.now().toEpochMilli();
             long spendTime = endTime - startTime;
             if (logResult) {
-                log.info("result: {}", JacksonUtil.writeAsString(result));
+                String resultJson = JacksonUtil.writeAsString(result);
+                // 脱敏处理
+                resultJson = desensitize(resultJson);
+                log.info("result: {}", resultJson);
             }
             log.info("spend time: {}ms", spendTime);
             // TODO 记录日志
@@ -87,6 +92,28 @@ public class DefaultWebLogAspect {
                     .build();
         }
         return result;
+    }
+
+    /**
+     * 脱敏处理
+     *
+     * @param json JSON 字符串
+     * @return 脱敏后的 JSON
+     */
+    private String desensitize(String json) {
+        if (properties.getDesensitizeFields().isEmpty() || StrUtil.isBlank(json)) {
+            return json;
+        }
+
+        for (String field : properties.getDesensitizeFields()) {
+            // 脱敏字符串值："field":"value" -> "field":"***"
+            json = json.replaceAll("\"" + field + "\"\\s*:\\s*\"[^\"]*\"",
+                    "\"" + field + "\":\"***\"");
+            // 脱敏数字/布尔值
+            json = json.replaceAll("\"" + field + "\"\\s*:\\s*[0-9.eE+-]+",
+                    "\"" + field + "\":***");
+        }
+        return json;
     }
 
     /**

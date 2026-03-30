@@ -58,6 +58,7 @@ public class TimeZoneUtil {
             } else if (List.class.isAssignableFrom(targetClass)) {
                 ((List<?>) target).forEach(e -> convert(e, format, formZoneId, toZoneId));
             } else if (Map.class.isAssignableFrom(targetClass)) {
+                @SuppressWarnings("unchecked")
                 Map<String, Object> map = (Map<String, Object>) target;
                 target = convertMap(map, format, formZoneId, toZoneId);
             } else if (PageVO.class.isAssignableFrom(targetClass)) {
@@ -107,7 +108,8 @@ public class TimeZoneUtil {
                             field.set(target, convertString(dateTimeStr, format, formZoneId, toZoneId));
                         } else if (List.class.isAssignableFrom(type)) {
                             ((List<?>) field.get(target)).forEach(e -> convert(e, format, formZoneId, toZoneId));
-                        } else if (Map.class.isAssignableFrom(targetClass)) {
+                        } else if (Map.class.isAssignableFrom(type)) {
+                            @SuppressWarnings("unchecked")
                             Map<String, Object> map = (Map<String, Object>) field.get(target);
                             field.set(target, convertMap(map, format, formZoneId, toZoneId));
                         } else {

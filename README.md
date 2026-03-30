@@ -210,21 +210,18 @@ money:
     port: 465
     protocol: smtps
     from-alias: 麦尼
-```
 
-### OSS 配置：`oss.properties`
-
-```properties
-# 本地存储
-local.bucket = F:/qk-money/
-local.resource-handler = /assets/**
-
-# 七牛云存储
-qiniu.access-key = your-access-key
-qiniu.secret-key = your-secret-key
-qiniu.domain = your-domain.com
-qiniu.bucket = your-bucket
-qiniu.region = huanan
+  oss:
+    local:
+      bucket: F:/qk-money/
+      resource-handler: /assets/**
+    qiniu:
+      access-key: your-access-key
+      secret-key: your-secret-key
+      domain: your-domain.com
+      bucket: your-bucket
+      region: huanan
+      token-expire: 3600
 ```
 
 ## 📝 使用登记

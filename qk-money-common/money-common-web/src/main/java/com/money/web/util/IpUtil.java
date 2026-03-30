@@ -9,6 +9,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,17 @@ import java.util.Map;
 public class IpUtil {
 
     /**
+     * IP 请求头列表
+     */
+    private static final String[] IP_HEADERS = {
+        "x-forwarded-for",
+        "Proxy-Client-IP",
+        "X-Forwarded-For",
+        "WL-Proxy-Client-IP",
+        "X-Real-IP"
+    };
+
+    /**
      * 获取 IP
      *
      * @param request 请求
@@ -32,23 +44,25 @@ public class IpUtil {
         if (request == null) {
             return "unknown";
         }
-        String ip = request.getHeader("x-forwarded-for");
-        if (StrUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+
+        // 从请求头列表中获取第一个有效的 IP
+        String ip = Arrays.stream(IP_HEADERS)
+            .map(request::getHeader)
+            .filter(ipStr -> StrUtil.isNotBlank(ipStr) && !"unknown".equalsIgnoreCase(ipStr))
+            .findFirst()
+            .orElse(request.getRemoteAddr());
+
+        // 处理多级代理的情况，取第一个 IP
+        if (ip != null && ip.contains(",")) {
+            ip = ip.split(",")[0].trim();
         }
-        if (StrUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Forwarded-For");
+
+        // IPv6 本地回环地址转换为 IPv4
+        if ("0:0:0:0:0:0:0:1".equals(ip) || "::1".equals(ip)) {
+            return "127.0.0.1";
         }
-        if (StrUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (StrUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
-        }
-        if (StrUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+
+        return ip;
     }
 
     /**
