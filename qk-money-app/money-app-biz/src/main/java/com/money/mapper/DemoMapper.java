@@ -1,7 +1,7 @@
 package com.money.mapper;
 
-import com.money.entity.Demo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.money.entity.Demo;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author money
- * @since 2024-12-21
+ * @since 2026-03-17
  */
 public interface DemoMapper extends BaseMapper<Demo> {
 

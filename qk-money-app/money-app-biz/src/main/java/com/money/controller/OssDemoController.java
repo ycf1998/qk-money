@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * 对象存储服务演示控制器
+ *
  * @author : money
- * @version : 1.0.0
- * @description : 对象存储服务演示控制器
- * @createTime : 2022-07-02 21:41:19
+ * @since : 1.0.0
  */
 @RestController
 @RequestMapping("/test/oss")

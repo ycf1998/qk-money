@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 时区演示控制器
+ *
  * @author : money
- * @version : 1.0.0
- * @description : 时区演示控制器
- * @createTime : 2022-05-13 22:28:16
+ * @since : 1.0.0
  */
 @TZProcess
 @RestController

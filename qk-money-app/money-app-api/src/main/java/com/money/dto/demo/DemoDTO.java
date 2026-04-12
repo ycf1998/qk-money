@@ -2,17 +2,15 @@ package com.money.dto.demo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import com.money.web.dto.ValidGroup;
 
 /**
-* <p>
-* 
-* </p>
-*
-* @author money
-* @since 2024-12-21
-*/
+ *  DTO
+ *
+ * @author money
+ * @since 2026-03-17
+ */
 @Data
 @Accessors(chain = true)
 public class DemoDTO {
@@ -21,13 +19,13 @@ public class DemoDTO {
     private Long id;
 
     /**
-    * 名称
-    */
+     * 名称
+     */
     private String name;
 
     /**
-    * 状态
-    */
+     * 状态
+     */
     private String status;
 
 }

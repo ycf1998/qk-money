@@ -6,12 +6,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
+ *  实体类
  *
  * @author money
- * @since 2024-12-21
+ * @since 2026-03-17
  */
 @Getter
 @Setter

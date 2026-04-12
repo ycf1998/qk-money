@@ -10,43 +10,41 @@ import com.money.dto.demo.DemoVO;
 import java.util.Collection;
 
 /**
- * <p>
- *  服务类
- * </p>
+ *  服务接口
  *
  * @author money
- * @since 2024-12-21
+ * @since 2026-03-17
  */
 public interface DemoService extends IService<Demo> {
 
     /**
-    * 列表
-    *
-    * @param queryDTO 查询 DTO
-    * @return {@link PageVO }<{@link DemoVO }>
-    */
+     * 分页查询
+     *
+     * @param queryDTO 查询 DTO
+     * @return 分页结果
+     */
     PageVO<DemoVO> list(DemoPageQueryDTO queryDTO);
 
     /**
-    * 新增
-    *
-    * @param addDTO 新增 DTO
-    * @return id
-    */
+     * 添加
+     *
+     * @param addDTO 添加 DTO
+     * @return 主键 ID
+     */
     Long add(DemoDTO addDTO);
 
     /**
-    * 修改
-    *
-    * @param updateDTO 修改 DTO
-    */
+     * 修改
+     *
+     * @param updateDTO 修改 DTO
+     */
     void update(DemoDTO updateDTO);
 
     /**
-    * 删除
-    *
-    * @param ids IDS
-    */
+     * 删除
+     *
+     * @param ids ID 集合
+     */
     void delete(Collection<Long> ids);
 
 }

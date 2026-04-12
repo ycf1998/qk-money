@@ -80,44 +80,21 @@ public void deleteFile(String uri) {
 
 ## 配置说明
 
-配置使用 `oss.properties` 文件：
-
-```properties
-# ================================= 本地存储 =================================
-
-# 目标空间（存储根目录）
-local.bucket = F:/qk-money/
-
-# 资源处理器（访问路径映射）
-local.resource-handler = /assets/**
-
-# ================================= 七牛云存储 =================================
-
-# 访问密钥
-qiniu.access-key = your-access-key
-
-# 秘密密钥
-qiniu.secret-key = your-secret-key
-
-# 访问域名
-qiniu.domain = your-domain.com
-
-# 目标空间（Bucket）
-qiniu.bucket = your-bucket
-
-# 区域
-qiniu.region = huanan
-
-# 上传令牌过期时间（秒）
-qiniu.token-expire = 3600
-```
-
-在 `application.yml` 中引入配置：
-
 ```yaml
-spring:
-  config:
-    import: oss.properties
+money:
+  oss:
+    # 目标空间（存储根目录）
+    # 资源处理器（访问路径映射）
+    local:
+      bucket: F:/qk-money/
+      resource-handler: /assets/**
+    # 访问密钥、秘密密钥、访问域名、Bucket 等
+    qiniu:
+      access-key: your-access-key
+      secret-key: your-secret-key
+      domain: your-domain.com
+      bucket: your-bucket
+      token-expire: 3600
 ```
 
 ## 核心类说明
