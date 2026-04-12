@@ -1,0 +1,36 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Compiled output ###
+target/
+out/
+build/
+
+# Logs
+logs/
+*.log
+
+### OS generated files ###
+.DS_Store
+Thumbs.db
+
+### Agent / AI 辅助文件 ###
+.claude/
+CLAUDE.md
+.qwen/
+QWEN.md
+
+### LSP ###
+.settings
+.project
+
+### 个人 ###
+.personal
+
+### Maven Wrapper ###
+/mvnw
+/mvnw.cmd
+.mvn/
