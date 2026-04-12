@@ -1,10 +1,18 @@
 <h2 align="center">🎉 Qk-MONEY 后台快速开发框架</h2>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
-  <img src="https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen" alt="Spring Boot">
-  <img src="https://img.shields.io/badge/MyBatis--Plus-3.5.x-blue" alt="MyBatis-Plus">
-  <img src="https://img.shields.io/badge/Hutool-5.8.x-yellow" alt="Hutool">
+  <a href="https://spring.io/projects/spring-boot" target="_blank">
+    <img src="https://img.shields.io/badge/Spring%20Boot-3.5.12-6DB33F?style=flat-square&logo=spring-boot" alt="Spring Boot">
+  </a>
+  <a href="https://baomidou.com/" target="_blank">
+    <img src="https://img.shields.io/badge/MyBatis--Plus-3.5.15-0078D4?style=flat-square" alt="MyBatis-Plus">
+  </a>
+  <a href="https://www.oracle.com/java/" target="_blank">
+    <img src="https://img.shields.io/badge/JDK-17+-E76F02?style=flat-square&logo=openjdk" alt="JDK">
+  </a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank">
+    <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
+  </a>
 </p>
 
 <p align="center">Money - 基于 Spring Boot 3、Spring Security、MyBatis-Plus 的后台快速开发框架</p>
@@ -26,12 +34,9 @@
 | Maven             | 3.8.1  |
 | Spring Boot       | 3.5.12 |
 | MyBatis-Plus      | 3.5.15 |
-| JJWT              | 0.13.0 |
 | Hutool            | 5.8.43 |
 | Spring Doc        | 2.8.8  |
-| Qiniu             | 7.19.0 |
 | XXL-JOB           | 3.3.2  |
-| Caffeine          | 3.2.3  |
 
 - **主 POM**：根目录下的 `pom.xml`，声明模块版本。
 - **清单 POM**：`qk-money-parent` 包下的 `pom.xml`，声明第三方依赖版本。
@@ -307,7 +312,3 @@ money:
 ## 📝 使用登记
 
 - [麦尼收银系统](https://github.com/ycf1998/money-pos)
-
-## 📄 License
-
-MIT License
