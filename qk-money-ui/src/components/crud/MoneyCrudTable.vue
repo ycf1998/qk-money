@@ -4,8 +4,8 @@
         v-else
         :="$attrs"
         class="max-h-full"
+        max-height="calc(100vh - 360px)"
         show-overflow-tooltip
-        flexible
         ref="moneyTable"
         :data="moneyCrud.data"
         :default-sort="moneyCrud.defaultSort"
@@ -51,7 +51,6 @@
         :total="moneyCrud.page.total"
         :layout="isMobile() ? 'prev, pager, next, ->, total' : 'prev, pager, next, sizes, ->, total'"
         :pager-count="isMobile() ? 5 : 7"
-        layout="prev, pager, next, sizes, ->, total"
         @current-change="moneyCrud.currentPageChange"
         @size-change="moneyCrud.pageSizeChange"
     />
