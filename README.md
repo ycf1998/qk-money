@@ -1,3 +1,5 @@
+
+
 <h1 align="center">🚀 QK-MONEY</h1>
 
 <p align="center">
@@ -104,7 +106,7 @@ spring:
 
 ### 4. 启动后端
 
-运行 `qk-money-app/money-app-biz` 模块下的 [`QkMoneyApplication`](./qk-money/qk-money-app/money-app-biz/src/main/java/com/money/QkMoneyApplication.java) 启动项目。
+运行 `qk-money-app/money-app-biz` 模块下的 [`QkMoneyApplication`](./qk-money/qk-money-app/money-app-biz/src/main/java/com/money/QkMoneyApplication.java)，以 `dev` 配置文件启动项目。
 
 启动后访问：
 - 接口文档：http://localhost:9000/qk-money/swagger-ui.html
@@ -184,4 +186,3 @@ CREATE TABLE `demo` (
 ## 📝 使用登记
 
 - [麦尼收银系统](https://github.com/ycf1998/money-pos)
-
