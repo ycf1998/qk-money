@@ -39,7 +39,7 @@ public class TokenConfig {
     /**
      * Refresh Token 过期时间（ms），默认 30 天
      */
-    private long refreshTtl = 18144000000L;
+    private long refreshTtl = 2592000000L;
 
     /**
      * Token 策略：jwt（默认）或 redis

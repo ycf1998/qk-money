@@ -24,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -171,6 +173,31 @@ public abstract class ControllerTestBase {
 
     protected MvcResult delete(String url, Object body) throws Exception {
         return request(HttpMethod.DELETE, url, body, null);
+    }
+
+    /**
+     * Multipart 请求 - 用于 @RequestPart 接口
+     *
+     * @param method        HTTP 方法（POST/PUT）
+     * @param url           请求路径
+     * @param partName      JSON 部分的名称（如 "brand"）
+     * @param dto           JSON 数据对象
+     * @param filePartName  文件部分的名称（可为 null）
+     * @param fileContent   文件内容（可为 null）
+     */
+    protected MvcResult multipart(HttpMethod method, String url, String partName, Object dto,
+                                   String filePartName, byte[] fileContent) throws Exception {
+        String json = objectMapper.writeValueAsString(dto);
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(method, url)
+                .file(new MockMultipartFile(partName, partName + ".json", "application/json", json.getBytes("UTF-8")));
+        builder.header("Authorization", "Bearer " + authToken);
+        builder.accept(MediaType.APPLICATION_JSON);
+
+        if (filePartName != null && fileContent != null) {
+            builder.file(new MockMultipartFile(filePartName, filePartName, "application/octet-stream", fileContent));
+        }
+
+        return mockMvc.perform(builder).andReturn();
     }
 
     // ==================== 断言方法 ====================

@@ -5,8 +5,8 @@
 缓存模块提供本地缓存和 Redis 缓存两种实现方式，支持灵活切换。
 
 **设计优势**：
-- **双缓存支持**：本地缓存（Hutool/Caffeine）+ Redis 分布式缓存
-- **灵活切换**：通过配置切换缓存提供者和策略
+- **双缓存支持**：本地缓存（Hutool）+ Redis 分布式缓存
+- **灵活切换**：通过配置切换缓存策略
 - **统一接口**：`LocalCache` 接口提供统一的缓存操作 API
 - **Spring Cache 集成**：Redis 缓存支持 `@Cacheable` 等注解
 
@@ -30,7 +30,7 @@
 
 ### 1. 本地缓存
 
-基于 Hutool Cache（默认）或 Caffeine，支持多种缓存策略：
+基于 Hutool Cache，支持多种缓存策略：
 
 | 策略 | 说明 | 适用场景 |
 |------|------|----------|
@@ -83,7 +83,7 @@ public void deleteUser(Long id) {
 money:
   cache:
     local:
-      # 提供者：hutool（默认）、caffeine
+      # 提供者：hutool
       provider: hutool
       hutool:
         # 失效策略：LRU、LFU、FIFO、TIMED、WEAK
@@ -91,7 +91,7 @@ money:
         # 容量
         capacity: 102400
         # 过期时间（ms），0 代表永不过期
-        ttl: 86400000
+        ttl: 0
 ```
 
 ### Redis 缓存配置
@@ -122,5 +122,4 @@ spring:
 ## 相关链接
 
 - [Hutool Cache 文档](https://www.hutool.cn/docs/#/cache/%E6%A6%82%E8%BF%B0)
-- [Caffeine 官方文档](https://github.com/ben-manes/caffeine)
 - [Spring Cache 文档](https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#cache)

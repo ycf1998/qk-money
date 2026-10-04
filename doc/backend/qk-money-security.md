@@ -131,7 +131,7 @@ money:
       token-type: Bearer          # 令牌类型
       secret: your-secret         # 密钥（生产环境请修改）
       ttl: 28800000               # Access Token 过期时间（ms），默认 8 小时
-      refresh-ttl: 2592000000     # Refresh Token 过期时间（ms），默认 30 天
+      refresh-ttl: 18144000000    # Refresh Token 过期时间（ms），默认 210 天
       strategy: jwt               # 策略：jwt（默认）、redis
       cache-key: "security:token:"
     

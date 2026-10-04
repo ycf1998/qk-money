@@ -68,7 +68,7 @@ public R<UserVO> getUser(@PathVariable Long id) {
 @GetMapping("/check")
 public R<Void> check() {
     if (someCondition) {
-        return R.failed("自定义错误");
+        return R.fail("自定义错误");
     }
     return R.success();
 }
@@ -176,8 +176,8 @@ public interface WebRequestConstant {
 
 ```java
 String requestId = WebRequestContextHolder.getContext().getRequestId();
-Locale lang = WebRequestContextHolder.getContext().getLang();
-TimeZone timezone = WebRequestContextHolder.getContext().getTimezone();
+String lang = WebRequestContextHolder.getContext().getLang();
+ZoneId timezone = WebRequestContextHolder.getContext().getTimezone();
 ```
 
 请求 ID 通过 MDC 集成到日志中，方便链路追踪。
@@ -204,7 +204,7 @@ money:
 ```properties
 操作成功=success
 操作失败=failure
-暂未登录或 token 已经过期=Not logged in yet or the token has expired
+暂未登录或token已经过期=Not logged in yet or the token has expired
 没有相关权限=No relevant permissions
 ```
 
@@ -236,14 +236,26 @@ money:
 
 **注解使用**：
 
+`@TZProcess` 标注在类上，类中方法参与时区转换：
+
 ```java
 @TZProcess
-@PostMapping("/create")
-public R<UserVO> create(@RequestBody @TZParam UserDTO dto) {
-    // 入参已转换为默认时区时间
-    userService.create(dto);
-    // 出参自动转换为客户时区
-    return R.success(userService.getById(dto.getId()));
+@RestController
+public class UserController {
+
+    // @TZParam 标注入参字段：客户时区 → 默认时区
+    @PostMapping("/create")
+    public R<UserVO> create(@RequestBody @TZParam UserDTO dto) {
+        userService.create(dto);
+        return R.success(userService.getById(dto.getId()));
+    }
+
+    // @TZRep 标注出参：默认时区 → 客户时区
+    @TZRep
+    @GetMapping("/{id}")
+    public UserVO get(@PathVariable Long id) {
+        return userService.getVO(id);
+    }
 }
 ```
 
@@ -253,7 +265,7 @@ public R<UserVO> create(@RequestBody @TZParam UserDTO dto) {
 |------|------|
 | `LocalDateTime` | 日期时间类 |
 | `String` | 日期时间格式的字符串 |
-| `Bean` | 递归处理标注 `@TZParam` / `@TZRep` 的字段 |
+| `Bean` | 递归处理标注 `@TZParam` 的字段 |
 | `List` / `Collection` | 集合类型（递归转换） |
 | `Map` | 键包含 `time` 或 `date` 的值 |
 | `PageVO` | 分页响应 VO |
@@ -264,14 +276,14 @@ public R<UserVO> create(@RequestBody @TZParam UserDTO dto) {
 // 实现 TimeZoneConverter 接口
 public class CustomTimeZoneConverter implements TimeZoneConverter {
     @Override
-    public Object convert(Object value, TimeZone from, TimeZone to) {
+    public Object convert(Object o, String format, ZoneId formZoneId, ZoneId toZoneId) {
         // 自定义转换逻辑
-        return convertedValue;
+        return o;
     }
 }
 
-// 使用
-@TZProcess(converter = CustomTimeZoneConverter.class)
+// 通过 @TZParam / @TZRep 的 converter 属性指定
+@TZParam(format = "yyyy-MM-dd HH:mm:ss", converter = CustomTimeZoneConverter.class)
 ```
 
 ### 7. 常用工具类

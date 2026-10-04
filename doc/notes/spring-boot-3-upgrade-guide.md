@@ -1,5 +1,7 @@
 # Spring Boot 3.0 升级指南
 
+> **通用参考**：本文为 Spring Boot 官方迁移指南的翻译，与本仓库（QK-Money）的版本无关。
+
 > 原文：Spring Boot 3.0 Migration Guide
 > 翻译版本：1.0
 > 最后更新：2026-03-21

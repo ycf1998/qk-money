@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "tailwind": "npx @tailwindcss/cli -i ./src/style/tailwind.css -o ./src/style/tailwind.out.css --watch"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

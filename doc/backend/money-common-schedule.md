@@ -9,7 +9,7 @@
 **设计优势**：
 - **开箱即用**：自动配置 XXL-JOB 执行器，无需手动初始化
 - **配置集中**：通过 `XxlJobProperties` 统一管理配置
-- **注解支持**：支持 `@XxlJob`、`@XxlJobParam` 等注解
+- **注解支持**：支持 `@XxlJob` 注解
 
 ## 依赖
 
@@ -75,8 +75,10 @@ public void shardingJobHandler() throws Exception {
 
 ```java
 @XxlJob("paramJobHandler")
-public void paramJobHandler(@XxlJobParam("param1") String param1) throws Exception {
-    XxlJobHelper.log("任务参数：{}", param1);
+public void paramJobHandler() throws Exception {
+    // 读取调度中心配置的任务参数
+    String param = XxlJobHelper.getJobParam();
+    XxlJobHelper.log("任务参数：{}", param);
 }
 ```
 
@@ -111,7 +113,7 @@ public void paramJobHandler(@XxlJobParam("param1") String param1) throws Excepti
 | 随机 | 随机选择 |
 | 一致性 HASH | 相同参数路由到同一节点 |
 | 分片广播 | 广播所有节点执行分片任务 |
-| 故障转移/故障转移 | 自动切换到可用节点 |
+| 故障转移 | 自动切换到可用节点 |
 | 忙碌转移 | 自动切换到空闲节点 |
 
 ## 核心类说明
@@ -126,8 +128,6 @@ public void paramJobHandler(@XxlJobParam("param1") String param1) throws Excepti
 | 注解 | 说明 |
 |------|------|
 | `@XxlJob` | 定义任务 Handler |
-| `@XxlJobParam` | 任务参数 |
-| `@XxlJobInit` / `@XxlJobStart` / `@XxlJobEnd` | 任务生命周期 |
 
 ## 常用 API
 
@@ -152,8 +152,7 @@ XxlJobHelper.handleFail("失败原因");
 1. **执行器名称**：确保 `app-name` 与调度中心配置的执行器一致
 2. **访问令牌**：执行器和调度中心的 `access-token` 必须一致
 3. **网络连通**：执行器需能访问调度中心，调度中心需能回调执行器
-4. **任务幂等**：分布式环境下需保证任务幂等性
-5. **端口配置**：执行器端口建议使用固定端口或 0（自动分配）
+4. **端口配置**：执行器端口建议使用固定端口或 0（自动分配）
 
 ## 相关链接
 

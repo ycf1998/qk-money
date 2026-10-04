@@ -105,7 +105,7 @@ Long tenantId = TenantContextHolder.getTenant();
 
 | 配置项 | 默认值 | 说明 |
 |--------|--------|------|
-| `enabled` | false | 是否启用多租户 |
+| `enabled` | true | 是否启用多租户 |
 | `header` | Y-tenant | 请求头键名 |
 | `default-tenant-id` | 0 | 默认租户 ID |
 | `ignore-table` | [] | 忽略的表列表 |
@@ -132,7 +132,6 @@ Long tenantId = TenantContextHolder.getTenant();
 
 1. **拦截器顺序**：多租户拦截器必须在分页拦截器**之前**添加
 2. **自定义 SQL 规范**：多表查询时每个表都需要使用别名
-3. **跨租户查询**：可通过 `TenantContextHolder.clear()` 临时关闭租户上下文
 
 ## 相关链接
 

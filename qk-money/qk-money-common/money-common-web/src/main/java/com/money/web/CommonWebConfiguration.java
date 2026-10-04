@@ -71,7 +71,7 @@ public class CommonWebConfiguration {
      * @return {@link TimeZoneAspect }
      */
     @Bean
-    @ConditionalOnProperty(prefix = "money.web.time-zone", name = "enabled")
+    @ConditionalOnProperty(prefix = "money.web.timezone", name = "enabled")
     public TimeZoneAspect timeZoneAspect(TimeZoneProperties timeZoneProperties) {
         return new TimeZoneAspect(timeZoneProperties);
     }

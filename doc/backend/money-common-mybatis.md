@@ -21,8 +21,8 @@ MyBatis 模块集成 MyBatis-Plus 增强框架，提供分页插件、自动填�
 
 <!-- MySQL 驱动 -->
 <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
 </dependency>
 ```
 
@@ -99,7 +99,7 @@ request.setPage(1);
 request.setSize(10);
 request.setOrderBy("create_time,desc");
 
-Page<SysUser> page = userService.page(request.toPage());
+Page<SysUser> page = userService.page(PageUtil.toPage(request));
 
 // 转换为 PageVO（统一分页响应格式）
 PageVO<SysUser> pageVO = PageUtil.toPageVO(page);
@@ -114,7 +114,7 @@ PageVO<SysUser> pageVO = PageUtil.toPageVO(page);
 public class SecurityOperator implements Operator {
 
     @Override
-    public String get() {
+    public String getUsername() {
         // 从安全上下文获取当前登录用户名
         return SecurityGuard.getRbacUser().getUsername();
     }
@@ -135,8 +135,6 @@ public class SecurityOperator implements Operator {
 - **全局配置**：输出目录、作者等
 - **包配置**：父包名、模块名、各层包名
 - **策略配置**：需要生成的表、实体/映射/服务/控制器配置
-
-生成后可根据业务需求调整代码。
 
 ## 配置说明
 

@@ -36,13 +36,13 @@
 ```java
 // 本地存储
 @Autowired
-@Qualifier("localOSSDelegate")
-private OSSDelegate<LocalOSS> localOSSDelegate;
+@Qualifier("localOSS")
+private OSSDelegate<LocalOSS> localOSS;
 
 // 七牛云存储
 @Autowired
-@Qualifier("qiniuOSSDelegate")
-private OSSDelegate<QiniuOSS> qiniuOSSDelegate;
+@Qualifier("qiniuOSS")
+private OSSDelegate<QiniuOSS> qiniuOSS;
 ```
 
 ### 文件上传
@@ -51,7 +51,7 @@ private OSSDelegate<QiniuOSS> qiniuOSSDelegate;
 @PostMapping("/upload")
 public R<String> upload(@RequestParam("file") MultipartFile file) {
     // 默认上传（使用时间戳文件名）
-    String uri = localOSSDelegate.upload(file);
+    String uri = localOSS.upload(file);
     return R.success(uri);
 }
 ```
@@ -61,11 +61,11 @@ public R<String> upload(@RequestParam("file") MultipartFile file) {
 ```java
 @PostMapping("/upload/avatar")
 public R<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
-    // 上传到 avatar 文件夹，使用 UUID 文件名
+    // 上传到 avatar 文件夹，使用雪花 ID 文件名
     FolderPath folderPath = FolderPath.builder()
-            .addPath("avatar")
+            .cd("avatar")
             .build();
-    String uri = localOSSDelegate.upload(file, folderPath, FileNameStrategy.UUID);
+    String uri = localOSS.upload(file, folderPath, FileNameStrategy.SNOWFLAKE_ID);
     return R.success(uri);
 }
 ```
@@ -74,7 +74,7 @@ public R<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
 
 ```java
 public void deleteFile(String uri) {
-    localOSSDelegate.delete(uri);
+    localOSS.delete(uri);
 }
 ```
 
@@ -114,9 +114,10 @@ money:
 
 | 策略 | 说明 | 示例 |
 |------|------|------|
-| `TIMESTAMP` | 时间戳命名 | `1672531200000.jpg` |
-| `UUID` | UUID 命名 | `550e8400-e29b-41d4-a716-446655440000.jpg` |
-| `RAW` | 原始文件名 | `original.jpg` |
+| `ORIGINAL` | 原始文件名 | `original.jpg` |
+| `TIMESTAMP` | 时间戳 + 3 位随机字符（减少高并发碰撞） | `1672531200000a1b.jpg` |
+| `SNOWFLAKE_ID` | 雪花 ID | `1876528475928199168.jpg` |
+| `ORIGINAL_WITH_TIMESTAMP` | 原始文件名 + 时间戳 | `original1672531200000.jpg` |
 
 也支持自定义策略（实现 `FileNameStrategy` 接口）。
 
@@ -125,9 +126,9 @@ money:
 ```java
 // 链式构建路径
 FolderPath folderPath = FolderPath.builder()
-        .addPath("users")
-        .addPath(userId.toString())
-        .addPath("avatars")
+        .cd("users")
+        .cd(userId.toString())
+        .cd("avatars")
         .build();
 // 结果：users/123/avatars/
 ```
