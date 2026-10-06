@@ -24,7 +24,7 @@
 
 | 分类 | 特性 |
 |------|------|
-| 🤖 **AI 辅助开发** | `/qk-dev` 命令，需求确认→设计文档→编码交付全流程 |
+| 🤖 **AI 辅助开发** | `/qk-dev` skill，需求确认→设计文档→编码交付全流程 |
 | 🔐 **认证授权** | JWT 双 Token + RBAC 模型，声明式鉴权 |
 | 📦 **通用 Web** | 响应自动包装、异常统一处理、日志链路追踪 |
 | 🏢 **多租户** | 表字段隔离，拦截器自动注入，开关控制 |
@@ -46,8 +46,9 @@
 | 依赖 | 版本 |
 |------|------|
 | JDK | 17+ |
+| MySQL | 5.7+ |
 | Maven | 3.8+ |
-| Node | 18+ |
+| Node.js | 22.12+ |
 
 ## 🏗️ 工程结构
 
@@ -88,7 +89,7 @@ cd qk-money
 mysql -u root -p < qk_money.sql
 ```
 
-> **MySQL 8 以下版本**：将脚本中的 `utf8mb4` 替换为 `utf8`，`utf8mb4_general_ci` 替换为 `utf8_general_ci`。
+> **MySQL 8 以下版本**：将脚本中的 `utf8mb4_0900_ai_ci` 替换为 `utf8mb4_general_ci`。
 
 ### 3. 配置数据库连接
 
@@ -137,25 +138,26 @@ VITE_BASE_URL=http://localhost:9000/qk-money
 
 建表 → 代码生成 → 补充业务，三步完成新模块开发。
 
-> 💡 **AI 辅助**：使用 Claude Code 的 `/qk-dev` 命令，AI 引导完成需求确认 → 设计文档 → 编码交付的全流程。
+> 💡 **AI 辅助**：使用 Claude Code 的 `/qk-dev` skill，AI 引导完成需求确认 → 设计文档 → 编码交付的全流程。
 
 ### 1. 建表
 
 ```sql
 CREATE TABLE `demo` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL COMMENT '名称',
-  `create_by` varchar(32) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` varchar(32) NOT NULL,
-  `update_time` datetime NOT NULL,
-  `tenant_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '租户 id',
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+  `id`          bigint       NOT NULL                COMMENT '主键ID',
+  `name`        varchar(50)  NOT NULL                COMMENT '名称',
+  `create_by`   varchar(50)  NOT NULL                COMMENT '创建人',
+  `create_time` datetime     NOT NULL                COMMENT '创建时间',
+  `update_by`   varchar(50)  NOT NULL                COMMENT '更新人',
+  `update_time` datetime     NOT NULL                COMMENT '更新时间',
+  `tenant_id`   bigint       NOT NULL DEFAULT 0      COMMENT '租户ID',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_id` (`tenant_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '示例表';
 ```
 
 - **必选字段**：`id`、`create_by`、`create_time`、`update_by`、`update_time`（实体类继承 `BaseEntity` 后自动填充）
-- **可选字段**：`tenant_id`（需要多租户隔离时添加）
+- **可选字段**：`tenant_id`（需要多租户隔离时添加；带 `tenant_id` 的表，每个索引都以它为最左列）
 
 ### 2. 运行代码生成器
 
